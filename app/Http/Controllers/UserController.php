@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
+use Auth;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = User::orderBy('id', 'DESC')->paginate(5);
+        //dd($data);
         return view('users.index', compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -42,6 +44,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        //dd(array($request->input('roles'), $request->all()));
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -53,9 +56,7 @@ class UserController extends Controller
         $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);
-        foreach ($request->input('roles') as $key => $value) {
-            $user->attachRole($value);
-        }
+        $user->attachRole($input['roles']);
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
@@ -139,5 +140,13 @@ class UserController extends Controller
     public function login()
     {
         return view('users.login');
+    }
+    public function postLogin(Request $request)
+    {
+        if (Auth::attempt(array('email' => $request['email'], 'password' => $request['password']))) {
+            $user = Auth::user();
+            return redirect()->route('users.index')
+                ->with('success', 'User deleted successfully');
+        }
     }
 }

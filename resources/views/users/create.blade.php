@@ -21,7 +21,7 @@
 			</ul>
 		</div>
 	@endif
-	{!! Form::open(array('route' => 'users.store','method'=>'POST')) !!}
+    {!! Form::open(array( "name"=>"frmaddUser","id"=>"frmaddUser", 'method'=>'POST')) !!}
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
@@ -50,7 +50,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Role:</strong>
-                {!! Form::select('roles[]', $roles,[], array('class' => 'form-control','multiple')) !!}
+                {!! Form::select('roles', $roles,null, array('placeholder'=>'Select Role','class' => 'form-control')) !!}
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">

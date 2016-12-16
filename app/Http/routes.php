@@ -28,11 +28,14 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web']], function () {
     Route::get("/register", ['uses' => "UserController@create"]);
+    Route::post("/register", ['uses' => "UserController@store"]);
     Route::get("/login", ['uses' => "UserController@login"]);
-    Route::post("/login", ['uses' => "UserController@login"]);
+    Route::post("/login", ['uses' => "UserController@postLogin"]);
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
+
+    Route::get("users", ['as' => 'users.index', 'uses' => 'UserController@index']);
 
     Route::get('/home', 'HomeController@index');
 

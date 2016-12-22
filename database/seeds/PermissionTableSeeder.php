@@ -11,7 +11,9 @@ class PermissionTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
+    {        
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::table('permissions')->truncate();
         $permission = [
             [
                 'name' => 'role-list',
@@ -58,5 +60,6 @@ class PermissionTableSeeder extends Seeder
         foreach ($permission as $key => $value) {
             Permission::create($value);
         }
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 }

@@ -16,11 +16,8 @@ class CreateSurveysTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->integer('torrent_id')->unsigned()->index();
-            $table->string('office_id');
+            $table->integer('office_id')->unsigned()->index();
             $table->string('allow_area')->comment('Client allow area in Sq m');
-
-            // columns to store answers
-            //$table->string('industrial_area');
             $table->string('establishment_name');
             $table->string('postel_address');
             $table->string('pin_code');
@@ -154,7 +151,7 @@ class CreateSurveysTable extends Migration
             //$table->morphs('c_two_surveysable');
             $table->timestamps();
             $table->foreign('c_one_surveys_id')
-                ->references('id')->on('c_surveys')
+                ->references('id')->on('c_one_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

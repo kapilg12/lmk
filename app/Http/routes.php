@@ -29,6 +29,11 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web']], function () {
     Route::get("/login", ['uses' => "UserController@login"]);
     Route::post("/login", ['uses' => "UserController@postLogin"]);
+    Route::get('survey', 'SurveyController@getSurvey');
+    Route::post('survey', 'SurveyController@postSurvey');
+    Route::get('survey/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
+    Route::post('survey/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
+    Route::get('survey/done', 'SurveyController@getSurveyDone');
 });
 
 Route::group(['middleware' => ['web', 'auth']], function () {
@@ -69,9 +74,5 @@ Route::get('itemCRUD2/{id}', ['as' => 'itemCRUD2.show', 'uses' => 'ItemCRUD2Cont
 Route::get('itemCRUD2/{id}/edit', ['as' => 'itemCRUD2.edit', 'uses' => 'ItemCRUD2Controller@edit', 'middleware' => ['permission:item-edit']]);
 Route::patch('itemCRUD2/{id}', ['as' => 'itemCRUD2.update', 'uses' => 'ItemCRUD2Controller@update', 'middleware' => ['permission:item-edit']]);
 Route::delete('itemCRUD2/{id}', ['as' => 'itemCRUD2.destroy', 'uses' => 'ItemCRUD2Controller@destroy', 'middleware' => ['permission:item-delete']]);*/
+
 });
-Route::get('survey', 'SurveyController@getSurvey');
-Route::post('survey', 'SurveyController@postSurvey');
-Route::get('survey/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
-Route::post('survey/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
-Route::get('survey/done', 'SurveyController@getSurveyDone');

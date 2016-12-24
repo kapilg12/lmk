@@ -57,11 +57,12 @@ class CreateSurveysTable extends Migration
             $table->string('road_paved_area')->nullable()->comment('Road/Paved Area in Sq m');
             $table->string('green_belt_area')->nullable()->comment('Green Belt Area in Sq m');
             $table->string('open_land')->nullable()->comment('Open Land in Sq m');
-            $table->string('GPSCoordinate_A')->nullable()->comment('GPS Coordinates A : Space available in north east corner of the area  L x W');
-            $table->string('GPSCoordinate_B')->nullable()->comment('GPS Coordinates B : Space available in north east corner of the area  L x W');
-            $table->string('GPSCoordinate_C')->nullable()->comment('GPS Coordinates C : Space available in north east corner of the area  L x W');
-            $table->string('GPSCoordinate_D')->nullable()->comment('GPS Coordinates D : Space available in north east corner of the area  L x W');
-            $table->string('space_available')->nullable()->comment('Space available in north east corner of the area  L x W');
+            //$table->string('area_type_GPSCoordinate')->nullable()->comment('Area for GPS Coordinates Like bulding, Shed and tubewell');
+            //$table->string('GPSCoordinate_A')->nullable()->comment('GPS Coordinates A : Space available in north east corner of the area  L x W');
+            //$table->string('GPSCoordinate_B')->nullable()->comment('GPS Coordinates B : Space available in north east corner of the area  L x W');
+            //$table->string('GPSCoordinate_C')->nullable()->comment('GPS Coordinates C : Space available in north east corner of the area  L x W');
+            //$table->string('GPSCoordinate_D')->nullable()->comment('GPS Coordinates D : Space available in north east corner of the area  L x W');
+            //$table->string('space_available')->nullable()->comment('Space available in north east corner of the area  L x W');
 
             $table->string('average_annual_rainfall')->nullable()->comment('Average Annual Rainfall in the area in mm');
             $table->string('number_of_rainy_day')->nullable()->comment('Number of Rainy days in a Year');
@@ -69,10 +70,18 @@ class CreateSurveysTable extends Migration
             $table->enum('nature_of_terrain', ['hilly', 'hocky', 'undulating', 'uniform', 'flat'])->comment('Nature of Terrain: Hilly/Rocky or Undulating, Uniform or flat');
             $table->enum('nature_of_soil', ['alluvial', 'sandy', 'loamy', 'gravel', 'silty'])->comment('Nature of Soil: Alluvial, Sandy, Loamy, gravel, silty');
 
-            $table->string('recharge_well')->nullable()->comment('Recharge well (T/W or H/P) – working / abandoned [Depth(m), Diameter(m)]');
-            $table->string('recharge_pit')->nullable()->comment('Recharge Pit – working / abandoned [Depth(m), Diameter(m)]');
-            $table->string('recharge_trenches')->nullable()->comment('Recharge Trenches – working / abandoned [Dimension – L x W x D]');
-            $table->string('water_bodies_ponds')->nullable()->comment('Water bodies ponds etc.– working / abandoned [Depth(m), Diameter(m)]');
+            $table->string('recharge_well_depth')->nullable()->comment('Recharge well (T/W or H/P) – working / abandoned [Depth(m), Diameter(m)]');
+            $table->string('recharge_well_diameter')->nullable()->comment('Recharge well (T/W or H/P) – working / abandoned [Depth(m), Diameter(m)]');
+
+            $table->string('recharge_pit_depth')->nullable()->comment('Recharge Pit – working / abandoned [Depth(m), Diameter(m)]');
+            $table->string('recharge_pit_diameter')->nullable()->comment('Recharge Pit – working / abandoned [Depth(m), Diameter(m)]');
+
+            $table->string('recharge_trenches_l')->nullable()->comment('Recharge Trenches – working / abandoned [Dimension – L x W x D]');
+            $table->string('recharge_trenches_w')->nullable()->comment('Recharge Trenches – working / abandoned [Dimension – L x W x D]');
+            $table->string('recharge_trenches_d')->nullable()->comment('Recharge Trenches – working / abandoned [Dimension – L x W x D]');
+
+            $table->string('water_bodies_ponds_depth')->nullable()->comment('Water bodies ponds etc.– working / abandoned [Depth(m), Diameter(m)]');
+            $table->string('water_bodies_ponds_diameter')->nullable()->comment('Water bodies ponds etc.– working / abandoned [Depth(m), Diameter(m)]');
 
             $table->string('source_of_availability_of_surface_water')->nullable()->comment('Source of Availability of surface water for industrial use, if any, give details');
             $table->string('water_supply_from_RIICO')->nullable()->comment('Water Supply from RIICO, if available, take copy of last 3 bills');
@@ -101,6 +110,7 @@ class CreateSurveysTable extends Migration
 
         Schema::create('b_attachments', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned()->index();
             $table->integer('b_surveys_id')->unsigned()->index();
             $table->string('area_location')->nullable()->comment("Area/Location Attchment");
             $table->string('sources_sw_gw')->nullable()->comment("Sources – SW/GW");
@@ -108,6 +118,10 @@ class CreateSurveysTable extends Migration
             $table->string('site_layout_plan')->nullable()->comment("Site Layout plan");
             //$table->morphs('b_attachmentsable');
             $table->timestamps();
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('b_surveys_id')
                 ->references('id')->on('b_surveys')
                 ->onUpdate('cascade')
@@ -143,6 +157,37 @@ class CreateSurveysTable extends Migration
                 ->references('id')->on('c_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+        });
+
+        Schema::create('GPSCoordinates', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned()->index();
+            $table->integer('b_surveys_id')->unsigned()->index();
+            $table->string('GPSCoordinate_area')->nullable()->comment('bulding,shed,tubewell');
+            $table->string('GPSCoordinate_type')->nullable()->comment('residential, non residential');
+            $table->string('GPSCoordinate_point')->nullable()->comment('A,B,C,D');
+            $table->string('GPSCoordinate_latitude')->nullable()->comment('latitude');
+            $table->string('GPSCoordinate_longitude')->nullable()->comment('longitude');
+            //$table->morphs('c_two_surveysable');
+            $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('b_surveys_id')
+                ->references('id')->on('b_surveys')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('GPSCoordinate_points', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('GPSCoordinate_area')->nullable()->comment('bulding,shed,tubewell');
+            $table->string('GPSCoordinate_type')->nullable()->comment('residential, non residential');
+            $table->integer('GPSCoordinate_point')->nullable()->default(0)->comment('1,2,3,4,5');
+            //$table->morphs('c_two_surveysable');
+            $table->timestamps();
         });
 
         Schema::create('survey_logs', function (Blueprint $table) {

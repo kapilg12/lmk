@@ -14,7 +14,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <style>
         body {
             font-family: 'Lato';
@@ -39,11 +39,13 @@
 
             font: 32px Arial, sans-serif;
         }
+        .top-buffer { margin-top:20px; }
     </style>
 
 </head>
 <body id="app-layout">
-    <nav class="navbar navbar-default navbar-static-top">
+
+     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
 
@@ -92,6 +94,9 @@
         </div>
     </nav>
     <div class="container-fluid">
+        <div class="row">
+           @include('layouts.partial.access_nav');
+        </div>
         @yield('content')
     </div>
     <!-- JavaScripts -->

@@ -45,6 +45,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('offices', ['as' => 'offices.index', 'uses' => 'OfficeController@index', 'middleware' => ['permission:office-list|office-create|office-edit|office-delete']]);
     Route::get('offices/create', ['as' => 'offices.create', 'uses' => 'OfficeController@create', 'middleware' => ['permission:office-create']]);
     Route::post('offices/store', ['as' => 'offices.store', 'uses' => 'OfficeController@store', 'middleware' => ['permission:office-create']]);
+    Route::post('offices/update', ['as' => 'offices.update', 'uses' => 'OfficeController@update', 'middleware' => ['permission:office-edit']]);
 
     Route::get('offices/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show']);
     Route::get('offices/{id}/edit', ['as' => 'offices.edit', 'uses' => 'OfficeController@edit', 'middleware' => ['permission:office-edit']]);
@@ -53,6 +54,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('states/getStates',['as' => 'states.getStatesList','uses'=>'StateController@getStatesList','middleware'=>['permission:state-list']]);
     Route::post('offices/getOffices',['as' => 'offices.getOfficeList','uses'=>'OfficeController@getOfficesList','middleware'=>['permission:office-list']]);
     
+    delete
     /*Route::get('states/getStates',['as' => 'states.getStatesList','uses'=>'StateController@getStatesList','middleware'=>['permission:state-list']]);*/
 
 

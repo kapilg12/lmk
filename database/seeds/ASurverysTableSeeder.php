@@ -77,7 +77,7 @@ class ASurverysTableSeeder extends Seeder
         DB::table('b_surveys')->insert([
             [
                 'id' => 1,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'total_land_area' => '2000',
                 'roof_top_area' => '4500',
                 'road_paved_area' => '900',
@@ -101,7 +101,7 @@ class ASurverysTableSeeder extends Seeder
                 'water_supply_from_RIICO' => 'water supply from RIICO',
             ], [
                 'id' => 2,
-                'a_surveys_id' => 2,
+                'a_survey_id' => 2,
                 'total_land_area' => '2000',
                 'roof_top_area' => '4500',
                 'road_paved_area' => '900',
@@ -125,7 +125,7 @@ class ASurverysTableSeeder extends Seeder
                 'water_supply_from_RIICO' => 'water supply from RIICO',
             ], [
                 'id' => 3,
-                'a_surveys_id' => 3,
+                'a_survey_id' => 3,
                 'total_land_area' => '6000',
                 'roof_top_area' => '2000',
                 'road_paved_area' => '3000',
@@ -154,19 +154,22 @@ class ASurverysTableSeeder extends Seeder
         DB::table('b_sg_waters')->insert([
             [
                 'id' => 1,
-                'b_surveys_id' => 1,
+                'a_survey_id' => 1,
+                'b_survey_id' => 1,
                 'tubewell_borewell' => "tubewell",
                 'depth_of_s_pump' => "5000",
                 'current_water_abstraction' => "current water abstraction",
             ], [
                 'id' => 2,
-                'b_surveys_id' => 2,
+                'a_survey_id' => 2,
+                'b_survey_id' => 2,
                 'tubewell_borewell' => "borewell",
                 'depth_of_s_pump' => "5000",
                 'current_water_abstraction' => "current water abstraction borewell",
             ], [
                 'id' => 3,
-                'b_surveys_id' => 3,
+                'a_survey_id' => 3,
+                'b_survey_id' => 3,
                 'tubewell_borewell' => "borewell",
                 'depth_of_s_pump' => "5000",
                 'current_water_abstraction' => "current water abstraction borewell",
@@ -177,7 +180,8 @@ class ASurverysTableSeeder extends Seeder
             [
                 'id' => 1,
                 'user_id' => 1,
-                'b_surveys_id' => 1,
+                'a_survey_id' => 1,
+                'b_survey_id' => 1,
                 'area_location' => "demo.jpg",
                 'sources_sw_gw' => "demo1.jpg",
                 'existing_rwh_structure' => "demo2.jpg",
@@ -185,7 +189,8 @@ class ASurverysTableSeeder extends Seeder
             ], [
                 'id' => 2,
                 'user_id' => 1,
-                'b_surveys_id' => 2,
+                'a_survey_id' => 2,
+                'b_survey_id' => 2,
                 'area_location' => "test.jpg",
                 'sources_sw_gw' => "test1.jpg",
                 'existing_rwh_structure' => "test2.jpg",
@@ -193,7 +198,8 @@ class ASurverysTableSeeder extends Seeder
             ], [
                 'id' => 3,
                 'user_id' => 2,
-                'b_surveys_id' => 3,
+                'a_survey_id' => 3,
+                'b_survey_id' => 3,
                 'area_location' => "demo5.jpg",
                 'sources_sw_gw' => "demo6.jpg",
                 'existing_rwh_structure' => "demo7.jpg",
@@ -205,7 +211,8 @@ class ASurverysTableSeeder extends Seeder
         DB::table('gpscoordinates')->insert([
             [
                 'id' => 1,
-                'b_surveys_id' => 1,
+                'a_survey_id' => 1,
+                'b_survey_id' => 1,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "A",
@@ -213,7 +220,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 2,
-                'b_surveys_id' => 1,
+                'a_survey_id' => 1,
+                'b_survey_id' => 1,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "B",
@@ -221,7 +229,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 3,
-                'b_surveys_id' => 1,
+                'a_survey_id' => 1,
+                'b_survey_id' => 1,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "C",
@@ -229,7 +238,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 4,
-                'b_surveys_id' => 1,
+                'a_survey_id' => 1,
+                'b_survey_id' => 1,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "D",
@@ -237,7 +247,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 5,
-                'b_surveys_id' => 5,
+                'a_survey_id' => 5,
+                'b_survey_id' => 5,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "A",
@@ -245,7 +256,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 6,
-                'b_surveys_id' => 5,
+                'a_survey_id' => 2,
+                'b_survey_id' => 2,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "B",
@@ -253,7 +265,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 7,
-                'b_surveys_id' => 2,
+                'a_survey_id' => 2,
+                'b_survey_id' => 2,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "C",
@@ -261,7 +274,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 8,
-                'b_surveys_id' => 2,
+                'a_survey_id' => 2,
+                'b_survey_id' => 2,
                 'GPSCoordinate_area' => "bulding",
                 'GPSCoordinate_type' => "bulding",
                 'GPSCoordinate_point' => "D",
@@ -269,7 +283,8 @@ class ASurverysTableSeeder extends Seeder
                 'GPSCoordinate_longitude' => "75.7692° E",
             ], [
                 'id' => 9,
-                'b_surveys_id' => 3,
+                'a_survey_id' => 3,
+                'b_survey_id' => 3,
                 'GPSCoordinate_area' => "tubewell",
                 'GPSCoordinate_type' => "tubewell",
                 'GPSCoordinate_point' => "A",
@@ -282,7 +297,7 @@ class ASurverysTableSeeder extends Seeder
         DB::table('c_one_surveys')->insert([
             [
                 'id' => 1,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'details_of_water_requirement' => "industrial",
                 'requirement_CGWA_permission' => "Yes",
                 'existing_requirement' => "Yes",
@@ -290,7 +305,7 @@ class ASurverysTableSeeder extends Seeder
                 'annual_requirement' => "Yes",
             ], [
                 'id' => 2,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'details_of_water_requirement' => "residential",
                 'requirement_CGWA_permission' => "Yes",
                 'existing_requirement' => "Yes",
@@ -298,7 +313,7 @@ class ASurverysTableSeeder extends Seeder
                 'annual_requirement' => "Yes",
             ], [
                 'id' => 3,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'details_of_water_requirement' => "domestic",
                 'requirement_CGWA_permission' => "Yes",
                 'existing_requirement' => "Yes",
@@ -306,7 +321,7 @@ class ASurverysTableSeeder extends Seeder
                 'annual_requirement' => "Yes",
             ], [
                 'id' => 4,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'details_of_water_requirement' => "greenbelt_development",
                 'requirement_CGWA_permission' => "Yes",
                 'existing_requirement' => "Yes",
@@ -314,7 +329,7 @@ class ASurverysTableSeeder extends Seeder
                 'annual_requirement' => "Yes",
             ], [
                 'id' => 5,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'details_of_water_requirement' => "other_uses_specify",
                 'requirement_CGWA_permission' => "Yes",
                 'existing_requirement' => "Yes",
@@ -326,49 +341,49 @@ class ASurverysTableSeeder extends Seeder
         DB::table('c_two_surveys')->insert([
             [
                 'id' => 1,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Total waste water generated",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 2,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Quantity of treated water generated",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 3,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Reuse in Industrial activity",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 4,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Reuse in green belt development",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 5,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Domestic",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 6,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => " Other uses",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 7,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Total Treated water utilised",
                 'cum_day' => "180",
                 'cum_year' => "2106",
             ], [
                 'id' => 8,
-                'a_surveys_id' => 1,
+                'a_survey_id' => 1,
                 'breakup_of_recycled_water_usage' => "Water Testing Report of Treated Water",
                 'cum_day' => "180",
                 'cum_year' => "2106",

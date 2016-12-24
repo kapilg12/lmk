@@ -47,10 +47,9 @@ class CreateSurveysTable extends Migration
         });
         Schema::create('b_surveys', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('a_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
             $table->string('total_land_area')->comment('Total Land Area in Sq m');
             $table->string('roof_top_area')->comment('Roof Top Area of Buildings/Sheds in Sq m');
-            // columns to store answers
             $table->string('road_paved_area')->nullable()->comment('Road/Paved Area in Sq m');
             $table->string('green_belt_area')->nullable()->comment('Green Belt Area in Sq m');
             $table->string('open_land')->nullable()->comment('Open Land in Sq m');
@@ -63,8 +62,10 @@ class CreateSurveysTable extends Migration
 
             $table->string('average_annual_rainfall')->nullable()->comment('Average Annual Rainfall in the area in mm');
             $table->string('number_of_rainy_day')->nullable()->comment('Number of Rainy days in a Year');
-            $table->enum('nature_of_aquifer', ['impermeable-area', 'non_porous_area', 'hard_rock_area', 'alluvial_area'])->comment('Is it Impermeable/non-porous/hard rock/Alluvial area?');
-            $table->enum('nature_of_terrain', ['hilly', 'hocky', 'undulating', 'uniform', 'flat'])->comment('Nature of Terrain: Hilly/Rocky or Undulating, Uniform or flat');
+            //$table->enum('nature_of_aquifer', ['impermeable-area', 'non_porous_area', 'hard_rock_area', 'alluvial_area'])->comment('Is it Impermeable/non-porous/hard rock/Alluvial area?');
+            //$table->enum('nature_of_terrain', ['hilly', 'hocky', 'undulating', 'uniform', 'flat'])->comment('Nature of Terrain: Hilly/Rocky or Undulating, Uniform or flat');
+            $table->string('nature_of_aquifer')->comment('Is it Impermeable/non-porous/hard rock/Alluvial area?');
+            $table->string('nature_of_terrain')->comment('Nature of Terrain: Hilly/Rocky or Undulating, Uniform or flat');
             $table->enum('nature_of_soil', ['alluvial', 'sandy', 'loamy', 'gravel', 'silty'])->comment('Nature of Soil: Alluvial, Sandy, Loamy, gravel, silty');
 
             $table->string('recharge_well_depth')->nullable()->comment('Recharge well (T/W or H/P) – working / abandoned [Depth(m), Diameter(m)]');
@@ -85,7 +86,7 @@ class CreateSurveysTable extends Migration
 
             //$table->morphs('b_surveysable');
             $table->timestamps();
-            $table->foreign('a_surveys_id')
+            $table->foreign('a_survey_id')
                 ->references('id')->on('a_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -93,22 +94,29 @@ class CreateSurveysTable extends Migration
 
         Schema::create('b_sg_waters', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('b_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
+            $table->integer('b_survey_id')->unsigned()->index();
             $table->string('tubewell_borewell')->nullable()->comment("Tubewell / Borewell (Working only)");
             $table->string('depth_of_s_pump')->nullable()->comment("Depth of S/pump & water level (m)**, Diameter(m)");
             $table->string('current_water_abstraction')->nullable()->comment("Current Water Abstraction - Discharge Rate x working hr");
             //$table->morphs('b_sg_waters');
             $table->timestamps();
-            $table->foreign('b_surveys_id')
+            $table->foreign('a_survey_id')
+                ->references('id')->on('a_surveys')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('b_survey_id')
                 ->references('id')->on('b_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
         });
 
         Schema::create('b_attachments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('b_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
+            $table->integer('b_survey_id')->unsigned()->index();
             $table->string('area_location')->nullable()->comment("Area/Location Attchment");
             $table->string('sources_sw_gw')->nullable()->comment("Sources – SW/GW");
             $table->string('existing_rwh_structure')->nullable()->comment("Existing RWH Structure");
@@ -119,7 +127,11 @@ class CreateSurveysTable extends Migration
                 ->references('id')->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('b_surveys_id')
+            $table->foreign('a_survey_id')
+                ->references('id')->on('a_surveys')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('b_survey_id')
                 ->references('id')->on('b_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -128,7 +140,7 @@ class CreateSurveysTable extends Migration
 
         Schema::create('c_one_surveys', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('a_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
             $table->enum('details_of_water_requirement', ['industrial', 'residential', 'domestic', 'greenbelt_development', 'other_uses_specify', 'total'])->comment('Details of Water requirement / recycled water usage: (Demand a flow chart of activities and requirement of water at each stage)');
             $table->string('requirement_CGWA_permission')->nullable()->comment('Requirement as per CGWA permission**/##(Cum/day)');
             $table->string('existing_requirement')->nullable()->comment('Existing Requirement (Cum/day)');
@@ -136,30 +148,30 @@ class CreateSurveysTable extends Migration
             $table->string('annual_requirement')->nullable()->comment('Annual requirement (Cum/year)');
             //$table->morphs('c_one_surveysable');
             $table->timestamps();
-            $table->foreign('a_surveys_id')
+            $table->foreign('a_survey_id')
                 ->references('id')->on('a_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
         Schema::create('c_two_surveys', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('c_one_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
             $table->string('breakup_of_recycled_water_usage')->nullable()->comment('Breakup of Recycled water usage');
             $table->string('cum_day')->nullable()->comment('Cum/day');
             $table->string('cum_year')->nullable()->comment('Cum/Year');
 
             //$table->morphs('c_two_surveysable');
             $table->timestamps();
-            $table->foreign('c_one_surveys_id')
-                ->references('id')->on('c_one_surveys')
+            $table->foreign('a_survey_id')
+                ->references('id')->on('a_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
 
         Schema::create('GPSCoordinates', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index();
-            $table->integer('b_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
+            $table->integer('b_survey_id')->unsigned()->index();
             $table->string('GPSCoordinate_area')->nullable()->comment('bulding,shed,tubewell');
             $table->string('GPSCoordinate_type')->nullable()->comment('residential, non residential');
             $table->string('GPSCoordinate_point')->nullable()->comment('A,B,C,D');
@@ -168,11 +180,11 @@ class CreateSurveysTable extends Migration
             //$table->morphs('c_two_surveysable');
             $table->timestamps();
 
-            $table->foreign('user_id')
-                ->references('id')->on('users')
+            $table->foreign('a_survey_id')
+                ->references('id')->on('a_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('b_surveys_id')
+            $table->foreign('b_survey_id')
                 ->references('id')->on('b_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -190,7 +202,7 @@ class CreateSurveysTable extends Migration
         Schema::create('survey_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('a_surveys_id')->unsigned()->index();
+            $table->integer('a_survey_id')->unsigned()->index();
             $table->enum('is_status', ['active', 'approved', 'completed', 'certified'])->comment('Set Status');
             $table->string('ip_address')->nullable()->comment('Track Ip Address');
             //$table->morphs('c_two_surveysable');
@@ -200,7 +212,7 @@ class CreateSurveysTable extends Migration
                 ->references('id')->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('a_surveys_id')
+            $table->foreign('a_survey_id')
                 ->references('id')->on('a_surveys')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

@@ -67,7 +67,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Pin:</strong>
-                <input type="text" name="office_email" id="office_email" placeholder="Office Email" class="form-control" />                
+                <input type="text" name="office_pin" id="office_pin" placeholder="Pin" class="form-control" />                
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">

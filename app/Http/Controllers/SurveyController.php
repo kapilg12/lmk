@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ASurvey;
+use App\BSurvey;
 use App\Http\Controllers\Controller;
 use App\Office;
 use Illuminate\Http\Request;
@@ -70,6 +71,48 @@ class SurveyController extends Controller
     }
     public function getSurveyDone()
     {
-        return '<h1>Thanks! You have completed the survey</h1>';
+        return view('survey.success');
     }
+    public function getDashboard(Request $request)
+    {
+        $user_role = "torrent";
+        if ($user_role == 'torrent') {
+            $torrent_id = 2;
+            $ASurveys = ASurvey::with('offices')
+                ->with('bsurveys')
+                ->where('torrent_id', $torrent_id)
+                ->where('is_active', 1)
+                ->orderBy('id', 'DESC')
+                ->paginate(5);
+            return view('survey.dashboard', compact('ASurveys', 'user_role'))
+                ->with('i', ($request->input('page', 1) - 1) * 5);
+        } else {
+            $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->paginate(5);
+            return view('survey.dashboard', compact('ASurveys', 'user_role'))
+                ->with('i', ($request->input('page', 1) - 1) * 5);
+        }
+
+    }
+    public function show($id)
+    {
+        $user_role = 'torrent';
+        if ($user_role == 'superadmin') {
+            //$ASurveys = ASurvey::where('id', $id);
+            $ASurvey = ASurvey::with('bsurveys')
+                ->with('bsgwater')
+                ->with('gpscoordinate')
+                ->find($id);
+
+        } else if ($user_role == 'rm') {
+            $ASurveys = ASurvey::find($id);
+        } else if ($user_role == 'torrent') {
+            $BSurveys = BSurvey::where('id', 1);
+            dd($BSurveys);
+            //$ASurveys = BSurvey::with('bsgwater, gpscoordinates')->where('a_survey_id', $id)->get();
+        }
+
+        //$ASurvey = ASurvey::with('bsurveys')->where('user_id', 1)->get();
+        return view('survey.dashboard_torrent');
+    }
+
 }

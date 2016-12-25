@@ -34,6 +34,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('survey/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
     Route::post('survey/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
     Route::get('survey/done', 'SurveyController@getSurveyDone');
+    Route::get('dashboard', 'SurveyController@getDashboard');
+    Route::get('survey/show/{id}', 'SurveyController@show');
+    //Route::resource('surveys', 'SurveyController');
+
 });
 
 Route::group(['middleware' => ['web', 'auth']], function () {
@@ -58,7 +62,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('states/getStates', ['as' => 'states.getStatesList', 'uses' => 'StateController@getStatesList', 'middleware' => ['permission:state-list']]);
     Route::post('offices/getOffices', ['as' => 'offices.getOfficeList', 'uses' => 'OfficeController@getOfficesList', 'middleware' => ['permission:office-list']]);
 
-  
     Route::get('roles', ['as' => 'roles.index', 'uses' => 'RoleController@index', 'middleware' => ['permission:role-list|role-create|role-edit|role-delete']]);
     Route::get('roles/create', ['as' => 'roles.create', 'uses' => 'RoleController@create', 'middleware' => ['permission:role-create']]);
     Route::post('roles/create', ['as' => 'roles.store', 'uses' => 'RoleController@store', 'middleware' => ['permission:role-create']]);

@@ -3,7 +3,6 @@
 namespace App;
 
 use App\BSgWater;
-use App\Gpscoordinate;
 use Illuminate\Database\Eloquent\Model;
 
 class BSurvey extends Model
@@ -13,15 +12,16 @@ class BSurvey extends Model
 
     public function surveys()
     {
-        return $this->belongsTo(ASurvey::class, 'a_survey_id');
+        return $this->belongsTo('App\ASurvey', 'a_survey_id');
     }
 
     public function bsgwater()
     {
-        return $this->hasMany(BSgWater::class, 'b_survey_id', 'id');
+        return $this->hasOne('App\BSgWater', 'b_survey_id', 'id');
     }
+
     public function gpscoordinates()
     {
-        return $this->hasMany(Gpscoordinate::class, 'b_survey_id', 'id');
+        return $this->hasMany('App\Gpscoordinate', 'b_survey_id', 'id');
     }
 }

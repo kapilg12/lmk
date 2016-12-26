@@ -75,7 +75,7 @@ class SurveyController extends Controller
     }
     public function getDashboard(Request $request)
     {
-        $user_role = "torrent";
+        $user_role = "superadmin";
         if ($user_role == 'torrent') {
             $torrent_id = 2;
             $ASurveys = ASurvey::with('offices')
@@ -83,7 +83,10 @@ class SurveyController extends Controller
                 ->where('torrent_id', $torrent_id)
                 ->where('is_active', 1)
                 ->orderBy('id', 'DESC')
-                ->paginate(5);
+                ->paginate(5)->all();
+            //echo "<pre>";
+            //print_r($ASurveys);
+            // dd($ASurveys[0]['bsurveys']->id);
             return view('survey.dashboard', compact('ASurveys', 'user_role'))
                 ->with('i', ($request->input('page', 1) - 1) * 5);
         } else {
@@ -95,24 +98,24 @@ class SurveyController extends Controller
     }
     public function show($id)
     {
-        $user_role = 'torrent';
+        $user_role = 'superadmin';
         if ($user_role == 'superadmin') {
-            //$ASurveys = ASurvey::where('id', $id);
-            $ASurvey = ASurvey::with('bsurveys')
+            $ASurveys = ASurvey::with('offices')
+                ->with('bsurveys')
                 ->with('bsgwater')
-                ->with('gpscoordinate')
+                ->with('gpscoordinates')
                 ->find($id);
-
         } else if ($user_role == 'rm') {
             $ASurveys = ASurvey::find($id);
         } else if ($user_role == 'torrent') {
-            $BSurveys = BSurvey::where('id', 1);
-            dd($BSurveys);
+            $ASurveys = BSurvey::with('bsgwater')
+                ->with('gpscoordinates')
+                ->find($id);
             //$ASurveys = BSurvey::with('bsgwater, gpscoordinates')->where('a_survey_id', $id)->get();
         }
-
+        return view('survey.show', compact('ASurveys', 'user_role'));
         //$ASurvey = ASurvey::with('bsurveys')->where('user_id', 1)->get();
-        return view('survey.dashboard_torrent');
+
     }
 
 }

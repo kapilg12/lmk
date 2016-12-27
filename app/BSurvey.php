@@ -17,11 +17,23 @@ class BSurvey extends Model
 
     public function bsgwater()
     {
-        return $this->hasOne('App\BSgWater', 'b_survey_id', 'id');
+        return $this->hasMany('App\BSgWater', 'b_survey_id', 'id');
     }
 
     public function gpscoordinates()
     {
         return $this->hasMany('App\Gpscoordinate', 'b_survey_id', 'id');
+    }
+    public function attachments()
+    {
+        return $this->hasMany('App\BAttachment', 'a_survey_id', 'id');
+    }
+    public function conesurveys()
+    {
+        return $this->hasMany('App\COneSurvey', 'b_survey_id', 'id');
+    }
+    public function ctwosurveys()
+    {
+        return $this->hasMany('App\CTwoSurvey', 'b_survey_id', 'id');
     }
 }

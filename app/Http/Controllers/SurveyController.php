@@ -99,11 +99,14 @@ class SurveyController extends Controller
     public function show($id)
     {
         $user_role = 'superadmin';
-        if ($user_role == 'superadmin') {
+        if ($user_role == 'torrent') {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
                 ->with('bsgwater')
                 ->with('gpscoordinates')
+                ->with('attachments')
+                ->with('conesurveys')
+                ->with('ctwosurveys')
                 ->find($id);
         } else if ($user_role == 'rm') {
             $ASurveys = ASurvey::find($id);

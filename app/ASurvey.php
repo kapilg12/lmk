@@ -28,11 +28,23 @@ class ASurvey extends Model
     }
     public function bsgwater()
     {
-        return $this->hasOne('App\BSgWater', 'a_survey_id', 'id');
+        return $this->hasMany('App\BSgWater', 'a_survey_id', 'id');
     }
     public function gpscoordinates()
     {
         return $this->hasMany('App\Gpscoordinate', 'a_survey_id', 'id');
+    }
+    public function attachments()
+    {
+        return $this->hasMany('App\BAttachment', 'a_survey_id', 'id');
+    }
+    public function conesurveys()
+    {
+        return $this->hasMany('App\COneSurvey', 'a_survey_id', 'id');
+    }
+    public function ctwosurveys()
+    {
+        return $this->hasMany('App\CTwoSurvey', 'a_survey_id', 'id');
     }
 
 }

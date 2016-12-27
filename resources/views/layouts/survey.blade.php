@@ -112,9 +112,6 @@
         <div class="container">
             <section class="content-header">
                 <div class="container-fluid">
-                    <div class="row">
-                       @include('layouts.partial.access_nav');
-                    </div>
                     @yield('content')
                 </div>
             </section>

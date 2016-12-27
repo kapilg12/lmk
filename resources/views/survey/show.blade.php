@@ -1,8 +1,13 @@
 @extends('layouts.survey')
 @section('content')
-{{ dump($ASurveys) }}
-
+{{-- dump($ASurveys) --}}
+@if($user_role == 'superadmin')
 <div class="row">
+   @include('layouts.partial.access_nav');
+</div>
+@endif
+<div class="row">
+    @if($user_role != 'torrent')
     <div class="col-md-3">
         <!-- Profile Image -->
           <div class="box box-primary">
@@ -31,36 +36,46 @@
                 </li>
               </ul>
 
-              <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
-      <!-- About Me Box -->
-      <div class="box box-primary">
-        <div class="box-header with-border">
-          <h3 class="box-title">Basic Information</h3>
-        </div><!-- /.box-header -->
-        <div class="box-body">
-          <strong><i class="fa fa-map-marker margin-r-5"></i> Postel Address</strong>
-          <p class="text-muted">{{ $ASurveys->postel_address}} - {{ $ASurveys->pin_code}}</p>
+          <!-- About Me Box -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Basic Information</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <strong><i class="fa fa-map-marker margin-r-5"></i> Postel Address</strong>
+              <p class="text-muted">{{ $ASurveys->postel_address}} - {{ $ASurveys->pin_code}}</p>
 
-          <hr>
+              <hr>
 
-          <strong><i class="fa fa-phone margin-r-5">Contact</i></strong>
-          <p class="text-muted">{{ $ASurveys->contact_number}}</p>
+              <strong><i class="fa fa-phone margin-r-5">Contact</i></strong>
+              <p class="text-muted">{{ $ASurveys->contact_number}}</p>
 
-          <hr>
-        </div><!-- /.box-body -->
-      </div><!-- /.box -->
+              <hr>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
 
     </div><!-- /.col -->
+    @endif
+    @if($user_role != 'torrent')
     <div class="col-md-9">
+    @else
+        <div class="col-md-12">
+    @endif
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
+          @if($user_role == 'superadmin')
           <li class="active"><a href="#activity" data-toggle="tab">B: Area Specification</a></li>
           <li><a href="#timeline" data-toggle="tab">C: Details Of Water</a></li>
-          <li><a href="#settings" data-toggle="tab">C: Breakup of Recycled</a></li>
+          @elseif($user_role == 'torrent')
+            <li class="active"><a href="#activity" data-toggle="tab">B: Area Specification</a></li>
+          @else
+            <li class="active"><a href="#settings" data-toggle="tab">A: Details of Basic Informations</a></li>
+          @endif
         </ul>
         <div class="tab-content">
+        @if($user_role == 'superadmin' || $user_role == 'torrent')
           <div class="active tab-pane" id="activity">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -72,6 +87,7 @@
               </li>
               <!-- /.timeline-label -->
               <!-- timeline item -->
+
               <li>
                 <i class="fa fa-home bg-red"></i>
                 <div class="timeline-item">
@@ -79,19 +95,19 @@
                 <div class="box-body box-profile">
                  <ul class="list-group ">
                     <li class="list-group-item">
-                      <b>Total Land Area Sq m</b> <a class="pull-right">1,322</a>
+                      <b>Total Land Area Sq m</b> <a class="pull-right">{{ $ASurveys->bsurveys->total_land_area }}</a>
                     </li>
                     <li class="list-group-item">
-                      <b>Roof Top Area of Building/Sheds Sq m</b> <a class="pull-right">543</a>
+                      <b>Roof Top Area of Building/Sheds Sq m</b> <a class="pull-right">{{ $ASurveys->bsurveys->roof_top_area }}</a>
                     </li>
                     <li class="list-group-item">
-                      <b>Road/Paved Area in Sq m</b> <a class="pull-right">13,287</a>
+                      <b>Road/Paved Area in Sq m</b> <a class="pull-right">{{ $ASurveys->bsurveys->road_paved_area }}</a>
                     </li>
                     <li class="list-group-item">
-                      <b>Green Belt Area Sq m</b> <a class="pull-right">13,287</a>
+                      <b>Green Belt Area Sq m</b> <a class="pull-right">{{ $ASurveys->bsurveys->green_belt_area }}</a>
                     </li>
                     <li class="list-group-item">
-                      <b>Open Lead in Sq m</b> <a class="pull-right">13,287</a>
+                      <b>Open Lead in Sq m</b> <a class="pull-right">{{ $ASurveys->bsurveys->open_land }}</a>
                     </li>
                   </ul>
                 </div><!-- /.box-body -->
@@ -107,24 +123,37 @@
               <li>
                 <i class="fa fa-map-marker bg-blue"></i>
                 <div class="timeline-item">
-                    <div class="box-body box-profile">
-                 <ul class="list-group ">
-                    <li class="list-group-item">
-                      <b>Point A</b> <a class="pull-right">1,322</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Point B</b> <a class="pull-right">543</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Point C</b> <a class="pull-right">13,287</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Point D</b> <a class="pull-right">13,287</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Space available in north east cornor of the area (L x W)</b> <a class="pull-right">13,287</a>
-                    </li>
-                  </ul>
+                    <div class="box-body no-padding">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                  <th>GPSCoordinate Point</th>
+                                  <th>Latitude</th>
+                                  <th>Longitude</th>
+                                </tr>
+                                @foreach ($ASurveys->gpscoordinates as $key => $gpscoordinate)
+                                    <tr>
+                                      <td><b>Point {{$gpscoordinate->GPSCoordinate_point}}</b></td>
+                                      <td><span class="badge bg-red">{{$gpscoordinate->GPSCoordinate_latitude}}</span></td>
+                                      <td><span class="badge bg-red">{{$gpscoordinate->GPSCoordinate_longitude}}</span></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                         <!--<ul class="list-group ">
+                            <li class="list-group-item">
+                              <b>Point B</b> <a class="pull-right"></a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>Point C</b> <a class="pull-right"></a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>Point D</b> <a class="pull-right"></a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>Space available in north east cornor of the area (L x W)</b> <a class="pull-right">13,287</a>
+                            </li>
+                      </ul>-->
                 </div><!-- /.box-body -->
                 </div>
               </li>
@@ -141,10 +170,10 @@
                     <div class="box-body box-profile">
                          <ul class="list-group ">
                             <li class="list-group-item">
-                              <b>Average Annual Railfall in the area in mm</b> <a class="pull-right">1,322</a>
+                              <b>Average Annual Railfall in the area in mm</b> <a class="pull-right">{{ $ASurveys->bsurveys->average_annual_rainfall }}</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Number of Rainy days in a year</b> <a class="pull-right">543</a>
+                              <b>Number of Rainy days in a year</b> <a class="pull-right">{{ $ASurveys->bsurveys->number_of_rainy_day }}</a>
                             </li>
 
                           </ul>
@@ -164,18 +193,15 @@
                     <div class="box-body box-profile">
                          <ul class="list-group ">
                             <li class="list-group-item">
-                              <b>Average Annual Railfall in the area in mm</b> <a class="pull-right">1,322</a>
+                              <b>Nature of Aquifer:</b> <a class="pull-right">{{ $ASurveys->bsurveys->nature_of_aquifer }}</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Number of Rainy days in a year</b> <a class="pull-right">543</a>
+                              <b>Nature of Terrain:</b> <a class="pull-right">{{ $ASurveys->bsurveys->nature_of_terrain }}</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Average Annual Railfall in the area in mm</b> <a class="pull-right">1,322</a>
+                              <b>Nature of Soil:</b> <a class="pull-right">{{ $ASurveys->bsurveys->nature_of_soil }}</a>
                             </li>
-                            <li class="list-group-item">
-                              <b>Number of Rainy days in a year</b> <a class="pull-right">543</a>
-                            </li>
-                          </ul>
+                        </ul>
                     </div><!-- /.box-body -->
                 </div>
               </li>
@@ -192,19 +218,19 @@
                     <div class="box-body box-profile">
                          <ul class="list-group ">
                             <li class="list-group-item">
-                              <b>Reacharge Structures Available: </b> <a class="pull-right">1,322</a>
+                              <b>Reacharge Structures Available: </b> <a class="pull-right"></a>
                             </li>
                             <li class="list-group-item">
-                              <b>Recharge well (T/W or H/P) – working / abandoned    [Depth(m), Diameter(m)]</b> <a class="pull-right">543</a>
+                              <b>Recharge well (T/W or H/P) – working / abandoned <br />[Depth(m), Diameter(m)]</b> <a class="pull-right">Depth(m): {{ $ASurveys->bsurveys->recharge_well_depth }}, Diameter(m): {{ $ASurveys->bsurveys->recharge_well_diameter }}</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Recharge Pit – working / abandoned [Depth(m), Diameter(m)]</b> <a class="pull-right">1,322</a>
+                              <b>Recharge Pit – working / abandoned <br />[Depth(m), Diameter(m)]</b> <a class="pull-right">Depth(m): {{ $ASurveys->bsurveys->recharge_pit_depth }} Diameter(m):{{ $ASurveys->bsurveys->recharge_pit_diameter }}</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Recharge Trenches – working / abandoned [Dimension – L x W x D]</b> <a class="pull-right">543</a>
+                              <b>Recharge Trenches – working / abandoned <br />[Dimension – L x W x D]</b> <a class="pull-right">L: {{ $ASurveys->bsurveys->recharge_trenches_l }} X W:{{ $ASurveys->bsurveys->recharge_trenches_w }} X D:{{ $ASurveys->bsurveys->recharge_trenches_d }}</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Water bodies ponds etc.– working / abandoned [Depth(m), Diameter(m)]</b> <a class="pull-right">543</a>
+                              <b>Water bodies ponds etc.– working / abandoned <br />[Depth(m), Diameter(m)]</b> <a class="pull-right">Depth(m): {{ $ASurveys->bsurveys->water_bodies_ponds_depth }}, Diameter(m):{{ $ASurveys->bsurveys->water_bodies_ponds_diameter }}</a>
                             </li>
                           </ul>
                     </div><!-- /.box-body -->
@@ -221,12 +247,7 @@
                 <i class="fa fa-cloud bg-aqua"></i>
                 <div class="timeline-item">
                       <h3 class="timeline-header">Source of Availability of surface water for industrial use, if any, give details</h3>
-                      <div class="timeline-body">
-                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                        quora plaxo ideeli hulu weebly balihoo...
-                      </div>
+                      <div class="timeline-body">{{ $ASurveys->bsurveys->source_of_availability_of_surface_water }}</div>
                 </div>
               </li>
               <!-- END Source of Water item -->
@@ -244,21 +265,23 @@
                               <h3 class="box-title">Source of Ground water</h3>
                             </div><!-- /.box-header -->
                             <div class="box-body no-padding">
-                              <table class="table table-striped">
-                                <tr>
-                                  <th style="width: 10px">#</th>
-                                  <th>Tubewell / Borewell (Working only)</th>
-                                  <th>Depth of S/pump & water level (m)**, Diameter(m)</th>
-                                  <th>Current Water Abstraction (Discharge Rate x working hr)</th>
-                                </tr>
-                                <tr>
-                                  <td>1.</td>
-                                  <td>Tubewell</td>
-                                  <td>50000 * 50
-                                  </td>
-                                  <td><span class="badge bg-red">50</span></td>
-                                </tr>
-                              </table>
+                                <table class="table table-striped">
+                                    <tr>
+                                      <th style="width: 10px">#</th>
+                                      <th>Tubewell / Borewell (Working only)</th>
+                                      <th>Depth of S/pump & water level (m)**, Diameter(m)</th>
+                                      <th>Current Water Abstraction (Discharge Rate x working hr)</th>
+                                    </tr>
+                                    {{--*/ $i = 0 /*--}}
+                                     @foreach ($ASurveys->bsgwater as $key => $bsgwater)
+                                        <tr>
+                                          <td>{{++$i}}</td>
+                                          <td><b>Point {{$bsgwater->tubewell_borewell}}</b></td>
+                                          <td>{{$bsgwater->depth_of_s_pump}}</td>
+                                          <td>{{$bsgwater->current_water_abstraction}}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
                             </div><!-- /.box-body -->
                           </div><!-- /.box -->
                 </div>
@@ -274,12 +297,7 @@
                 <i class="fa fa-cloud bg-aqua"></i>
                 <div class="timeline-item">
                       <h3 class="timeline-header">Water Supply from RIICO, if available, take copy of last 3 bills</h3>
-                      <div class="timeline-body">
-                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                        quora plaxo ideeli hulu weebly balihoo...
-                      </div>
+                      <div class="timeline-body">{{ $ASurveys->bsurveys->water_supply_from_RIICO }}</div>
                 </div>
               </li>
               <!-- END Water Supply from RIICO item -->
@@ -296,10 +314,28 @@
                 <div class="timeline-item">
                   <h3 class="timeline-header">Area/Location Site Layout Pians uploaded Picutes</h3>
                   <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <table class="table table-striped">
+                        <tr>
+                          <th style="width: 10px">#</th>
+                          <th>Area Location</th>
+                          <th>Sources SW GW</th>
+                          <th>Existing RWH Structure</th>
+                          <th>Site Layout Plan</th>
+                        </tr>
+                        {{--*/ $i = 0 /*--}}
+                         @foreach ($ASurveys->attachments as $key => $attachment)
+                            <tr>
+                              <td>{{++$i}}</td>
+                              <td><a href="{!! asset('dist/img/').'/'.$attachment->area_location !!}" target="_new">{{$attachment->area_location}}</a></td>
+                              <td><a href="{!! asset('dist/img/').'/'.$attachment->sources_sw_gw !!}" target="_new">{{$attachment->sources_sw_gw}}</a></td>
+                              <td><a href="{!! asset('dist/img/').'/'.$attachment->existing_rwh_structure !!}" target="_new">{{$attachment->existing_rwh_structure}}</a></td>
+                              <td><a href="{!! asset('dist/img/').'/'.$attachment->site_layout_plan !!}" target="_new">{{$attachment->site_layout_plan}}</a></td>
+                            </tr>
+                        @endforeach
+                    </table>
+                   <!-- <img src="{!! asset('dist/img/docx_mac.png') !!}" width="100" height="100" alt="..." class="margin">
+                    <img src="{!! asset('dist/img/p1.png') !!}" width="100" height="100" alt="..." class="margin">
+                    <img src="{!! asset('dist/img/icone-projet-web.png') !!}"  width="100" height="100" alt="..." class="margin">-->
                   </div>
                 </div>
               </li>
@@ -309,172 +345,145 @@
               </li>
             </ul>
           </div><!-- /.tab-pane -->
+          @endif
+          @if($user_role == 'superadmin')
           <div class="tab-pane" id="timeline">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
               <!-- timeline time label -->
               <li class="time-label">
-                <span class="bg-red">
-                  10 Feb. 2014
-                </span>
+                <span class="bg-red">Data Sheet for Medium / Large Scale Industries and WATER Instensive Inds</span>
               </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
+               <!-- timeline item -->
               <li>
-                <i class="fa fa-envelope bg-blue"></i>
+                <i class="fa fa-cloud bg-red"></i>
                 <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
+                      <div class="box">
+                            <div class="box-header">
+                              <h3 class="box-title">1.</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body no-padding">
+                              <table class="table table-striped">
+                                <tbody><tr>
+                                  <th style="width: 10px">#</th>
+                                  <th> Details of Water requirement / recycled water usage: (Demand a flow chart of activities and requirement of water at each stage)</th>
+                                  <th>Requirement as per CGWA permission**/##  (Cum/day)</th>
+                                  <th>Existing Requirement (Cum/day)</th>
+                                  <th>No. of operational days (Cum/day)</th>
+                                  <th>Annual requirement (Cum/year)</th>
+                                </tr>
+                                {{--*/ $i = 0 /*--}}
+                                 @foreach ($ASurveys->conesurveys as $key => $conesurvey)
+                                    <tr>
+                                      <td>{{++$i}}</td>
+                                      <td>{{$conesurvey->details_of_water_requirement}}</td>
+                                      <td>{{$conesurvey->requirement_CGWA_permission}}</td>
+                                      <td>{{$conesurvey->existing_requirement}}</a></td>
+                                      <td>{{$conesurvey->no_of_operational_day}}</td>
+                                      <td>{{$conesurvey->annual_requirement}}</td>
+                                    </tr>
+                                @endforeach
+
+                              </tbody></table>
+                            </div><!-- /.box-body -->
+                          </div><!-- /.box -->
                 </div>
               </li>
               <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
+                  <!-- timeline time label -->
               <li class="time-label">
-                <span class="bg-green">
-                  3 Jan. 2014
-                </span>
+                <span class="bg-red">Details of Water requirement / recycled water usage</span>
               </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
+               <!-- timeline item -->
               <li>
-                <i class="fa fa-camera bg-purple"></i>
+                <i class="fa fa-cloud bg-red"></i>
                 <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
+                      <div class="box">
+                            <div class="box-header">
+                              <h3 class="box-title">2.</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body no-padding">
+                              <table class="table table-striped">
+                                <tbody><tr>
+                                  <th style="width: 10px">#</th>
+                                  <th> Breakup of Recycled water usage:</th>
+                                  <th>Cum/Day</th>
+                                  <th>Cum/Year</th>
+                                </tr>
+                                {{--*/ $i = 0 /*--}}
+                                 @foreach ($ASurveys->ctwosurveys as $key => $ctwosurvey)
+                                    <tr>
+                                      <td>{{++$i}}</td>
+                                      <td>{{$ctwosurvey->breakup_of_recycled_water_usage}}</td>
+                                      <td>{{$ctwosurvey->cum_day}}</td>
+                                      <td>{{$ctwosurvey->cum_year}}</a></td>
+                                    </tr>
+                                @endforeach
+                              </tbody></table>
+                            </div><!-- /.box-body -->
+                          </div><!-- /.box -->
                 </div>
               </li>
               <!-- END timeline item -->
+
               <li>
                 <i class="fa fa-clock-o bg-gray"></i>
               </li>
             </ul>
           </div><!-- /.tab-pane -->
-
-          <div class="tab-pane" id="settings">
+           @endif
+           @if($user_role == 'rm')
+            <div class="active tab-pane" id="settings">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
               <!-- timeline time label -->
               <li class="time-label">
                 <span class="bg-red">
-                  10 Feb. 2014
+                  Basic Information
                 </span>
               </li>
               <!-- /.timeline-label -->
               <!-- timeline item -->
+
               <li>
-                <i class="fa fa-envelope bg-blue"></i>
+                <i class="fa fa-home bg-red"></i>
                 <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
+                <!-- Profile Image -->
+                <div class="box-body box-profile">
+                 <ul class="list-group ">
+                    <li class="list-group-item">
+                      <b>Allow Area Sq m</b> <a class="pull-right">{{ $ASurveys->allow_area }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Establishment name</b> <a class="pull-right">{{ $ASurveys->establishment_name }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Nature of Establishment</b> <a class="pull-right">{{ $ASurveys->nature_of_establishment }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Active</b> <a class="pull-right">@if($ASurveys->is_active == '1') <span class="label label-success">Active</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Approved</b> <a class="pull-right">@if($ASurveys->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Completed</b> <a class="pull-right">@if($ASurveys->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Certified</b> <a class="pull-right">@if($ASurveys->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                  </ul>
+                </div><!-- /.box-body -->
                 </div>
               </li>
               <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                <span class="bg-green">
-                  3 Jan. 2014
-                </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
+
               <li>
                 <i class="fa fa-clock-o bg-gray"></i>
               </li>
             </ul>
           </div><!-- /.tab-pane -->
-
+         @endif
         </div><!-- /.tab-content -->
       </div><!-- /.nav-tabs-custom -->
     </div><!-- /.col -->

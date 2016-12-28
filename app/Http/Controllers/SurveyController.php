@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\ASurvey;
+use App\BSurvey;
 use App\Http\Controllers\Controller;
 use App\Office;
+use Auth;
 use Illuminate\Http\Request;
 use Session;
 
@@ -70,6 +72,70 @@ class SurveyController extends Controller
     }
     public function getSurveyDone()
     {
-        return '<h1>Thanks! You have completed the survey</h1>';
+        return view('survey.success');
     }
+    public function getDashboard(Request $request)
+    {
+        $user = Auth::user();
+        //echo $user->hasRole('superadmin');die;
+        //$user_role = "superadmin";
+        if ($user->hasRole('superadmin') == 1) {
+            $user_role = 'superadmin';
+        } else if ($user->hasRole('torrent') == 1) {
+            $user_role = 'torrent';
+        } else {
+            $user_role = 'rm';
+        }
+        if ($user->hasRole('torrent') == 1) {
+            $torrent_id = 2;
+            $ASurveys = ASurvey::with('offices')
+                ->with('bsurveys')
+                ->where('torrent_id', $torrent_id)
+                ->where('is_active', 1)
+                ->orderBy('id', 'DESC')
+                ->paginate(5)->all();
+            //echo "<pre>";
+            //print_r($ASurveys);
+            // dd($ASurveys[0]['bsurveys']->id);
+            return view('survey.dashboard', compact('ASurveys', 'user_role'))
+                ->with('i', ($request->input('page', 1) - 1) * 5);
+        } else {
+            $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->paginate(5);
+            return view('survey.dashboard', compact('ASurveys', 'user_role'))
+                ->with('i', ($request->input('page', 1) - 1) * 5);
+        }
+
+    }
+    public function show($id)
+    {
+        $user = Auth::user();
+        if ($user->hasRole('superadmin') == 1) {
+            $user_role = 'superadmin';
+        } else if ($user->hasRole('torrent') == 1) {
+            $user_role = 'torrent';
+        } else {
+            $user_role = 'rm';
+        }
+        if ($user_role == 'superadmin') {
+            $ASurveys = ASurvey::with('offices')
+                ->with('bsurveys')
+                ->with('bsgwater')
+                ->with('gpscoordinates')
+                ->with('attachments')
+                ->with('conesurveys')
+                ->with('ctwosurveys')
+                ->find($id);
+        } else if ($user_role == 'rm') {
+            $ASurveys = ASurvey::find($id);
+        } else if ($user_role == 'torrent') {
+            $ASurveys = BSurvey::with('bsgwater')
+                ->with('gpscoordinates')
+                ->find($id);
+            //$ASurveys = BSurvey::with('bsgwater, gpscoordinates')->where('a_survey_id', $id)->get();
+        }
+        return view('survey.show', compact('ASurveys', 'user_role'));
+        //$ASurvey = ASurvey::with('bsurveys')->where('user_id', 1)->get();
+
+    }
+
 }

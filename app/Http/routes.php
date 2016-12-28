@@ -29,15 +29,6 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web']], function () {
     Route::get("/login", ['uses' => "UserController@login"]);
     Route::post("/login", ['uses' => "UserController@postLogin"]);
-    Route::get('survey', 'SurveyController@getSurvey');
-    Route::post('survey', 'SurveyController@postSurvey');
-    Route::get('survey/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
-    Route::post('survey/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
-    Route::get('survey/done', 'SurveyController@getSurveyDone');
-    Route::get('dashboard', 'SurveyController@getDashboard');
-    Route::get('survey/show/{id}', 'SurveyController@show');
-    //Route::resource('surveys', 'SurveyController');
-
 });
 
 Route::group(['middleware' => ['web', 'auth']], function () {
@@ -45,6 +36,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get("users", ['as' => 'users.index', 'uses' => 'UserController@index']);
     Route::get("/register", ['uses' => "UserController@create"]);
     Route::post("/register", ['uses' => "UserController@store"]);
+    Route::get("/logout", ['uses' => "UserController@getLogout"]);
 
     Route::get('/home', 'HomeController@index');
 
@@ -69,6 +61,15 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('roles/{id}/edit', ['as' => 'roles.edit', 'uses' => 'RoleController@edit', 'middleware' => ['permission:role-edit']]);
     Route::patch('roles/{id}', ['as' => 'roles.update', 'uses' => 'RoleController@update', 'middleware' => ['permission:role-edit']]);
     Route::delete('roles/{id}', ['as' => 'roles.destroy', 'uses' => 'RoleController@destroy', 'middleware' => ['permission:role-delete']]);
+
+    Route::get('survey', 'SurveyController@getSurvey');
+    Route::post('survey', 'SurveyController@postSurvey');
+    Route::get('survey/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
+    Route::post('survey/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
+    Route::get('survey/done', 'SurveyController@getSurveyDone');
+    Route::get('dashboard', 'SurveyController@getDashboard');
+    Route::get('survey/show/{id}', 'SurveyController@show');
+    //Route::resource('surveys', 'SurveyController');
 
     /*Route::get('itemCRUD2', ['as' => 'itemCRUD2.index', 'uses' => 'ItemCRUD2Controller@index', 'middleware' => ['permission:item-list|item-create|item-edit|item-delete']]);
 Route::get('itemCRUD2/create', ['as' => 'itemCRUD2.create', 'uses' => 'ItemCRUD2Controller@create', 'middleware' => ['permission:item-create']]);

@@ -5,7 +5,19 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <h3><span style="text-transform: capitalize;">{{$user_role}}</span>: Welcome to your Dashboard Panel</h3>
+        <div class="row">
+            <div class="col-md-8">
+                <h4><span style="text-transform: capitalize;">{{$user_role}}</span>: Welcome to your Dashboard Panel</h4>
+            </div>
+
+            <div class="col-md-4">
+                <div class="pull-right">
+                    @if('rm' == $user_role)
+                        <a class="btn btn-success" href="{{ url('/survey') }}"> Create New survey</a>
+                    @endif
+                </div>
+            </div>
+        </div>
         <div class="box">
             <div class="box-header">
               <h3 class="box-title">Data Table With Full Features</h3>

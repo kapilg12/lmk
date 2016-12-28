@@ -6,6 +6,7 @@ use App\ASurvey;
 use App\BSurvey;
 use App\Http\Controllers\Controller;
 use App\Office;
+use Auth;
 use Illuminate\Http\Request;
 use Session;
 
@@ -75,8 +76,17 @@ class SurveyController extends Controller
     }
     public function getDashboard(Request $request)
     {
-        $user_role = "superadmin";
-        if ($user_role == 'torrent') {
+        $user = Auth::user();
+        //echo $user->hasRole('superadmin');die;
+        //$user_role = "superadmin";
+        if ($user->hasRole('superadmin') == 1) {
+            $user_role = 'superadmin';
+        } else if ($user->hasRole('torrent') == 1) {
+            $user_role = 'torrent';
+        } else {
+            $user_role = 'rm';
+        }
+        if ($user->hasRole('torrent') == 1) {
             $torrent_id = 2;
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
@@ -98,8 +108,15 @@ class SurveyController extends Controller
     }
     public function show($id)
     {
-        $user_role = 'superadmin';
-        if ($user_role == 'torrent') {
+        $user = Auth::user();
+        if ($user->hasRole('superadmin') == 1) {
+            $user_role = 'superadmin';
+        } else if ($user->hasRole('torrent') == 1) {
+            $user_role = 'torrent';
+        } else {
+            $user_role = 'rm';
+        }
+        if ($user_role == 'superadmin') {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
                 ->with('bsgwater')

@@ -149,4 +149,9 @@ class UserController extends Controller
                 ->with('success', 'User deleted successfully');
         }
     }
+    public function getLogout()
+    {
+        Auth::logout();
+        return redirect()->intended('/login');
+    }
 }

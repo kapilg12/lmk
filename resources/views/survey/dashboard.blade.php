@@ -12,7 +12,7 @@
 
             <div class="col-md-4">
                 <div class="pull-right">
-                    @if('rm' == $user_role)
+                    @if('rm' == $user_role || 'superadmin' == $user_role)
                         <a class="btn btn-success" href="{{ url('/survey') }}"> Create New survey</a>
                     @endif
                 </div>

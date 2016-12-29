@@ -10,25 +10,26 @@
                 </button>
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Bhujal Sanrakshan
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
-                     <li><a href="{{ url('/roles') }}"><i class="fa fa-btn fa-sign-out"></i>Roles</a></li>
-                    <li><a href="{{ url('/users') }}"><i class="fa fa-btn fa-sign-out"></i>Users</a></li>
-                    <li><a href="{{ url('/offices') }}"><i class="fa fa-btn fa-sign-out"></i>Regional Offices</a></li>
-                    <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-
+                <ul class="nav navbar-nav">  
+                    @if (Auth::user())
+                        @if (Auth::user()->hasRole('superadmin'))
+                            <li><a href="{{ url('/roles') }}"><i class="fa fa-btn fa-sign-out"></i>Roles</a></li>
+                            <li><a href="{{ url('/users') }}"><i class="fa fa-btn fa-sign-out"></i>Users</a></li>
+                            <li><a href="{{ url('/offices') }}"><i class="fa fa-btn fa-sign-out"></i>Regional Offices</a></li>
+                        @endif
+                        <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                    @endif
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">Login</a></li>
-                        <li><a href="{{ url('/register') }}">Register</a></li>
+                        <li><a href="{{ url('/login') }}">Login</a></li>                        
                     @else
                         <li><a href="{{ url('/dashboard') }}">Dashboard</a></li>
                         <li class="dropdown">
@@ -36,10 +37,7 @@
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
 
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/roles') }}"><i class="fa fa-btn fa-sign-out"></i>Roles</a></li>
-                                <li><a href="{{ url('/users') }}"><i class="fa fa-btn fa-sign-out"></i>Users</a></li>
-                                                                <li><a href="{{ url('/offices') }}"><i class="fa fa-btn fa-sign-out"></i>Regional Offices</a></li>
+                            <ul class="dropdown-menu" role="menu">                                
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>

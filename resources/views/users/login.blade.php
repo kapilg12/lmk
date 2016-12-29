@@ -1,4 +1,4 @@
-@extends('layouts.login')
+@extends('layouts.survey')
 
 @section('content')
 	<!--<div class="row">
@@ -49,7 +49,7 @@
 	</div>-->
     <div class="login-box">
       <div class="login-logo">
-        <a href="{{ url('/') }}"><b>LMK</b>New</a>
+        <a href="{{ url('/') }}"><b>Bhujal Admin Panel</b></a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
@@ -64,15 +64,8 @@
             <!--<input type="password" class="form-control" placeholder="Password">-->
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
-          <div class="row">
-            <div class="col-xs-8">
-              <div class="checkbox icheck">
-                <label>
-                  <input type="checkbox"> Remember Me
-                </label>
-              </div>
-            </div><!-- /.col -->
-            <div class="col-xs-4">
+          <div class="row">            
+            <div class="col-xs-12">
               <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
             </div><!-- /.col -->
           </div>

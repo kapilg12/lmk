@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.survey')
 
 @section('content')
 	<div class="row">

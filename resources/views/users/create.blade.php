@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.survey')
 
 @section('content')
 	<div class="row">
@@ -53,8 +53,11 @@
                 {!! Form::select('roles', $roles,null, array('placeholder'=>'Select Role','class' => 'form-control')) !!}
             </div>
         </div>
+        
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-				<button type="submit" class="btn btn-primary">Submit</button>
+            
+				<button type="submit" class="btn btn-primary btn-flat form-control">Submit</button>
+            
         </div>
 	</div>
 	{!! Form::close() !!}

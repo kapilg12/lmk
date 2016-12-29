@@ -22,7 +22,7 @@
 		</div>
 	@endif
     {!! Form::open(array("url"=>"offices/store", "name"=>"frmaddOffice","id"=>"frmaddOffice", 'method'=>'POST')) !!}
-    
+
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
@@ -35,7 +35,7 @@
                 <strong>State:</strong>
                 <select name="state_id" id="state_id" class="form-control" onchange="loadOffices()">
                     <option value="">Select State</option>
-                </select>                
+                </select>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -43,19 +43,19 @@
                 <strong>Regional Offices:</strong>
                 <select name="office_id" id="office_id" class="form-control">
                     <option value="">Select Offices</option>
-                </select>                
+                </select>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Area Office:</strong>
-                <input type="text" name="office_name" id="office_name" placeholder="Office Name" class="form-control" />                
+                <input type="text" name="office_name" id="office_name" placeholder="Office Name" class="form-control" />
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Officer Name:</strong>
-                <input type="text" name="officer_name" id="officer_name" placeholder="Officer Name" class="form-control" />                
+                <input type="text" name="officer_name" id="officer_name" placeholder="Officer Name" class="form-control" />
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -67,36 +67,35 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Pin:</strong>
-                <input type="text" name="office_pin" id="office_pin" placeholder="Pin" class="form-control" />                
+                <input type="text" name="office_pin" id="office_pin" placeholder="Pin" class="form-control" />
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Office Phone:</strong>
-                <input type="text" name="office_phone" id="office_phone" placeholder="Office Phone" class="form-control" />                
+                <input type="text" name="office_phone" id="office_phone" placeholder="Office Phone" class="form-control" />
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Office Mobile:</strong>
-                <input type="text" name="office_mobile" id="office_mobile" placeholder="Office Mobile" class="form-control" />                
+                <input type="text" name="office_mobile" id="office_mobile" placeholder="Office Mobile" class="form-control" />
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Office Email:</strong>
-                <input type="text" name="office_email" id="office_email" placeholder="Office Email" class="form-control" />                
+                <input type="text" name="office_email" id="office_email" placeholder="Office Email" class="form-control" />
             </div>
         </div>
-        
+
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
 				<button type="submit" class="btn btn-primary">Submit</button>
         </div>
 	</div>
 	{!! Form::close() !!}
-@endsection
-<script type="text/javascript">
-    function loadState(){        
+    <script type="text/javascript">
+    function loadState(){
         $.ajax({
             type:'POST',
             url:'/states/getStates',
@@ -106,10 +105,10 @@
                     $("#state_id").append('<option value="' + index + '">' + state + '</option>');
                 });
             }
-        });               
+        });
     }
     function loadOffices()
-    {        
+    {
         $.ajax({
             type:'POST',
             url:'/offices/getOffices',
@@ -119,6 +118,7 @@
                     $("#office_id").append('<option value="'+index+'">'+office+'</option>');
                 });
             }
-        });        
+        });
     }
 </script>
+@endsection

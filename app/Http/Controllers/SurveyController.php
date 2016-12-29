@@ -32,9 +32,9 @@ class SurveyController extends Controller
         return view('survey.index', compact('id', 'Office'))->withErrors($validator);
         }*/
         $input = $request->all();
-        $ASurvey = ASurvey::create($input);
-        $a_survey_id = $ASurvey['id'];
-        Session::put('a_survey_id', $a_survey_id);
+        //$ASurvey = ASurvey::create($input);
+        //$a_survey_id = $ASurvey['id'];
+        //Session::put('a_survey_id', $a_survey_id);
 
         return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
     }
@@ -86,6 +86,7 @@ class SurveyController extends Controller
         } else {
             $user_role = 'rm';
         }
+
         if ($user->hasRole('torrent') == 1) {
             $torrent_id = 2;
             $ASurveys = ASurvey::with('offices')

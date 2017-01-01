@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -25,6 +26,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('active', function(Builder $builder) {
+            $builder->where('is_active', 1);
+        });
+    }
 
     public function ASurveys()
     {

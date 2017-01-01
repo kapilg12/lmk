@@ -47,7 +47,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('offices/store', ['as' => 'offices.store', 'uses' => 'OfficeController@store', 'middleware' => ['permission:office-create']]);
     Route::post('offices/update', ['as' => 'offices.update', 'uses' => 'OfficeController@update', 'middleware' => ['permission:office-edit']]);
 
-    Route::get('offices/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show']);
+    Route::get('offices/show/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show']);
     Route::get('offices/{id}/edit', ['as' => 'offices.edit', 'uses' => 'OfficeController@edit', 'middleware' => ['permission:office-edit']]);
     Route::delete('offices/{id}', ['as' => 'offices.destroy', 'uses' => 'OfficeController@destroy', 'middleware' => ['permission:office-delete']]);
 

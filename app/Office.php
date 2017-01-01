@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Scope\ActiveScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Baum;
 class Office extends Baum\Node
 {
@@ -22,8 +24,34 @@ class Office extends Baum\Node
 
     // guard attributes from mass-assignment
     protected $guarded = array('id', 'parent_id', 'lft', 'rgt', 'depth');
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    /*protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new ActiveScope);
+    }*/
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('active', function(Builder $builder) {
+            $builder->where('is_active', 1);
+        });
+    }
+
     public function states()
     {
     	return $this->belongsTo('App\State','state_id');
+    }
+
+    public function scopeActive($query){
+        return $query->where('is_active',1);
     }
 }

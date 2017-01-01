@@ -23,18 +23,31 @@
 			<th width="280px">Action</th>
 		</tr>
 	@foreach ($data as $key => $office)
-	<tr>
-		<td>{{ ++$i }}</td>
-		<td>{{ $office->office_name }}</td>				
-		<td>
-			<a class="btn btn-info" href="{{ route('offices.show',$office->id) }}">Show</a>
-			<a class="btn btn-primary" href="{{ route('offices.edit',$office->id) }}">Edit</a>
-			{!! Form::open(['method' => 'DELETE','route' => ['offices.destroy', $office->id],'style'=>'display:inline']) !!}
-            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-        	{!! Form::close() !!}
-		</td>
-	</tr>
+		
+			<tr>
+				<td>{{ ++$i }}</td>
+				<td>{{ $office->office_name }}</td>				
+				<td>
+					<a class="btn btn-info" href="{{ route('offices.show',$office->id) }}">Show</a>
+					<a class="btn btn-primary" href="{{ route('offices.edit',$office->id) }}">Edit</a>
+					{!! Form::open(['method' => 'DELETE','route' => ['offices.destroy', $office->id],'style'=>'display:inline']) !!}
+		            {!! Form::submit('Delete', ['class' => 'btn btn-danger','onclick'=>'return getConfirmation();']) !!}
+		        	{!! Form::close() !!}
+				</td>
+			</tr>
+		
 	@endforeach
 	</table>
 	{!! $data->render() !!}
+	<script type="text/javascript">
+		function getConfirmation()
+		{
+			if(confirm("Are sure want to delete ?"))
+			{
+				return true;
+			}else{
+				return false;
+			}
+		}
+	</script>
 @endsection

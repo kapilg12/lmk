@@ -17,8 +17,7 @@ class OfficeController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Office::orderBy('id', 'DESC')->paginate(5);
-        //dd($data);
+        $data = Office::with('children')->where('parent_id',null)->orderBy('id', 'DESC')->paginate(5);
         return view('offices.index', compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -97,9 +96,17 @@ class OfficeController extends Controller
         return redirect()->route('offices.index')
             ->with('success', 'Office updated successfully');
     }
-
-    public function destroy(Request $request)
+    public function show($id)
     {
+        $officeDetail = Office::with('children')->where('id',$id)->first();
+        return view("offices.show",compact('officeDetail'))->with('i');
         
+    }
+
+    public function destroy($id)
+    {
+        Office::where('id',$id)->update(['is_active'=>0]);
+        return redirect()->route('offices.index')
+            ->with('success', 'Office deleted successfully');
     }
 }

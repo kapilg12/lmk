@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
+use App\Office;
+use App\Country;
 use Auth;
 use DB;
 use Hash;
@@ -33,7 +35,10 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::lists('display_name', 'id');
-        return view('users.create', compact('roles'));
+        /*$offices = Office::with(['children','states','states.countries'])->where('parent_id',null)->orderBy('id', 'DESC')->get();*/
+        $globalOffices = Country::with(['states','states.offices'])->get();
+//        dd($globalOffices);
+        return view('users.create', compact('roles','globalOffices'));
     }
 
     /**

@@ -129,8 +129,8 @@ class SurveyController extends Controller
         } else if ($user_role == 'rm') {
             $ASurveys = ASurvey::find($id);
         } else if ($user_role == 'torrent') {
-            $ASurveys = BSurvey::with('bsgwater')
-                ->with('gpscoordinates')
+            $ASurveys = ASurvey::with(['bsgwater','gpscoordinates','bsurveys','attachments'])
+                
                 ->find($id);
             //$ASurveys = BSurvey::with('bsgwater, gpscoordinates')->where('a_survey_id', $id)->get();
         }

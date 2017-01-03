@@ -44,7 +44,7 @@
               <h3 class="box-title">Basic Information</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
-              <strong><i class="fa fa-map-marker margin-r-5"></i> Postel Address</strong>
+              <strong><i class="fa fa-map-marker margin-r-5"></i> Postal Address</strong>
               <p class="text-muted">{{ $ASurveys->postel_address}} - {{ $ASurveys->pin_code}}</p>
 
               <hr>
@@ -74,15 +74,69 @@
             <li class="active"><a href="#settings" data-toggle="tab">A: Details of Basic Informations</a></li>
           @endif
         </ul>
+
+@if($user_role == 'rm')
+            <div class="active tab-pane" id="settings">
+            <!-- The timeline -->
+            <ul class="timeline timeline-inverse">
+              <!-- timeline time label -->
+              <li class="time-label">
+                <span class="bg-red">
+                  Basic Information
+                </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+
+              <li>
+                <i class="fa fa-home bg-red"></i>
+                <div class="timeline-item">
+                <!-- Profile Image -->
+                <div class="box-body box-profile">
+                 <ul class="list-group ">
+                    <li class="list-group-item">
+                      <b>Allow Area Sq m</b> <a class="pull-right">{{ $ASurveys->allow_area }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Establishment name</b> <a class="pull-right">{{ $ASurveys->establishment_name }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Nature of Establishment</b> <a class="pull-right">{{ $ASurveys->nature_of_establishment }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Active</b> <a class="pull-right">@if($ASurveys->is_active == '1') <span class="label label-success">Active</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Approved</b> <a class="pull-right">@if($ASurveys->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Completed</b> <a class="pull-right">@if($ASurveys->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Is Certified</b> <a class="pull-right">@if($ASurveys->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label-warning">Pending</span> @endif</a>
+                    </li>
+                  </ul>
+                </div><!-- /.box-body -->
+                </div>
+              </li>
+              <!-- END timeline item -->
+
+              <li>
+                <i class="fa fa-clock-o bg-gray"></i>
+              </li>
+            </ul>
+          </div><!-- /.tab-pane -->
+         @endif
+        
         <div class="tab-content">
-        @if($user_role == 'superadmin' || $user_role == 'torrent')
+        @if($user_role == 'superadmin' || $user_role == 'torrent'|| $user_role == 'rm') 
           <div class="active tab-pane" id="activity">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
               <!-- timeline time label -->
               <li class="time-label">
                 <span class="bg-red">
-                  Details of Arae
+                  Details of Area
                 </span>
               </li>
               <!-- /.timeline-label -->
@@ -117,7 +171,7 @@
               <!-- GMS Coordinates -->
               <li class="time-label">
                 <span class="bg-blue">
-                 GMS Coordinates
+                 GPS Coordinates
                 </span>
               </li>
               <li>
@@ -161,7 +215,7 @@
               <!-- Rinfall -->
               <li class="time-label">
                 <span class="bg-aqua">
-                    Railfall
+                    Rainfall
                 </span>
               </li>
               <li>
@@ -319,7 +373,7 @@
                           <th style="width: 10px">#</th>
                           <th>Area Location</th>
                           <th>Sources SW GW</th>
-                          <th>Existing RWH Structure</th>
+                          <th>Concept plan-RWHS</th>
                           <th>Site Layout Plan</th>
                         </tr>
                         {{--*/ $i = 0 /*--}}
@@ -432,58 +486,7 @@
             </ul>
           </div><!-- /.tab-pane -->
            @endif
-           @if($user_role == 'rm')
-            <div class="active tab-pane" id="settings">
-            <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                <span class="bg-red">
-                  Basic Information
-                </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-
-              <li>
-                <i class="fa fa-home bg-red"></i>
-                <div class="timeline-item">
-                <!-- Profile Image -->
-                <div class="box-body box-profile">
-                 <ul class="list-group ">
-                    <li class="list-group-item">
-                      <b>Allow Area Sq m</b> <a class="pull-right">{{ $ASurveys->allow_area }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Establishment name</b> <a class="pull-right">{{ $ASurveys->establishment_name }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Nature of Establishment</b> <a class="pull-right">{{ $ASurveys->nature_of_establishment }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Is Active</b> <a class="pull-right">@if($ASurveys->is_active == '1') <span class="label label-success">Active</span> @else <span class="label-warning">Pending</span> @endif</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Is Approved</b> <a class="pull-right">@if($ASurveys->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label-warning">Pending</span> @endif</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Is Completed</b> <a class="pull-right">@if($ASurveys->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label-warning">Pending</span> @endif</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Is Certified</b> <a class="pull-right">@if($ASurveys->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label-warning">Pending</span> @endif</a>
-                    </li>
-                  </ul>
-                </div><!-- /.box-body -->
-                </div>
-              </li>
-              <!-- END timeline item -->
-
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
-            </ul>
-          </div><!-- /.tab-pane -->
-         @endif
+           
         </div><!-- /.tab-content -->
       </div><!-- /.nav-tabs-custom -->
     </div><!-- /.col -->

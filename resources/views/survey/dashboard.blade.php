@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <div class="pull-right">
                     @if('rm' == $user_role || 'superadmin' == $user_role)
-                        <a class="btn btn-success" href="{{ url('/survey') }}"> Create New survey</a>
+                        <a class="btn btn-success" href="{{ url('/audit') }}"> Create New Audit</a>
                     @endif
                 </div>
             </div>
@@ -43,10 +43,11 @@
                         <th scope="row">{{ ++$i }}</th>
                         <td>{{$ASurvey->offices['office_name']}}</td>
                         <td>{{ $ASurvey->establishment_name }}</td>
-                        <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label-warning">Pending</span> @endif</td>
-                        <td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label-warning">Pending</span> @endif</td>
-                        <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label-warning">Pending</span> @endif</td>
-                        <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label-warning">Pending</span> @endif</td>
+                        <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                        <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                        <td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                        <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                        <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>
                             @if($user_role == 'torrent')
                               <a class="btn btn-info" href="{{ url('survey/show',$ASurvey->bsurveys['id']) }}">Show</a>

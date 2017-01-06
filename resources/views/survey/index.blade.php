@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-    <h1>Welcome to My Survey</h1>
+    <h1>Welcome to My Audit</h1>
     @include('errors.list')
      {!! Form::open() !!}
       <fieldset style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">

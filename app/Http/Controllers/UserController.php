@@ -36,8 +36,8 @@ class UserController extends Controller
     {
         $roles = Role::lists('display_name', 'id');
         /*$offices = Office::with(['children','states','states.countries'])->where('parent_id',null)->orderBy('id', 'DESC')->get();*/
-        $globalOffices = Country::with(['states','states.offices'])->get();
-//        dd($globalOffices);
+        $globalOffices = Country::with(['states','states.offices','states.offices.children'])->get();
+        //dd($globalOffices);
         return view('users.create', compact('roles','globalOffices'));
     }
 
@@ -59,6 +59,9 @@ class UserController extends Controller
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+        $input['options']['country'] = $input['country'];
+        $input['options']['state'] = $input['state'];
+        $input['options']['allowedOffices'] = $input['allowedOffices'];
 
         $user = User::create($input);
         $user->attachRole($input['roles']);
@@ -90,8 +93,8 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::lists('display_name', 'id');
         $userRole = $user->roles->lists('id', 'id')->toArray();
-
-        return view('users.edit', compact('user', 'roles', 'userRole'));
+        $globalOffices = Country::with(['states','states.offices','states.offices.children'])->get();
+        return view('users.edit', compact('user', 'roles', 'userRole','globalOffices'));
     }
 
     /**
@@ -150,8 +153,12 @@ class UserController extends Controller
     {
         if (Auth::attempt(array('email' => $request['email'], 'password' => $request['password']))) {
             $user = Auth::user();
-            return redirect()->route('users.index')
-                ->with('success', 'User deleted successfully');
+            if(Auth::user()->hasRole('superadmin')){
+                return redirect()->route('users.index');
+            }else{
+                return redirect()->route('dashboard');                
+            }
+            
         }
     }
     public function getLogout()

@@ -34,13 +34,34 @@ Route::group(['middleware' => ['web']], function () {
 Route::group(['middleware' => ['web', 'auth']], function () {
 
     Route::get("users", ['as' => 'users.index', 'uses' => 'UserController@index','middleware' => ['permission:user-list']]);
-    Route::get("/register", ['uses' => "UserController@create",'middleware' => ['permission:user-create']]);
-    Route::post("/register", ['uses' => "UserController@store",'middleware' => ['permission:user-create']]);
-    Route::get("/logout", ['uses' => "UserController@getLogout"]);
+    Route::get("users/create", ['as' => 'users.create','uses' => "UserController@create",'middleware' => ['permission:user-create']]);
+    Route::post("users/store", ['as'=>'users.store','uses' => "UserController@store",'middleware' => ['permission:user-create']]);
+
+Route::post("users/update", ['as'=>'users.update','uses' => "UserController@update",'middleware' => ['permission:user-edit']]);    
+
+
+
+Route::get('users/show/{id}', ['as' => 'users.show', 'uses' => 'UserController@show']);
+    Route::get('users/{id}/edit', ['as' => 'users.edit', 'uses' => 'UserController@edit', 'middleware' => ['permission:user-edit']]);
+    Route::delete('users/{id}', ['as' => 'users.destroy', 'uses' => 'UserController@destroy', 'middleware' => ['permission:user-delete']]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::get("/logout", ['uses' => "UserController@getLogout"]);
 
     Route::get('/home', 'HomeController@index');
 
-    Route::resource('users', 'UserController');
+    //Route::resource('users', 'UserController');
 
     Route::get('offices', ['as' => 'offices.index', 'uses' => 'OfficeController@index', 'middleware' => ['permission:office-list|office-create|office-edit|office-delete']]);
     Route::get('offices/create', ['as' => 'offices.create', 'uses' => 'OfficeController@create', 'middleware' => ['permission:office-create']]);

@@ -21,7 +21,7 @@
 			</ul>
 		</div>
 	@endif
-    {!! Form::open(array( "name"=>"frmaddUser","id"=>"frmaddUser", 'method'=>'POST')) !!}
+    {!! Form::open(array("url"=>"users/store",  "name"=>"frmaddUser","id"=>"frmaddUser", 'method'=>'POST')) !!}
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
@@ -58,7 +58,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12">                    
                 <div class="form-group">                  
                     <label>
-                      <input type="checkbox">
+                      <input type="checkbox" name="country[]" value="{{$value->id}}" class="country_{{$value->id}}" data-val="country_{{$value->id}}">
                       {{$value->title}}
                     </label>                  
                 </div>
@@ -67,18 +67,18 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">                    
                     <div class="form-group">                  
                         <label>
-                          <input type="checkbox">
+                          <input type="checkbox" name="state[]" value="{{$stateValue->id}}" class="country_{{$value->id}} state_{{$stateValue->id}}" data-val="state_{{$stateValue->id}}">
                           {{$stateValue->title}}
                         </label>                  
                     </div>
                 </div>
                 @foreach($stateValue->offices as $key => $stateRO)
                     {{-- <pre>{{print_r($stateRO->children->toArray())}}</pre> --}}
-                    @if(!empty($stateRO->children->toArray()))
+                    @if(($stateRO->isRoot()))
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">                  
                                 <label>
-                                  <input type="checkbox">
+                                  <input type="checkbox" name="allowedOffices[]" value="{{$stateRO->id}}" class="country_{{$value->id}} state_{{$stateValue->id}} stateRO_{{$stateRO->id}}"  data-val="stateRO_{{$stateRO->id}}">
                                   {{$stateRO->office_name}}
                                 </label>                  
                             </div>
@@ -89,64 +89,28 @@
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">                  
                                         <label>
-                                          <input type="checkbox">
+                                          <input type="checkbox" name="allowedOffices[]" value="{{$subOffice->id}}" class="country_{{$value->id}} state_{{$stateValue->id}} stateRO_{{$stateRO->id}}">
                                           {{$subOffice->office_name}}
                                         </label>                  
                                     </div>  
                                 </div>
                             @endforeach
-                        </div>
-                    @else
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">                  
-                                <label>
-                                  <input type="checkbox">
-                                  {{$stateRO->office_name}}
-                                </label>                  
-                            </div>
-                        </div>    
+                        </div>                    
                     @endif
                 @endforeach    
             @endforeach
-
         @endforeach
-
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <label>Multiple</label>
-                <select class="form-control select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-                  <option>Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
-              </div>
-        </div>
-
-
-
-
-
-
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            
 				<button type="submit" class="btn btn-primary btn-flat form-control">Submit</button>
-            
         </div>
 	</div>
 	{!! Form::close() !!}
 
 @endsection
 @section('js')
-
-     <script type="text/javascript" src="{!! asset('plugins/select2/select2.full.min.js') !!}"></script>
-
-    <script type="text/javascript">
-        $(function () {
-        $(".select2").select2();
-    });
+    <script type="text/javascript">        
+        $('input[type=checkbox]').click(function(){
+            $("."+$(this).data('val')).prop('checked',$(this).is(':checked'));
+        });
     </script>
 @endsection

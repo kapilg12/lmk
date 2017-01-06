@@ -65,23 +65,26 @@ class SurveyController extends Controller
         if ($v->fails()) {
             return redirect()->back()->withErrors($v->errors());
         }
-
-        //$ASurvey = ASurvey::create($input);
-        //$a_survey_id = $ASurvey['id'];
-        //Session::put('a_survey_id', $a_survey_id);
-        //return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
+        $ASurvey = ASurvey::create($input);
+        $a_survey_id = $ASurvey['id'];
+        Session::put('a_survey_id', $a_survey_id);
+        return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
     }
 
     public function getSurveyStep(Request $request, $step)
     {
-        $BSurveyValidationRules = '';
-        switch ($step) {
-            case 2:
-                $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
-                break;
+        if ($request->session()->has('a_survey_id')) {
+            $BSurveyValidationRules = '';
+            switch ($step) {
+                case 2:
+                    $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
+                    break;
+            }
+            $a_survey_id = Session::get('a_survey_id');
+            return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+        } else {
+            return redirect('/audit');
         }
-        $a_survey_id = Session::get('a_survey_id');
-        return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
 
     }
     public function postSurveyStep(Request $request, $step)

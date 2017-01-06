@@ -7,7 +7,7 @@
     @include('errors.list')
      {!! Form::open() !!}
       <fieldset style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
-        <h2>Step 1: General Data Sheet for Industry Establishment</h2>
+        <h4>Step 1: General Data Sheet for Industry Establishment</h4>
         <div class="form-group">
             {!! Form::label('office_id', trans('Industrial Area'), array('class' => '')) !!}
             {!! Form::select('office_id', $Office, null, ['class' => 'form-control']) !!}

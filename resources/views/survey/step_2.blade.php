@@ -1,14 +1,15 @@
 @extends('layouts.survey')
 @section('content')
 <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
 
-    <h1>Step 2:- General Data Sheet for Industry Establishment</h1>
-    <h2>B: Area Specifications</h2>
+    <h2>Step 2:- General Data Sheet for Industry Establishment</h2>
+
     {!! Form::open() !!}
     {{ Form::hidden('a_survey_id', $a_survey_id) }}
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
+         <h3>B: Area Specifications</h3>
            <div class="form-group">
                 {!! Form::label('total_land_area', trans('total land area'), array('class' => '')) !!}
                 {!! Form::text('total_land_area', null, array('id' => 'total_land_area', 'class' => 'form-control', 'placeholder' => trans('total land area'), 'title' => trans('total land area'), 'autocomplete' => 'off')) !!}
@@ -282,7 +283,7 @@
         </fieldset>
     {!! Form::close() !!}
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
 </div>
 <!-- Laravel Javascript Validation -->
  <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>

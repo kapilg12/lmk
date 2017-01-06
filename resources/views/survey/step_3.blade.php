@@ -1,10 +1,10 @@
 @extends('layouts.survey')
 @section('content')
 <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
 
-    <h2>Step 3:- Data Sheet for Medium / Large Scale Industries and WATER Instensive Inds</h2>
+    <h3>Step 3:- Data Sheet for Medium / Large Scale Industries and WATER Instensive Inds</h3>
     {!! Form::open() !!}
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <div class="set1">
@@ -107,6 +107,6 @@
         </fieldset>
     {!! Form::close() !!}
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
 </div>
 @endsection

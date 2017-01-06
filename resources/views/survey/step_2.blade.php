@@ -47,10 +47,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point A latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["A"][]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude["A"]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["A"][]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude["A"]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
@@ -58,10 +58,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point B latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["B"][]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude["B"]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["B"][]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude["B"]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
@@ -72,10 +72,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point C latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["C"][]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude["C"]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["C"][]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude["C"]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
@@ -83,10 +83,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point D latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["D"][]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude["D"]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["D"][]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude["D"]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
@@ -160,8 +160,8 @@
                         {!! Form::text('recharge_pit_depth', null, array('id' => 'recharge_pit_depth', 'class' => 'form-control', 'placeholder' => trans('recharge pit depth'), 'title' => trans('recharge pit depth'), 'autocomplete' => 'off')) !!}
                     </div>
                     <div class="col-md-6">
-                        {!! Form::label('recharge_well_diameter', trans('recharge well diameter'), array('class' => '')) !!}
-                        {!! Form::text('recharge_well_diameter', null, array('id' => 'recharge_well_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge well diameter'), 'title' => trans('recharge well diameter'), 'autocomplete' => 'off')) !!}
+                        {!! Form::label('recharge_pit_diameter', trans('recharge pit diameter'), array('class' => '')) !!}
+                        {!! Form::text('recharge_pit_diameter', null, array('id' => 'recharge_pit_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge pit diameter'), 'title' => trans('recharge pit diameter'), 'autocomplete' => 'off')) !!}
                     </div>
                 </div>
             </div>
@@ -188,7 +188,7 @@
                         {!! Form::text('water_bodies_ponds_depth', null, array('id' => 'water_bodies_ponds_depth', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds depth'), 'title' => trans('water bodies ponds depth'), 'autocomplete' => 'off')) !!}
                     </div>
                     <div class="col-md-6">
-                        {!! Form::label('water_bodies_ponds_diameter', trans('recharge well diameter'), array('class' => '')) !!}
+                        {!! Form::label('water_bodies_ponds_diameter', trans('water bodies ponds diameter'), array('class' => '')) !!}
                         {!! Form::text('water_bodies_ponds_diameter', null, array('id' => 'water_bodies_ponds_diameter', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds diameter'), 'title' => trans('water bodies ponds diameter'), 'autocomplete' => 'off')) !!}
                     </div>
                 </div>
@@ -208,12 +208,12 @@
                         {!! Form::select('tubewell_borewell[]', [ '' => 'Please Select Source of Ground water', 'tubewell' => 'Tubewell','borewell' => 'Borewell'], null, array('id' => 'tubewell_borewell', 'class' => 'form-control')) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('depth_of_s_pump[]', trans('depth of s pump'), array('class' => '')) !!}
-                        {!! Form::text('depth_of_s_pump', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'), 'autocomplete' => 'off')) !!}
+                        {!! Form::label('depth_of_s_pump', trans('depth of s pump'), array('class' => '')) !!}
+                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'), 'autocomplete' => 'off')) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('current_water_abstraction[]', trans('current water abstraction'), array('class' => '')) !!}
-                        {!! Form::text('current_water_abstraction', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'), 'autocomplete' => 'off')) !!}
+                        {!! Form::label('current_water_abstraction', trans('current water abstraction'), array('class' => '')) !!}
+                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'), 'autocomplete' => 'off')) !!}
                     </div>
                 </div>
                 <div class="set2 hide alert1 alert alert-success" style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
@@ -284,6 +284,9 @@
     </div>
     <div class="col-md-2"></div>
 </div>
+<!-- Laravel Javascript Validation -->
+ <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+ {!! $BSurveyValidationRules !!}
 <script type="text/javascript">
     var c = $('.set1').data('count');
     $('#addmore').click(function() {

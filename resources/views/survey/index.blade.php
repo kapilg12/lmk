@@ -61,4 +61,7 @@
     </div>
     <div class="col-md-2"></div>
 </div>
+<!-- Laravel Javascript Validation -->
+ <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+ {!! $ASurveyValidationRules !!}
 @endsection

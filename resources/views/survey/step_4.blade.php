@@ -113,6 +113,8 @@
                     {!! Form::text('cum_year[]', null, array('id' => 'cum_year', 'class' => 'form-control', 'placeholder' => trans('Cum/Year'), 'title' => trans('Cum/Year'), 'autocomplete' => 'off')) !!}
                 </div>
             </div>
+        </fieldset>
+        <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <div class="set5">
                 <div class="form-group">
                     {!! Form::label('breakup_of_recycled_water_usage', trans('Breakup of Recycled water usage:'), array('class' => '')) !!}

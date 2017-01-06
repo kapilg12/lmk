@@ -22,7 +22,7 @@
     <link href="{!! asset('plugins/datatables/dataTables.bootstrap.css') !!}" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
     <link href="{!! asset('dist/css/AdminLTE.min.css') !!}" rel="stylesheet" type="text/css" />
-
+<link href="{!! asset('plugins/select2/select2.min.css') !!}" rel="stylesheet" type="text/css" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link href="{!! asset('dist/css/skins/_all-skins.min.css') !!}" rel="stylesheet" type="text/css" />
@@ -107,5 +107,6 @@
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>-->
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    @yield('js')
 </body>
 </html>

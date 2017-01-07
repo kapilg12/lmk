@@ -64,6 +64,7 @@
             font: 32px Arial, sans-serif;
         }
         .top-buffer { margin-top:20px; }
+        .bottom-buffer { margin-bottom:20px; }
     </style>
 
 </head>

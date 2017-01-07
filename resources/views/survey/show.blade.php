@@ -3,8 +3,9 @@
 {{-- dump($ASurveys) --}}
 @if($user_role == 'superadmin')
 <div class="row">
-   @include('layouts.partial.access_nav');
+   @include('layouts.partial.access_nav')
 </div>
+<div class="bottom-buffer"></div>
 @endif
 <div class="row">
     @if($user_role != 'torrent')
@@ -375,15 +376,17 @@
                           <th>Sources SW GW</th>
                           <th>Concept plan-RWHS</th>
                           <th>Site Layout Plan</th>
+                          <th>GPX File</th>
                         </tr>
                         {{--*/ $i = 0 /*--}}
                          @foreach ($ASurveys->attachments as $key => $attachment)
                             <tr>
                               <td>{{++$i}}</td>
-                              <td><a href="{!! asset('dist/img/').'/'.$attachment->area_location !!}" target="_new">{{$attachment->area_location}}</a></td>
-                              <td><a href="{!! asset('dist/img/').'/'.$attachment->sources_sw_gw !!}" target="_new">{{$attachment->sources_sw_gw}}</a></td>
-                              <td><a href="{!! asset('dist/img/').'/'.$attachment->existing_rwh_structure !!}" target="_new">{{$attachment->existing_rwh_structure}}</a></td>
-                              <td><a href="{!! asset('dist/img/').'/'.$attachment->site_layout_plan !!}" target="_new">{{$attachment->site_layout_plan}}</a></td>
+                              <td><a href="{!! asset('uploads/').'/'.$attachment->area_location !!}" target="_new">{{$attachment->area_location}}</a></td>
+                              <td><a href="{!! asset('uploads/').'/'.$attachment->sources_sw_gw !!}" target="_new">{{$attachment->sources_sw_gw}}</a></td>
+                              <td><a href="{!! asset('uploadsimg/').'/'.$attachment->existing_rwh_structure !!}" target="_new">{{$attachment->existing_rwh_structure}}</a></td>
+                              <td><a href="{!! asset('uploads/').'/'.$attachment->site_layout_plan !!}" target="_new">{{$attachment->site_layout_plan}}</a></td>
+                              <td><a href="{!! asset('uploads/').'/'.$attachment->attachgpxfile !!}" target="_new">{{$attachment->attachgpxfile}}</a></td>
                             </tr>
                         @endforeach
                     </table>
@@ -394,6 +397,21 @@
                 </div>
               </li>
               <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-cloud-upload bg-purple"></i>
+                <div class="timeline-item">
+                  <h3 class="timeline-header">Uploads section</h3>
+                  <div class="timeline-body">
+                    {!! Form::open(array('url'=>'audit/upload', 'files'=>'true')) !!}
+                    {{ Form::hidden('a_survey_id', $ASurveys->id) }}
+                    {{ Form::hidden('b_survey_id', $ASurveys->bsurveys->id) }}
+                        @include('layouts.partial.file_upload_fields')
+                        <input type="submit" name="submit" class="next btn btn-info" value="Submit" />
+                    {!! Form::close() !!}
+                  </div>
+                </div>
+              </li>
               <li>
                 <i class="fa fa-clock-o bg-gray"></i>
               </li>
@@ -491,4 +509,7 @@
       </div><!-- /.nav-tabs-custom -->
     </div><!-- /.col -->
 </div><!-- /.row -->
+<!-- Laravel Javascript Validation -->
+ <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+ {!! $attachmentsValidationRules !!}
 @endsection

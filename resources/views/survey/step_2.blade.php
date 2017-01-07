@@ -7,29 +7,30 @@
     <h2>Step 2:- General Data Sheet for Industry Establishment</h2>
 
     {!! Form::open(array('files'=>'true')) !!}
+
     {{ Form::hidden('a_survey_id', $a_survey_id) }}
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
          <h3>B: Area Specifications</h3>
            <div class="form-group">
                 {!! Form::label('total_land_area', trans('total land area'), array('class' => '')) !!}
-                {!! Form::text('total_land_area', null, array('id' => 'total_land_area', 'class' => 'form-control', 'placeholder' => trans('total land area'), 'title' => trans('total land area'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('total_land_area', null, array('id' => 'total_land_area', 'class' => 'form-control', 'placeholder' => trans('total land area'), 'title' => trans('total land area'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('roof_top_area', trans('roof top area'), array('class' => '')) !!}
-                {!! Form::text('roof_top_area', null, array('id' => 'roof top area', 'class' => 'form-control', 'placeholder' => trans('roof top area'), 'title' => trans('roof top area'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('roof_top_area', null, array('id' => 'roof top area', 'class' => 'form-control', 'placeholder' => trans('roof top area'), 'title' => trans('roof top area'))) !!}
             </div>
 
             <div class="form-group">
                 {!! Form::label('road_paved_area', trans('road paved area'), array('class' => '')) !!}
-                {!! Form::text('road_paved_area', null, array('id' => 'road paved area', 'class' => 'form-control', 'placeholder' => trans('road paved area'), 'title' => trans('road paved area'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('road_paved_area', null, array('id' => 'road paved area', 'class' => 'form-control', 'placeholder' => trans('road paved area'), 'title' => trans('road paved area'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('green_belt_area', trans('green belt area'), array('class' => '')) !!}
-                {!! Form::text('green_belt_area', null, array('id' => 'green_belt_area', 'class' => 'form-control', 'placeholder' => trans('green belt area'), 'title' => trans('green belt area'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('green_belt_area', null, array('id' => 'green_belt_area', 'class' => 'form-control', 'placeholder' => trans('green belt area'), 'title' => trans('green belt area'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('open_land', trans('open land'), array('class' => '')) !!}
-                {!! Form::text('open_land', null, array('id' => 'open_land', 'class' => 'form-control', 'placeholder' => trans('open land'), 'title' => trans('open land'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('open_land', null, array('id' => 'open_land', 'class' => 'form-control', 'placeholder' => trans('open land'), 'title' => trans('open land'))) !!}
             </div>
         </fieldset>
         <fieldset style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
@@ -53,7 +54,7 @@
                 {!! Form::label('GPSCoordinate_waypoint', trans('Way Point'), array('class' => '')) !!}
                 <div class="row">
                     <div class="col-md-12 gpsCord" id="0">
-                         {!! Form::text('GPSCoordinate_waypoint', null, array('id' => 'GPSCoordinate_waypoint', 'class' => 'form-control', 'placeholder' => trans('Way point: 085,086,087'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                         {!! Form::text('GPSCoordinate_waypoint', null, array('id' => 'GPSCoordinate_waypoint', 'class' => 'form-control', 'placeholder' => trans('Way point: 085,086,087'), 'title' => trans('latitude'))) !!}
                     </div>
                  </div>
             </div>
@@ -71,10 +72,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point A latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
                             </div>
                        </div>
                     </div>
@@ -82,10 +83,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point B latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
                             </div>
                        </div>
                     </div>
@@ -96,10 +97,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point C latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
                             </div>
                        </div>
                     </div>
@@ -107,10 +108,10 @@
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point D latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
                             </div>
                        </div>
                     </div>
@@ -119,30 +120,30 @@
             <div></div>
             <div class="form-group">
                 {!! Form::label('GPSCoordinate_B', trans('GPSCoordinate B'), array('class' => '')) !!}
-                {!! Form::text('GPSCoordinate_B', null, array('id' => 'GPSCoordinate_B', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate B'), 'title' => trans('GPSCoordinate B'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('GPSCoordinate_B', null, array('id' => 'GPSCoordinate_B', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate B'), 'title' => trans('GPSCoordinate B'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('GPSCoordinate_C', trans('GPSCoordinate C'), array('class' => '')) !!}
-                {!! Form::text('GPSCoordinate_C', null, array('id' => 'GPSCoordinate_C', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate C'), 'title' => trans('GPSCoordinate C'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('GPSCoordinate_C', null, array('id' => 'GPSCoordinate_C', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate C'), 'title' => trans('GPSCoordinate C'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('GPSCoordinate_D', trans('GPSCoordinate D'), array('class' => '')) !!}
-                {!! Form::text('GPSCoordinate_D', null, array('id' => 'GPSCoordinate_D', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate D'), 'title' => trans('GPSCoordinate D'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('GPSCoordinate_D', null, array('id' => 'GPSCoordinate_D', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate D'), 'title' => trans('GPSCoordinate D'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('space_available', trans('space available'), array('class' => '')) !!}
-                {!! Form::text('space_available', null, array('id' => 'space_available', 'class' => 'form-control', 'placeholder' => trans('space available'), 'title' => trans('space available'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('space_available', null, array('id' => 'space_available', 'class' => 'form-control', 'placeholder' => trans('space available'), 'title' => trans('space available'))) !!}
             </div>-->
         </fieldset>
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>Average Annual Rainfall :</h3>
             <div class="form-group">
                 {!! Form::label('average_annual_rainfall', trans('average annual rainfall'), array('class' => '')) !!}
-                {!! Form::text('average_annual_rainfall', null, array('id' => 'average_annual_rainfall', 'class' => 'form-control', 'placeholder' => trans('average annual rainfall'), 'title' => trans('average annual rainfall'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('average_annual_rainfall', null, array('id' => 'average_annual_rainfall', 'class' => 'form-control', 'placeholder' => trans('average annual rainfall'), 'title' => trans('average annual rainfall'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('number_of_rainy_day', trans('number of rainy day'), array('class' => '')) !!}
-                {!! Form::text('number_of_rainy_day', null, array('id' => 'number_of_rainy_day', 'class' => 'form-control', 'placeholder' => trans('number of rainy day'), 'title' => trans('number of rainy day'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('number_of_rainy_day', null, array('id' => 'number_of_rainy_day', 'class' => 'form-control', 'placeholder' => trans('number of rainy day'), 'title' => trans('number of rainy day'))) !!}
             </div>
         </fieldset>
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
@@ -169,11 +170,11 @@
                 <div class="row">
                     <div class="col-md-6">
                         {!! Form::label('recharge_well_depth', trans('recharge well depth'), array('class' => '')) !!}
-                        {!! Form::text('recharge_well_depth', null, array('id' => 'recharge_well_depth', 'class' => 'form-control', 'placeholder' => trans('recharge well depth'), 'title' => trans('recharge well depth'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_well_depth', null, array('id' => 'recharge_well_depth', 'class' => 'form-control', 'placeholder' => trans('recharge well depth'), 'title' => trans('recharge well depth'))) !!}
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('recharge_well_diameter', trans('recharge well diameter'), array('class' => '')) !!}
-                        {!! Form::text('recharge_well_diameter', null, array('id' => 'recharge_well_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge well diameter'), 'title' => trans('recharge well diameter'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_well_diameter', null, array('id' => 'recharge_well_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge well diameter'), 'title' => trans('recharge well diameter'))) !!}
                     </div>
                 </div>
             </div>
@@ -181,11 +182,11 @@
                 <div class="row">
                     <div class="col-md-6">
                         {!! Form::label('recharge_pit_depth', trans('recharge pit depth'), array('class' => '')) !!}
-                        {!! Form::text('recharge_pit_depth', null, array('id' => 'recharge_pit_depth', 'class' => 'form-control', 'placeholder' => trans('recharge pit depth'), 'title' => trans('recharge pit depth'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_pit_depth', null, array('id' => 'recharge_pit_depth', 'class' => 'form-control', 'placeholder' => trans('recharge pit depth'), 'title' => trans('recharge pit depth'))) !!}
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('recharge_pit_diameter', trans('recharge pit diameter'), array('class' => '')) !!}
-                        {!! Form::text('recharge_pit_diameter', null, array('id' => 'recharge_pit_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge pit diameter'), 'title' => trans('recharge pit diameter'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_pit_diameter', null, array('id' => 'recharge_pit_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge pit diameter'), 'title' => trans('recharge pit diameter'))) !!}
                     </div>
                 </div>
             </div>
@@ -193,15 +194,15 @@
                 <div class="row">
                     <div class="col-md-4">
                         {!! Form::label('recharge_trenches_l', trans('recharge_trenches l'), array('class' => '')) !!}
-                        {!! Form::text('recharge_trenches_l', null, array('id' => 'recharge_trenches_l', 'class' => 'form-control', 'placeholder' => trans('recharge_trenches_l'), 'title' => trans('recharge_trenches_l'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_trenches_l', null, array('id' => 'recharge_trenches_l', 'class' => 'form-control', 'placeholder' => trans('recharge_trenches_l'), 'title' => trans('recharge_trenches_l'))) !!}
                     </div>
                     <div class="col-md-4">
                         {!! Form::label('recharge_trenches_w', trans('recharge trenches w'), array('class' => '')) !!}
-                        {!! Form::text('recharge_trenches_w', null, array('id' => 'recharge_trenches_w', 'class' => 'form-control', 'placeholder' => trans('recharge trenches w'), 'title' => trans('recharge trenches w'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_trenches_w', null, array('id' => 'recharge_trenches_w', 'class' => 'form-control', 'placeholder' => trans('recharge trenches w'), 'title' => trans('recharge trenches w'))) !!}
                     </div>
                     <div class="col-md-4">
                         {!! Form::label('recharge_trenches_d', trans('recharge trenches d'), array('class' => '')) !!}
-                        {!! Form::text('recharge_trenches_d', null, array('id' => 'recharge_trenches_d', 'class' => 'form-control', 'placeholder' => trans('recharge trenches d'), 'title' => trans('recharge trenches d'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('recharge_trenches_d', null, array('id' => 'recharge_trenches_d', 'class' => 'form-control', 'placeholder' => trans('recharge trenches d'), 'title' => trans('recharge trenches d'))) !!}
                     </div>
                 </div>
             </div>
@@ -209,11 +210,11 @@
                <div class="row">
                     <div class="col-md-6">
                         {!! Form::label('water_bodies_ponds_depth', trans('water bodies ponds depth'), array('class' => '')) !!}
-                        {!! Form::text('water_bodies_ponds_depth', null, array('id' => 'water_bodies_ponds_depth', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds depth'), 'title' => trans('water bodies ponds depth'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('water_bodies_ponds_depth', null, array('id' => 'water_bodies_ponds_depth', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds depth'), 'title' => trans('water bodies ponds depth'))) !!}
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('water_bodies_ponds_diameter', trans('water bodies ponds diameter'), array('class' => '')) !!}
-                        {!! Form::text('water_bodies_ponds_diameter', null, array('id' => 'water_bodies_ponds_diameter', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds diameter'), 'title' => trans('water bodies ponds diameter'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('water_bodies_ponds_diameter', null, array('id' => 'water_bodies_ponds_diameter', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds diameter'), 'title' => trans('water bodies ponds diameter'))) !!}
                     </div>
                 </div>
             </div>
@@ -222,7 +223,7 @@
             <h3>C: Source of Water</h3>
             <div class="form-group">
                 {!! Form::label('source_of_availability_of_surface_water', trans('source of availability of surface water'), array('class' => '')) !!}
-                {!! Form::text('source_of_availability_of_surface_water', null, array('id' => 'source_of_availability_of_surface_water', 'class' => 'form-control', 'placeholder' => trans('source of availability of surface water'), 'title' => trans('source of_availability of surface water'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('source_of_availability_of_surface_water', null, array('id' => 'source_of_availability_of_surface_water', 'class' => 'form-control', 'placeholder' => trans('source of availability of surface water'), 'title' => trans('source of_availability of surface water'))) !!}
             </div>
             <fieldset>
                 <h4>Source of Ground water (** General Water Level – Village wise)</h4>
@@ -233,11 +234,11 @@
                     </div>
                     <div class="form-group">
                         {!! Form::label('depth_of_s_pump', trans('depth of s pump'), array('class' => '')) !!}
-                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'))) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('current_water_abstraction', trans('current water abstraction'), array('class' => '')) !!}
-                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'))) !!}
                     </div>
                 </div>
                 <div class="set2 hide alert1 alert alert-success" style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
@@ -250,11 +251,11 @@
                     </div>
                     <div class="form-group">
                         {!! Form::label('depth_of_s_pump', trans('depth of s pump'), array('class' => '')) !!}
-                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'))) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('current_water_abstraction', trans('current water abstraction'), array('class' => '')) !!}
-                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'))) !!}
                     </div>
                 </div>
                <div class="set3 hide alert1 alert alert-info" style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
@@ -267,11 +268,11 @@
                     </div>
                     <div class="form-group">
                         {!! Form::label('depth_of_s_pump', trans('depth of s pump'), array('class' => '')) !!}
-                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'))) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('current_water_abstraction', trans('current water abstraction'), array('class' => '')) !!}
-                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'))) !!}
                     </div>
                 </div>
                 <div class="set4 hide alert1 alert alert-warning" style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
@@ -284,11 +285,11 @@
                     </div>
                     <div class="form-group">
                         {!! Form::label('depth_of_s_pump', trans('depth of s pump'), array('class' => '')) !!}
-                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'))) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('current_water_abstraction', trans('current water abstraction'), array('class' => '')) !!}
-                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'), 'autocomplete' => 'off')) !!}
+                        {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'))) !!}
                     </div>
                 </div>
 
@@ -296,33 +297,17 @@
             </fieldset>
         </fieldset>
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
+            @if(Session::has('error'))
+             <p class="errors">{!! Session::get('error') !!}</p>
+            @endif
             <div class="form-group">
                 {!! Form::label('water_supply_from_RIICO', trans('water supply from RIICO'), array('class' => '')) !!}
-                {!! Form::text('water_supply_from_RIICO', null, array('id' => 'water_supply_from_RIICO', 'class' => 'form-control', 'placeholder' => trans('water supply from RIICO'), 'title' => trans('water supply from RIICO'), 'autocomplete' => 'off')) !!}
+                {!! Form::text('water_supply_from_RIICO', null, array('id' => 'water_supply_from_RIICO', 'class' => 'form-control', 'placeholder' => trans('water supply from RIICO'), 'title' => trans('water supply from RIICO'))) !!}
             </div>
         </fieldset>
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>Uploads :</h3>
-            <div class="form-group">
-                {!! Form::label('area_location', trans('Area Location'), array('class' => '')) !!}
-                {!! Form::file('area_location', array('id' => 'area_location', 'class' => 'form-control')) !!}
-            </div>
-           <div class="form-group">
-                {!! Form::label('sources_sw_gw', trans('Source SW GW'), array('class' => '')) !!}
-                {!! Form::file('sources_sw_gw', array('id' => 'sources_sw_gw', 'class' => 'form-control')) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('existing_rwh_structure', trans('existing rwh structure'), array('class' => '')) !!}
-                {!! Form::file('existing_rwh_structure', array('id' => 'existing_rwh_structure', 'class' => 'form-control')) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('site_layout_plan', trans('site layout plan'), array('class' => '')) !!}
-                {!! Form::file('site_layout_plan', array('id' => 'site_layout_plan', 'class' => 'form-control')) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('attachgpxfile', trans('Attach GPX File'), array('class' => '')) !!}
-                {!! Form::file('attachgpxfile',  array('id' => 'attachgpxfile', 'class' => 'form-control')) !!}
-            </div>
+             @include('layouts.partial.file_upload_fields')
         </fieldset>
 
         <fieldset style="margin-top: 20px;margin-bottom: 5px;">

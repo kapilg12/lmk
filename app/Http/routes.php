@@ -75,5 +75,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('audit/done', 'SurveyController@getSurveyDone');
     Route::get('dashboard', 'SurveyController@getDashboard');
     Route::get('audit/show/{id}', 'SurveyController@show');
+    Route::post('audit/upload', 'SurveyController@postShow');
     //Route::resource('surveys', 'SurveyController');
 });

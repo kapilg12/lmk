@@ -49,9 +49,9 @@
                         <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>
                             @if($user_role == 'torrent')
-                              <a class="btn btn-info" href="{{ url('survey/show',$ASurvey->bsurveys['id']) }}">Show</a>
+                              <a class="btn btn-info" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}">Show</a>
                             @else
-                                <a class="btn btn-info" href="{{ url('survey/show',$ASurvey->id) }}">Show</a>
+                                <a class="btn btn-info" href="{{ url('audit/show',$ASurvey->id) }}">Show</a>
                             @endif
                         </td>
                     </tr>

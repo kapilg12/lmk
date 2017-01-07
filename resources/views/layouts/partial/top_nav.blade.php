@@ -16,14 +16,18 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">  
-                    @if (Auth::user())
-                        @if (Auth::user()->hasRole('superadmin'))
+                    @if (!Auth::guest())
+                        @if (Auth::user()->can(['role-list','role-create','role-edit','role-delete','role-show']))
                             <li><a href="{{ url('/roles') }}"><i class="fa fa-btn fa-sign-out"></i>Roles</a></li>
+                        @endif
+                        @if (Auth::user()->can(['user-list','user-create','user-edit','user-delete','user-show']))
                             <li><a href="{{ url('/users') }}"><i class="fa fa-btn fa-sign-out"></i>Users</a></li>
+                        @endif    
+                        @if (Auth::user()->can(['user-list','user-create','user-edit','user-delete','user-show']))
                             <li><a href="{{ url('/offices') }}"><i class="fa fa-btn fa-sign-out"></i>Regional Offices</a></li>
                         @endif
                         <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                    @endif
+                    @endif    
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">

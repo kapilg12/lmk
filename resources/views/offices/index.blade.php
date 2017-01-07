@@ -38,8 +38,10 @@
 		
 	@endforeach
 	</table>
-	{!! $data->render() !!}
-	<script type="text/javascript">
+	{!! $data->render() !!}	
+@endsection
+@section('js')
+<script type="text/javascript">
 		function getConfirmation()
 		{
 			if(confirm("Are sure want to delete ?"))

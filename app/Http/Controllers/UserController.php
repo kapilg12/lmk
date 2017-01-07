@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::orderBy('id', 'DESC')->paginate(5);
+        $data = User::where('id','!=','1')->orderBy('id', 'DESC')->paginate(5);
         //dd($data);
         return view('users.index', compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
@@ -34,7 +34,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::lists('display_name', 'id');
+        $roles = Role::where('id','!=',1)->lists('display_name', 'id');
         /*$offices = Office::with(['children','states','states.countries'])->where('parent_id',null)->orderBy('id', 'DESC')->get();*/
         $globalOffices = Country::with(['states','states.offices','states.offices.children'])->get();
         //dd($globalOffices);
@@ -91,7 +91,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = Role::lists('display_name', 'id');
+        $roles = Role::where('id','!=',1)->lists('display_name', 'id');
         $userRole = $user->roles->lists('id', 'id')->toArray();
         $globalOffices = Country::with(['states','states.offices','states.offices.children'])->get();
         return view('users.edit', compact('user', 'roles', 'userRole','globalOffices'));
@@ -152,13 +152,10 @@ class UserController extends Controller
     public function postLogin(Request $request)
     {
         if (Auth::attempt(array('email' => $request['email'], 'password' => $request['password']))) {
-            $user = Auth::user();
-            if(Auth::user()->hasRole('superadmin')){
-                return redirect()->route('users.index');
-            }else{
-                return redirect()->route('dashboard');                
-            }
-            
+            $user = Auth::user();            
+            return redirect('dashboard');
+        }else{
+            return redirect()->route('login')->with('warning','Please enter correct username/password');
         }
     }
     public function getLogout()

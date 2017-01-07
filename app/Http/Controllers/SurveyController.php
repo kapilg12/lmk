@@ -48,7 +48,7 @@ class SurveyController extends Controller
         'green_belt_area' => 'required|numeric',
         'open_land' => 'required|numeric',
         'GPSCoordinate_area' => 'required',
-        'GPSCoordinate_latitude["A"]' => 'required',
+        'GPSCoordinate_waypoint' => 'required',
     ];
 
     public function getSurvey()
@@ -80,8 +80,15 @@ class SurveyController extends Controller
                     $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
                     break;
             }
+            $Gps = array(
+                array('aName' => 'Shed', 'aValue' => 'shad', 'dAttr' => '1'),
+                array('aName' => 'Building', 'aValue' => 'building', 'dAttr' => '4'),
+                array('aName' => 'Tubewell', 'aValue' => 'tubewell', 'dAttr' => '4'),
+            );
+            //dd($Gps);
             $a_survey_id = Session::get('a_survey_id');
-            return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+            $a_survey_id = 1;
+            return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id, 'listData' => $Gps])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
         } else {
             return redirect('/audit');
         }
@@ -95,6 +102,7 @@ class SurveyController extends Controller
         //$a_survey_id = 1;
         //$b_survey_id = 4;
         $input = $request->all();
+
         switch ($step) {
             case 2:
                 $v = Validator::make($input, $this->BSurveyValidationRules);
@@ -126,6 +134,7 @@ class SurveyController extends Controller
                 $BSurvey['water_supply_from_RIICO'] = $input['water_supply_from_RIICO'];
                 $BSurvey = BSurvey::create($BSurvey);
                 $b_survey_id = $BSurvey['id'];
+                //$b_survey_id = 4;
 
                 $BSgWater = array();
                 foreach ($input['tubewell_borewell'] as $key => $value) {
@@ -138,16 +147,20 @@ class SurveyController extends Controller
                     $BSgWater[$key]['updated_at'] = date('Y-m-d H:i:s');
                 }
                 BSgWater::insert($BSgWater);
+                // dd($input);
                 $Gpscoordinate = array();
                 $i = 0;
-                foreach ($input['GPSCoordinate_latitude'] as $key => $value) {
+                $GPSCoordinateWaypointArr = explode(',', $input['GPSCoordinate_waypoint']);
+                foreach ($GPSCoordinateWaypointArr as $GPSCoordinateWaypoint) {
                     $Gpscoordinate[$i]['a_survey_id'] = $a_survey_id;
                     $Gpscoordinate[$i]['b_survey_id'] = $b_survey_id;
                     $Gpscoordinate[$i]['GPSCoordinate_area'] = $input['GPSCoordinate_area'];
                     $Gpscoordinate[$i]['GPSCoordinate_type'] = $input['GPSCoordinate_area'];
-                    $Gpscoordinate[$i]['GPSCoordinate_point'] = trim($key, '"');
-                    $Gpscoordinate[$i]['GPSCoordinate_latitude'] = $input['GPSCoordinate_latitude'][$key];
-                    $Gpscoordinate[$i]['GPSCoordinate_longitude'] = $input['GPSCoordinate_longitude'][$key];
+                    $Gpscoordinate[$i]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
+                    $Gpscoordinate[$i]['GPSCoordinate_latitude'] = '0';
+                    $Gpscoordinate[$i]['GPSCoordinate_longitude'] = '0';
+                    $Gpscoordinate[$i]['gpxfile'] = '';
+                    $Gpscoordinate[$i]['comment'] = $input['GPSCoordinate_comment'];
                     $Gpscoordinate[$i]['created_at'] = date('Y-m-d H:i:s');
                     $Gpscoordinate[$i]['updated_at'] = date('Y-m-d H:i:s');
                     ++$i;
@@ -257,13 +270,36 @@ class SurveyController extends Controller
             $ASurveys = ASurvey::find($id);
         } else if ($user_role == 'torrent') {
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
-
                 ->find($id);
-            //$ASurveys = BSurvey::with('bsgwater, gpscoordinates')->where('a_survey_id', $id)->get();
         }
         return view('survey.show', compact('ASurveys', 'user_role'));
-        //$ASurvey = ASurvey::with('bsurveys')->where('user_id', 1)->get();
-
     }
 
+    private function uploadfile($file)
+    {
+        //$file = $request->file('image');
+
+        //Display File Name
+        //echo 'File Name: ' . $file->getClientOriginalName();
+        //echo '<br>';
+
+        //Display File Extension
+        //echo 'File Extension: ' . $file->getClientOriginalExtension();
+        //echo '<br>';
+
+        //Display File Real Path
+        //echo 'File Real Path: ' . $file->getRealPath();
+        //echo '<br>';
+
+        //Display File Size
+        ///echo 'File Size: ' . $file->getSize();
+        //echo '<br>';
+
+        //Display File Mime Type
+        //echo 'File Mime Type: ' . $file->getMimeType();
+
+        //Move Uploaded File
+        $destinationPath = 'uploads';
+        $file->move($destinationPath, $file->getClientOriginalName());
+    }
 }

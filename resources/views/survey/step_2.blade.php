@@ -6,7 +6,7 @@
 
     <h2>Step 2:- General Data Sheet for Industry Establishment</h2>
 
-    {!! Form::open() !!}
+    {!! Form::open(array('files'=>'true')) !!}
     {{ Form::hidden('a_survey_id', $a_survey_id) }}
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
          <h3>B: Area Specifications</h3>
@@ -38,63 +38,86 @@
             <div class="row">
                     <div class="col-md-12">
                         {!! Form::label('GPSCoordinate_area', trans('Area Type Of GPSCoordinate'), array('class' => '')) !!}
-                        {!! Form::select('GPSCoordinate_area', [ '' => 'Please Select Area', 'shed' => 'shed','building' => 'building', 'tubewell' => 'Tubewell'], null, array('id' => 'area_type', 'class' => 'form-control')) !!}
+                       <!--  {!! Form::select('GPSCoordinate_area', [ '' => 'Please Select Area', 'shed' => 'shed','building' => 'Building', 'tubewell' => 'Tubewell'], null, array('id' => 'area_type', 'class' => 'form-control')) !!} -->
+                       <select name="GPSCoordinate_area" id="area_type" class="form-control">
+                         <option selected disabled>Please Select Area</option>
+                         @foreach($listData as $data)
+                         <option value="{{ $data['aValue'] }}" data-point="{{ $data['dAttr'] }}">{{ $data['aName'] }}</option>
+                         @endforeach
+                    </select>
+
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="waypoint">
+                {!! Form::label('GPSCoordinate_waypoint', trans('Way Point'), array('class' => '')) !!}
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12 gpsCord" id="0">
+                         {!! Form::text('GPSCoordinate_waypoint', null, array('id' => 'GPSCoordinate_waypoint', 'class' => 'form-control', 'placeholder' => trans('Way point: 085,086,087'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                    </div>
+                 </div>
+            </div>
+            <div class="form-group" id="waypointcomment">
+                {!! Form::label('GPSCoordinate_comment', trans('Comment'), array('class' => '')) !!}
+                <div class="row">
+                    <div class="col-md-12 gpsCord" id="GPSCoordinatecomments">
+                        <textarea rows="5" cols="20" class="form-control" name="GPSCoordinate_comment" id="GPSCoordinate_comment"></textarea>
+                    </div>
+                 </div>
+            </div>
+            <!--<div class="form-group" id="gps">
+                <div class="row">
+                    <div class="col-md-6 gpsCord hide" id="0">
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point A latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["A"]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["A"]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 gpsCord hide" id="1">
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point B latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["B"]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["B"]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
                 </div>
                 <div class="top-buffer"></div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 gpsCord hide" id="2">
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point C latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["C"]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["C"]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 gpsCord hide" id="3">
                         {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point D latitude longitude'), array('class' => '')) !!}
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude["D"]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'), 'autocomplete' => 'off')) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude["D"]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
+                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'), 'autocomplete' => 'off')) !!}
                             </div>
                        </div>
                     </div>
                 </div>
             </div>
             <div></div>
-            <!--<div class="form-group">
+            <div class="form-group">
                 {!! Form::label('GPSCoordinate_B', trans('GPSCoordinate B'), array('class' => '')) !!}
                 {!! Form::text('GPSCoordinate_B', null, array('id' => 'GPSCoordinate_B', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate B'), 'title' => trans('GPSCoordinate B'), 'autocomplete' => 'off')) !!}
             </div>
@@ -278,6 +301,30 @@
                 {!! Form::text('water_supply_from_RIICO', null, array('id' => 'water_supply_from_RIICO', 'class' => 'form-control', 'placeholder' => trans('water supply from RIICO'), 'title' => trans('water supply from RIICO'), 'autocomplete' => 'off')) !!}
             </div>
         </fieldset>
+        <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
+            <h3>Uploads :</h3>
+            <div class="form-group">
+                {!! Form::label('area_location', trans('Area Location'), array('class' => '')) !!}
+                {!! Form::file('area_location', array('id' => 'area_location', 'class' => 'form-control')) !!}
+            </div>
+           <div class="form-group">
+                {!! Form::label('sources_sw_gw', trans('Source SW GW'), array('class' => '')) !!}
+                {!! Form::file('sources_sw_gw', array('id' => 'sources_sw_gw', 'class' => 'form-control')) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('existing_rwh_structure', trans('existing rwh structure'), array('class' => '')) !!}
+                {!! Form::file('existing_rwh_structure', array('id' => 'existing_rwh_structure', 'class' => 'form-control')) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('site_layout_plan', trans('site layout plan'), array('class' => '')) !!}
+                {!! Form::file('site_layout_plan', array('id' => 'site_layout_plan', 'class' => 'form-control')) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('attachgpxfile', trans('Attach GPX File'), array('class' => '')) !!}
+                {!! Form::file('attachgpxfile',  array('id' => 'attachgpxfile', 'class' => 'form-control')) !!}
+            </div>
+        </fieldset>
+
         <fieldset style="margin-top: 20px;margin-bottom: 5px;">
           <input type="submit" name="submit" class="next btn btn-info" value="Submit" />
         </fieldset>
@@ -305,6 +352,14 @@
             $('#addmore').removeClass('hide');
         }
         $(this).parent('div').addClass('hide');
+    });
+    $('select#area_type').on('change', function() {
+        var pointCordinates = $('select#area_type option[value="'+this.value+'"]').attr('data-point');
+        console.log(pointCordinates);
+        $("#gps .row .gpsCord").addClass('hide');
+        for (i = 0; i < pointCordinates; i++) {
+            $("#gps .row #"+i).removeClass('hide');
+        }
     });
 </script>
 @endsection

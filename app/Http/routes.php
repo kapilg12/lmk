@@ -76,5 +76,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('dashboard', 'SurveyController@getDashboard');
     Route::get('audit/show/{id}', 'SurveyController@show');
     Route::post('audit/upload', 'SurveyController@postShow');
+
+    Route::post('audit/changeStatus
+        ',['as'=>'survey.changeStatus','uses'=>'SurveyController@changeStatus','middleware'=>['role:superadmin|devadmin']]);
     //Route::resource('surveys', 'SurveyController');
 });

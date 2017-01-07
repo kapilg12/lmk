@@ -337,9 +337,7 @@ class SurveyController extends Controller
     }
     public function getDashboard(Request $request)
     {
-        $user = Auth::user();
-        //echo $user->hasRole('superadmin');die;
-        //$user_role = "superadmin";
+        $user = Auth::user();        
         if ($user->hasRole('superadmin') == 1) {
             $user_role = 'superadmin';
         } else if ($user->hasRole('torrent') == 1) {
@@ -396,6 +394,32 @@ class SurveyController extends Controller
         }
 
         return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules]);
+    }
+
+    public function changeStatus(Request $request)
+    {        
+        if(!empty($request['changeVar'])){
+            $ASurveys = ASurvey::find($request['changeVal']);
+            switch ($request['changeVar']) {                
+                case 'active':
+                    $ASurveys->is_active = 1;
+                    $ASurveys->save();                                        
+                    break;
+                case 'approve':    
+                    $ASurveys->is_approved = 1;
+                    $ASurveys->save();                                        
+                    break;
+                case 'completed':    
+                    $ASurveys->is_completed = 1;
+                    $ASurveys->save();                                        
+                    break;
+                case 'certified':    
+                    $ASurveys->is_certified = 1;
+                    $ASurveys->save();                                        
+                    break;        
+            }
+            return view('layouts.partial.access_nav',compact('ASurveys'));
+        }
     }
 
     public function postShow(Request $request)

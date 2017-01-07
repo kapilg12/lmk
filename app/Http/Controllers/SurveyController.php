@@ -90,24 +90,24 @@ class SurveyController extends Controller
 
     public function getSurveyStep(Request $request, $step)
     {
-        //if ($request->session()->has('a_survey_id')) {
-        $BSurveyValidationRules = '';
-        switch ($step) {
-            case 2:
-                $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
-                break;
+        if ($request->session()->has('a_survey_id')) {
+            $BSurveyValidationRules = '';
+            switch ($step) {
+                case 2:
+                    $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
+                    break;
+            }
+            $Gps = array(
+                array('aName' => 'Shed', 'aValue' => 'shad', 'dAttr' => '1'),
+                array('aName' => 'Building', 'aValue' => 'building', 'dAttr' => '4'),
+                array('aName' => 'Tubewell', 'aValue' => 'tubewell', 'dAttr' => '4'),
+            );
+            $a_survey_id = Session::get('a_survey_id');
+            $a_survey_id = 1;
+            return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id, 'listData' => $Gps])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+        } else {
+            return redirect('/audit');
         }
-        $Gps = array(
-            array('aName' => 'Shed', 'aValue' => 'shad', 'dAttr' => '1'),
-            array('aName' => 'Building', 'aValue' => 'building', 'dAttr' => '4'),
-            array('aName' => 'Tubewell', 'aValue' => 'tubewell', 'dAttr' => '4'),
-        );
-        $a_survey_id = Session::get('a_survey_id');
-        $a_survey_id = 1;
-        return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id, 'listData' => $Gps])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
-        //} else {
-        //    return redirect('/audit');
-        //}
 
     }
     public function postSurveyStep(Request $request, $step)

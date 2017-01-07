@@ -15,15 +15,31 @@ class UserSeeder extends Seeder
         DB::table('role_user')->truncate();
         DB::table('users')->truncate();
         DB::table('users')->insert([
+            [
             'id' => 1,
-            'name' => 'Super Administrator',
+            'name' => 'Supreme Administrator',
             'email' => 'kapilvermasgnr@gmail.com',
+            'password' => '$2y$10$h/L7XsQEIQCfq5PrUmtJtOIzgoCyxSdb/2zed0VlbEYPZh3Lkn7Cu',
+            'remember_token' => 'helloSupreme',
+        ],
+        [
+            'id' => 2,
+            'name' => 'Super Administrator',
+            'email' => 'info@bhujalsanrakshan.com',
             'password' => '$2y$10$zJZ8uhgC6Zqa9EhlnDtc0.h2gjQpM4rKmVdy60CrSQDlNkZ1kizKq',
             'remember_token' => 'helloAdmin',
+        ]
         ]);
-        DB::table('role_user')->insert([
+        DB::table('role_user')->insert(
+            [
+            [
             'user_id' => 1,
             'role_id' => 1,
+        ],
+        [
+            'user_id' => 2,
+            'role_id' => 2,
+        ]
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }

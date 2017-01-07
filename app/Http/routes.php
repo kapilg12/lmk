@@ -27,7 +27,7 @@ Route::get('/', function () {
  */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get("/login", ['uses' => "UserController@login"]);
+    Route::get("/login", ['as'=>'login','uses' => "UserController@login"]);
     Route::post("/login", ['uses' => "UserController@postLogin"]);
 });
 
@@ -53,18 +53,17 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('offices/create', ['as' => 'offices.create', 'uses' => 'OfficeController@create', 'middleware' => ['permission:office-create']]);
     Route::post('offices/store', ['as' => 'offices.store', 'uses' => 'OfficeController@store', 'middleware' => ['permission:office-create']]);
     Route::post('offices/update', ['as' => 'offices.update', 'uses' => 'OfficeController@update', 'middleware' => ['permission:office-edit']]);
-
-    Route::get('offices/show/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show']);
+    Route::get('offices/show/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show','middleware' => ['permission:office-show']]);
     Route::get('offices/{id}/edit', ['as' => 'offices.edit', 'uses' => 'OfficeController@edit', 'middleware' => ['permission:office-edit']]);
     Route::delete('offices/{id}', ['as' => 'offices.destroy', 'uses' => 'OfficeController@destroy', 'middleware' => ['permission:office-delete']]);
 
     Route::post('states/getStates', ['as' => 'states.getStatesList', 'uses' => 'StateController@getStatesList', 'middleware' => ['permission:state-list']]);
     Route::post('offices/getOffices', ['as' => 'offices.getOfficeList', 'uses' => 'OfficeController@getOfficesList', 'middleware' => ['permission:office-list']]);
 
-    Route::get('roles', ['as' => 'roles.index', 'uses' => 'RoleController@index', 'middleware' => ['permission:role-list|role-create|role-edit|role-delete']]);
+    Route::get('roles', ['as' => 'roles.index', 'uses' => 'RoleController@index', 'middleware' => ['permission:role-list|role-create|role-edit|role-delete|role-show']]);
     Route::get('roles/create', ['as' => 'roles.create', 'uses' => 'RoleController@create', 'middleware' => ['permission:role-create']]);
     Route::post('roles/create', ['as' => 'roles.store', 'uses' => 'RoleController@store', 'middleware' => ['permission:role-create']]);
-    Route::get('roles/{id}', ['as' => 'roles.show', 'uses' => 'RoleController@show']);
+    Route::get('roles/{id}', ['as' => 'roles.show', 'uses' => 'RoleController@show','middleware' => ['permission:role-show']]);
     Route::get('roles/{id}/edit', ['as' => 'roles.edit', 'uses' => 'RoleController@edit', 'middleware' => ['permission:role-edit']]);
     Route::patch('roles/{id}', ['as' => 'roles.update', 'uses' => 'RoleController@update', 'middleware' => ['permission:role-edit']]);
     Route::delete('roles/{id}', ['as' => 'roles.destroy', 'uses' => 'RoleController@destroy', 'middleware' => ['permission:role-delete']]);

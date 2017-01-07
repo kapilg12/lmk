@@ -39,7 +39,7 @@
 		<td>
 			<a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>
 			<a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Edit</a>
-			{!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
+			{!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline','onclick'=>'return getConfirmation();']) !!}
             {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
         	{!! Form::close() !!}
 		</td>
@@ -47,4 +47,17 @@
 	@endforeach
 	</table>
 	{!! $data->render() !!}
+@endsection
+@section('js')
+<script type="text/javascript">
+		function getConfirmation()
+		{
+			if(confirm("Are sure want to delete ?"))
+			{
+				return true;
+			}else{
+				return false;
+			}
+		}
+	</script>
 @endsection

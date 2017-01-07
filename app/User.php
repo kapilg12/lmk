@@ -34,8 +34,12 @@ class User extends Authenticatable
         parent::boot();
 
         static::addGlobalScope('active', function(Builder $builder) {
-            $builder->where('is_active', 1);
+            $builder->where('is_active', 1);            
         });
+        /*static::addGlobalScope('mainUser', function(Builder $builder) {
+            $builder->where('email', '!=' ,'kapilvermasgnr@gmail.com');           
+        });*/
+        
     }
 
     public function ASurveys()

@@ -57,7 +57,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12">                    
                 <div class="form-group">                  
                     <label>
-                      <input type="checkbox" name="country[]" value="{{$value->id}}" class="country_{{$value->id}}" data-val="country_{{$value->id}}" @if(in_array($value->id, $user['options']['country'])) checked="checked" @endif>
+                      <input type="checkbox" name="country[]" value="{{$value->id}}" class="country_{{$value->id}}" data-val="country_{{$value->id}}" @if(is_array($user['options']['country'])) @if(in_array($value->id, $user['options']['country'])) checked="checked" @endif @endif>
                       {{$value->title}}
                     </label>                  
                 </div>
@@ -66,7 +66,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">                    
                     <div class="form-group">                  
                         <label>
-                          <input type="checkbox" name="state[]" value="{{$stateValue->id}}" class="country_{{$value->id}} state_{{$stateValue->id}}" data-val="state_{{$stateValue->id}}" @if(in_array($stateValue->id, $user['options']['state'])) checked="checked" @endif>
+                          <input type="checkbox" name="state[]" value="{{$stateValue->id}}" class="country_{{$value->id}} state_{{$stateValue->id}}" data-val="state_{{$stateValue->id}}" @if(is_array($user['options']['state'])) @if(in_array($stateValue->id, $user['options']['state'])) checked="checked" @endif @endif>
                           {{$stateValue->title}}
                         </label>                  
                     </div>
@@ -77,7 +77,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">                  
                                 <label>
-                                  <input type="checkbox" name="allowedOffices[]" value="{{$stateRO->id}}" class="country_{{$value->id}} state_{{$stateValue->id}} stateRO_{{$stateRO->id}}"  data-val="stateRO_{{$stateRO->id}}" @if(in_array($stateRO->id, $user['options']['allowedOffices'])) checked="checked" @endif>
+                                  <input type="checkbox" name="allowedOffices[]" value="{{$stateRO->id}}" class="country_{{$value->id}} state_{{$stateValue->id}} stateRO_{{$stateRO->id}}"  data-val="stateRO_{{$stateRO->id}}" @if(is_array($user['options']['allowedOffices'])) @if(in_array($stateRO->id, $user['options']['allowedOffices'])) checked="checked" @endif @endif>
                                   {{$stateRO->office_name}}
                                 </label>                  
                             </div>
@@ -88,7 +88,7 @@
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">                  
                                         <label>
-                                          <input type="checkbox" name="allowedOffices[]" value="{{$subOffice->id}}" class="country_{{$value->id}} state_{{$stateValue->id}} stateRO_{{$stateRO->id}}" @if(in_array($subOffice->id, $user['options']['allowedOffices'])) checked="checked" @endif>
+                                          <input type="checkbox" name="allowedOffices[]" value="{{$subOffice->id}}" class="country_{{$value->id}} state_{{$stateValue->id}} stateRO_{{$stateRO->id}}" @if(is_array($user['options']['allowedOffices'])) @if(in_array($subOffice->id, $user['options']['allowedOffices'])) checked="checked" @endif @endif>
                                           {{$subOffice->office_name}}
                                         </label>                  
                                     </div>  

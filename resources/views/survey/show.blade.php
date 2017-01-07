@@ -127,9 +127,9 @@
             </ul>
           </div><!-- /.tab-pane -->
          @endif
-        
+
         <div class="tab-content">
-        @if($user_role == 'superadmin' || $user_role == 'torrent'|| $user_role == 'rm') 
+        @if($user_role == 'superadmin' || $user_role == 'torrent'|| $user_role == 'rm')
           <div class="active tab-pane" id="activity">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -400,7 +400,7 @@
             </ul>
           </div><!-- /.tab-pane -->
           @endif
-          @if($user_role == 'superadmin')
+          @if($user_role == 'superadmin' || $user_role == 'torrent')
           <div class="tab-pane" id="timeline">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -486,7 +486,7 @@
             </ul>
           </div><!-- /.tab-pane -->
            @endif
-           
+
         </div><!-- /.tab-content -->
       </div><!-- /.nav-tabs-custom -->
     </div><!-- /.col -->

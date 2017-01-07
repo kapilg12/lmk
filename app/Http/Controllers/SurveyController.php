@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ASurvey;
+use App\BAttachment;
 use App\BSgWater;
 use App\BSurvey;
 use App\COneSurvey;
@@ -49,6 +50,19 @@ class SurveyController extends Controller
         'open_land' => 'required|numeric',
         'GPSCoordinate_area' => 'required',
         'GPSCoordinate_waypoint' => 'required',
+        'area_location' => 'mimes:jpeg,jpg,pdf',
+        'sources_sw_gw' => 'mimes:jpeg,jpg,pdf',
+        'existing_rwh_structure' => 'mimes:jpeg,jpg,pdf,doc,docx',
+        'site_layout_plan' => 'mimes:jpeg,jpg,pdf',
+        'attachgpxfile' => 'mimes:gpx',
+    ];
+
+    protected $AttachmentValidationRules = [
+        'area_location' => 'mimes:jpeg,jpg,pdf',
+        'sources_sw_gw' => 'mimes:jpeg,jpg,pdf',
+        'existing_rwh_structure' => 'mimes:jpeg,jpg,pdf,doc,docx',
+        'site_layout_plan' => 'mimes:jpeg,jpg,pdf',
+        'attachgpxfile' => 'mimes:gpx',
     ];
 
     public function getSurvey()
@@ -65,6 +79,9 @@ class SurveyController extends Controller
         if ($v->fails()) {
             return redirect()->back()->withErrors($v->errors());
         }
+        $user = Auth::user();
+        $input['user_id'] = $user['id'];
+        $input['torrent_id'] = 1;
         $ASurvey = ASurvey::create($input);
         $a_survey_id = $ASurvey['id'];
         Session::put('a_survey_id', $a_survey_id);
@@ -73,25 +90,24 @@ class SurveyController extends Controller
 
     public function getSurveyStep(Request $request, $step)
     {
-        if ($request->session()->has('a_survey_id')) {
-            $BSurveyValidationRules = '';
-            switch ($step) {
-                case 2:
-                    $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
-                    break;
-            }
-            $Gps = array(
-                array('aName' => 'Shed', 'aValue' => 'shad', 'dAttr' => '1'),
-                array('aName' => 'Building', 'aValue' => 'building', 'dAttr' => '4'),
-                array('aName' => 'Tubewell', 'aValue' => 'tubewell', 'dAttr' => '4'),
-            );
-            //dd($Gps);
-            $a_survey_id = Session::get('a_survey_id');
-            $a_survey_id = 1;
-            return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id, 'listData' => $Gps])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
-        } else {
-            return redirect('/audit');
+        //if ($request->session()->has('a_survey_id')) {
+        $BSurveyValidationRules = '';
+        switch ($step) {
+            case 2:
+                $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
+                break;
         }
+        $Gps = array(
+            array('aName' => 'Shed', 'aValue' => 'shad', 'dAttr' => '1'),
+            array('aName' => 'Building', 'aValue' => 'building', 'dAttr' => '4'),
+            array('aName' => 'Tubewell', 'aValue' => 'tubewell', 'dAttr' => '4'),
+        );
+        $a_survey_id = Session::get('a_survey_id');
+        $a_survey_id = 1;
+        return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id, 'listData' => $Gps])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+        //} else {
+        //    return redirect('/audit');
+        //}
 
     }
     public function postSurveyStep(Request $request, $step)
@@ -102,7 +118,7 @@ class SurveyController extends Controller
         //$a_survey_id = 1;
         //$b_survey_id = 4;
         $input = $request->all();
-
+        $user = Auth::user();
         switch ($step) {
             case 2:
                 $v = Validator::make($input, $this->BSurveyValidationRules);
@@ -147,7 +163,6 @@ class SurveyController extends Controller
                     $BSgWater[$key]['updated_at'] = date('Y-m-d H:i:s');
                 }
                 BSgWater::insert($BSgWater);
-                // dd($input);
                 $Gpscoordinate = array();
                 $i = 0;
                 $GPSCoordinateWaypointArr = explode(',', $input['GPSCoordinate_waypoint']);
@@ -166,6 +181,112 @@ class SurveyController extends Controller
                     ++$i;
                 }
                 Gpscoordinate::insert($Gpscoordinate);
+
+                // getting all of the post data
+                $attachmentArr = array();
+                $attachmentArr['user_id'] = $user['id'];
+                $attachmentArr['a_survey_id'] = $a_survey_id;
+                $attachmentArr['b_survey_id'] = $b_survey_id;
+                // checking file is valid.
+                if (isset($input['area_location'])) {
+                    if ($input['area_location']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
+
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['area_location'] = $fileName;
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['sources_sw_gw'])) {
+                    if ($input['sources_sw_gw']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['sources_sw_gw'] = $fileName;
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['existing_rwh_structure'])) {
+                    if ($input['existing_rwh_structure']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['existing_rwh_structure'] = $fileName;
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['site_layout_plan'])) {
+                    if ($input['site_layout_plan']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['site_layout_plan'] = $fileName;
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['attachgpxfile'])) {
+                    if ($input['attachgpxfile']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['attachgpxfile'] = $fileName;
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                $attachmentArr['created_at'] = date('Y-m-d H:i:s');
+                $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
+                BAttachment::create($attachmentArr);
                 break;
             case 3:
                 //$rules = ['color' => 'required|min:3'];
@@ -249,6 +370,7 @@ class SurveyController extends Controller
     }
     public function show($id)
     {
+        $attachmentsValidationRules = JsValidator::make($this->AttachmentValidationRules);
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
             $user_role = 'superadmin';
@@ -272,34 +394,121 @@ class SurveyController extends Controller
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
                 ->find($id);
         }
-        return view('survey.show', compact('ASurveys', 'user_role'));
+
+        return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules]);
     }
 
-    private function uploadfile($file)
+    public function postShow(Request $request)
     {
-        //$file = $request->file('image');
+        $input = $request->all();
+        $user = Auth::user();
+        // getting all of the post data
+        $attachmentArr = array();
+        //$attachmentArr['user_id'] = $user['id'];
+        $attachmentArr['user_id'] = 2;
+        $a_survey_id = $input['a_survey_id'];
+        $attachmentArr['a_survey_id'] = $a_survey_id;
+        $attachmentArr['b_survey_id'] = $input['b_survey_id'];
+        // checking file is valid.
+        if (isset($input['area_location'])) {
+            if ($input['area_location']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
 
-        //Display File Name
-        //echo 'File Name: ' . $file->getClientOriginalName();
-        //echo '<br>';
-
-        //Display File Extension
-        //echo 'File Extension: ' . $file->getClientOriginalExtension();
-        //echo '<br>';
-
-        //Display File Real Path
-        //echo 'File Real Path: ' . $file->getRealPath();
-        //echo '<br>';
-
-        //Display File Size
-        ///echo 'File Size: ' . $file->getSize();
-        //echo '<br>';
-
-        //Display File Mime Type
-        //echo 'File Mime Type: ' . $file->getMimeType();
-
-        //Move Uploaded File
-        $destinationPath = 'uploads';
-        $file->move($destinationPath, $file->getClientOriginalName());
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                    $attachmentArr['area_location'] = $fileName;
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        if (isset($input['sources_sw_gw'])) {
+            if ($input['sources_sw_gw']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                    $attachmentArr['sources_sw_gw'] = $fileName;
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        if (isset($input['existing_rwh_structure'])) {
+            if ($input['existing_rwh_structure']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                    $attachmentArr['existing_rwh_structure'] = $fileName;
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        if (isset($input['site_layout_plan'])) {
+            if ($input['site_layout_plan']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                    $attachmentArr['site_layout_plan'] = $fileName;
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        if (isset($input['attachgpxfile'])) {
+            if ($input['attachgpxfile']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                    $attachmentArr['attachgpxfile'] = $fileName;
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        $attachmentArr['created_at'] = date('Y-m-d H:i:s');
+        $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
+        BAttachment::create($attachmentArr);
+        return redirect('/audit/show/' . $a_survey_id);
     }
 }

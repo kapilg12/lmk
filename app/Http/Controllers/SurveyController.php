@@ -275,6 +275,8 @@ class SurveyController extends Controller
                         // sending back with message
                         if (file_exists(public_path() . '/uploads/' . $fileName)) {
                             $attachmentArr['attachgpxfile'] = $fileName;
+                            $GPSCoordinate_points = $GPSCoordinateWaypointArr;
+                            $this->getLatLogFromXML($fileName, $GPSCoordinate_points);
                             Session::flash('success', 'Upload successfully');
                         } else {
                             Session::flash('failed', 'Not Uploaded');
@@ -368,6 +370,7 @@ class SurveyController extends Controller
     }
     public function show($id)
     {
+
         $attachmentsValidationRules = JsValidator::make($this->AttachmentValidationRules);
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
@@ -392,8 +395,17 @@ class SurveyController extends Controller
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
                 ->find($id);
         }
-
-        return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules]);
+        $GPSCoordinate_points = '';
+        if (isset($ASurveys->gpscoordinates)) {
+            foreach ($ASurveys->gpscoordinates as $key => $gpscoordinate) {
+                $GPSCoordinate_points .= ',' . $gpscoordinate->GPSCoordinate_point;
+            }
+        }
+        //$GPSCoordinate_points = array('085', '086', '087', '088', '089');
+        //$f = public_path() . '/uploads/20170107163139_Current.gpx';
+        //$r = $this->getLatLogFromXML($f, $GPSCoordinate_points);
+        // dd($GPSCoordinate_points);
+        return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
     }
 
     public function changeStatus(Request $request)
@@ -521,6 +533,8 @@ class SurveyController extends Controller
                 // sending back with message
                 if (file_exists(public_path() . '/uploads/' . $fileName)) {
                     $attachmentArr['attachgpxfile'] = $fileName;
+                    $GPSCoordinate_points = explode(',', $input['GPSCoordinate_points']);
+                    $this->getLatLogFromXML($fileName, $GPSCoordinate_points);
                     Session::flash('success', 'Upload successfully');
                 } else {
                     Session::flash('failed', 'Not Uploaded');
@@ -534,5 +548,23 @@ class SurveyController extends Controller
         $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
         BAttachment::create($attachmentArr);
         return redirect('/audit/show/' . $a_survey_id);
+    }
+
+    private function getLatLogFromXML($fileName, $wayPointArr)
+    {
+        $xml = simplexml_load_file($fileName);
+        $updateArr = array();
+        foreach ($xml->wpt as $nodes) {
+            if (in_array($nodes->name, $wayPointArr)) {
+                $k = (string) $nodes->name;
+                $updateArr[$k]['lat'] = (string) $nodes['lat'];
+                $updateArr[$k]['lon'] = (string) $nodes['lon'];
+
+                Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_latitude' => $nodes['lat']]);
+                Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
+            }
+        }
+
+        //dd($updateArr);
     }
 }

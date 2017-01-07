@@ -1,14 +1,14 @@
 @extends('layouts.survey')
 @section('content')
 {{-- dump($ASurveys) --}}
-@if($user_role == 'superadmin')
-<div class="row">
+@if(Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('devadmin'))
+<div class="row" id="access_nav">
    @include('layouts.partial.access_nav')
 </div>
 <div class="bottom-buffer"></div>
 @endif
 <div class="row">
-    @if($user_role != 'torrent')
+    @if(Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('rm') || Auth::user()->hasRole('devadmin'))
     <div class="col-md-3">
         <!-- Profile Image -->
           <div class="box box-primary">
@@ -59,14 +59,14 @@
 
     </div><!-- /.col -->
     @endif
-    @if($user_role != 'torrent')
+    @if(Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('rm') || Auth::user()->hasRole('devadmin'))
     <div class="col-md-9">
     @else
         <div class="col-md-12">
     @endif
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          @if($user_role == 'superadmin')
+          @if(Auth::user()->ability(array('superadmin'),array()) || Auth::user()->ability(array('devadmin'),array()))
           <li class="active"><a href="#activity" data-toggle="tab">B: Area Specification</a></li>
           <li><a href="#timeline" data-toggle="tab">C: Details Of Water</a></li>
           @elseif($user_role == 'torrent')
@@ -76,7 +76,7 @@
           @endif
         </ul>
 
-@if($user_role == 'rm')
+@if(Auth::user()->ability(array('rm'),array()))
             <div class="active tab-pane" id="settings">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -130,7 +130,7 @@
          @endif
 
         <div class="tab-content">
-        @if($user_role == 'superadmin' || $user_role == 'torrent'|| $user_role == 'rm')
+        @if(Auth::user()->ability(array('superadmin'),array()) || Auth::user()->ability(array('torrent'),array()) || Auth::user()->ability(array('rm'),array()) || Auth::user()->ability(array('devadmin'),array()))        
           <div class="active tab-pane" id="activity">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -194,21 +194,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>
-                         <!--<ul class="list-group ">
-                            <li class="list-group-item">
-                              <b>Point B</b> <a class="pull-right"></a>
-                            </li>
-                            <li class="list-group-item">
-                              <b>Point C</b> <a class="pull-right"></a>
-                            </li>
-                            <li class="list-group-item">
-                              <b>Point D</b> <a class="pull-right"></a>
-                            </li>
-                            <li class="list-group-item">
-                              <b>Space available in north east cornor of the area (L x W)</b> <a class="pull-right">13,287</a>
-                            </li>
-                      </ul>-->
+                        </table>                         
                 </div><!-- /.box-body -->
                 </div>
               </li>
@@ -417,8 +403,8 @@
               </li>
             </ul>
           </div><!-- /.tab-pane -->
-          @endif
-          @if($user_role == 'superadmin' || $user_role == 'torrent')
+          @endif          
+          @if(Auth::user()->ability(array('superadmin'),array()) || Auth::user()->ability(array('torrent'),array()) || Auth::user()->ability(array('devadmin'),array()))
           <div class="tab-pane" id="timeline">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -512,4 +498,20 @@
 <!-- Laravel Javascript Validation -->
  <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
  {!! $attachmentsValidationRules !!}
+@endsection
+@section('js')
+<script type="text/javascript">
+  function changeMe($changeVar,$changeVal)
+  {
+    alert($(this).data('val'));
+    $.ajax({
+        type:'POST',
+        url:'/audit/changeStatus',
+        data:{'changeVar':$changeVar,'changeVal':$changeVal},
+        success:function(data){
+          $("#access_nav").html(data);
+        }
+    });
+  }
+</script>
 @endsection

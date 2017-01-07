@@ -44,7 +44,6 @@
                         <td>{{$ASurvey->offices['office_name']}}</td>
                         <td>{{ $ASurvey->establishment_name }}</td>
                         <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
-                        <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>

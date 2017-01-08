@@ -11,6 +11,8 @@ use App\CTwoSurvey;
 use App\Gpscoordinate;
 use App\Http\Controllers\Controller;
 use App\Office;
+use App\SurveyLog;
+use App\User;
 use Auth;
 use Illuminate\Http\Request;
 use Input;
@@ -18,8 +20,6 @@ use JsValidator;
 use Redirect;
 use Session;
 use Validator;
-use App\User;
-use App\SurveyLog;
 
 class SurveyController extends Controller
 {
@@ -291,7 +291,7 @@ class SurveyController extends Controller
                         if (file_exists(public_path() . '/uploads/' . $fileName)) {
                             $attachmentArr['attachgpxfile'] = $fileName;
                             $GPSCoordinate_points = $GPSCoordinateWaypointArr;
-                            $this->getLatLogFromXML($fileName, $GPSCoordinate_points);
+                            $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
                             Session::flash('success', 'Upload successfully');
                         } else {
                             Session::flash('failed', 'Not Uploaded');
@@ -368,12 +368,12 @@ class SurveyController extends Controller
             $user_role = 'rm';
         }
 
-        if ($user->hasRole('torrent')) {            
+        if ($user->hasRole('torrent')) {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
                 ->where('torrent_id', Auth::user()->id)
                 ->orderBy('id', 'DESC')
-                ->paginate(5)->all();            
+                ->paginate(5)->all();
             return view('survey.dashboard', compact('ASurveys', 'user_role'))
                 ->with('i', ($request->input('page', 1) - 1) * 5);
         } else {
@@ -416,10 +416,11 @@ class SurveyController extends Controller
                 $GPSCoordinate_points .= ',' . $gpscoordinate->GPSCoordinate_point;
             }
         }
+        //dd($ASurveys->bsurveys->id);
         //$GPSCoordinate_points = array('085', '086', '087', '088', '089');
-        //$f = public_path() . '/uploads/20170107163139_Current.gpx';
-        //$r = $this->getLatLogFromXML($f, $GPSCoordinate_points);
-        // dd($GPSCoordinate_points);
+        //$f = '20170107163139_Current.gpx';
+        //$r = $this->getLatLogFromXML($f, $GPSCoordinate_points, $id);
+        //dd($GPSCoordinate_points);
         return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
     }
 
@@ -428,33 +429,33 @@ class SurveyController extends Controller
         if (!empty($request['changeVar'])) {
             $ASurveys = ASurvey::find($request['changeVal']);
             $SurveyLogArray = array(
-                        'user_id'=>Auth::user()->id,
-                        'a_survey_id'=>$ASurveys->id,                        
-                        'ip_address'=>$_SERVER['REMOTE_ADDR']
-                        );
+                'user_id' => Auth::user()->id,
+                'a_survey_id' => $ASurveys->id,
+                'ip_address' => $_SERVER['REMOTE_ADDR'],
+            );
             switch ($request['changeVar']) {
                 case 'active':
                     $ASurveys->is_active = 1;
                     $ASurveys->save();
-                    $SurveyLogArray['is_status']='active';
+                    $SurveyLogArray['is_status'] = 'active';
                     SurveyLog::create($SurveyLogArray);
                     break;
                 case 'approve':
                     $ASurveys->is_approved = 1;
                     $ASurveys->save();
-                    $SurveyLogArray['is_status']='approved';
+                    $SurveyLogArray['is_status'] = 'approved';
                     SurveyLog::create($SurveyLogArray);
                     break;
                 case 'completed':
                     $ASurveys->is_completed = 1;
                     $ASurveys->save();
-                    $SurveyLogArray['is_status']='completed';
+                    $SurveyLogArray['is_status'] = 'completed';
                     SurveyLog::create($SurveyLogArray);
                     break;
                 case 'certified':
                     $ASurveys->is_certified = 1;
                     $ASurveys->save();
-                    $SurveyLogArray['is_status']='certified';
+                    $SurveyLogArray['is_status'] = 'certified';
                     SurveyLog::create($SurveyLogArray);
                     break;
             }
@@ -471,8 +472,9 @@ class SurveyController extends Controller
         //$attachmentArr['user_id'] = $user['id'];
         $attachmentArr['user_id'] = 2;
         $a_survey_id = $input['a_survey_id'];
+        $b_survey_id = $input['b_survey_id'];
         $attachmentArr['a_survey_id'] = $a_survey_id;
-        $attachmentArr['b_survey_id'] = $input['b_survey_id'];
+        $attachmentArr['b_survey_id'] = $b_survey_id;
         // checking file is valid.
         if (isset($input['area_location'])) {
             if ($input['area_location']->isValid()) {
@@ -562,7 +564,7 @@ class SurveyController extends Controller
                 if (file_exists(public_path() . '/uploads/' . $fileName)) {
                     $attachmentArr['attachgpxfile'] = $fileName;
                     $GPSCoordinate_points = explode(',', $input['GPSCoordinate_points']);
-                    $this->getLatLogFromXML($fileName, $GPSCoordinate_points);
+                    $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
                     Session::flash('success', 'Upload successfully');
                 } else {
                     Session::flash('failed', 'Not Uploaded');
@@ -578,18 +580,22 @@ class SurveyController extends Controller
         return redirect('/audit/show/' . $a_survey_id);
     }
 
-    private function getLatLogFromXML($fileName, $wayPointArr)
+    private function getLatLogFromXML($fileName, $wayPointArr, $aid)
     {
-        $xml = simplexml_load_file($fileName);
+        $fullName = public_path() . '/uploads/' . $fileName;
+        $xml = simplexml_load_file($fullName);
         $updateArr = array();
         foreach ($xml->wpt as $nodes) {
             if (in_array($nodes->name, $wayPointArr)) {
                 $k = (string) $nodes->name;
                 $updateArr[$k]['lat'] = (string) $nodes['lat'];
                 $updateArr[$k]['lon'] = (string) $nodes['lon'];
-
-                Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_latitude' => $nodes['lat']]);
-                Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
+                $lat = $nodes['lat'];
+                $lon = $nodes['lon'];
+                Gpscoordinate::where('GPSCoordinate_point', $k)
+                    ->where('a_survey_id', $aid)
+                    ->update(['GPSCoordinate_latitude' => $lat, 'GPSCoordinate_longitude' => $lon, 'gpxfile' => $fileName]);
+                //Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
             }
         }
     }

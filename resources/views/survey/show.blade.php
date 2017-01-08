@@ -505,7 +505,7 @@
 <script type="text/javascript">
   function changeMe($changeVar,$changeVal)
   {
-    alert($(this).data('val'));
+    if(confirm("Are sure want to perform this action ? Step can't changed !")){
     $.ajax({
         type:'POST',
         url:'/audit/changeStatus',
@@ -514,6 +514,7 @@
           $("#access_nav").html(data);
         }
     });
+  }
   }
 </script>
 @endsection

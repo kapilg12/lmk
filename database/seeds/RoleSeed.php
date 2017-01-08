@@ -24,6 +24,11 @@ class RoleSeed extends Seeder
             'name'=>'superadmin',
             'display_name'=>'Master Administrator',
             'description'=>'User with each and every permission'
+            ],
+            [            
+            'name'=>'torrentadmin',
+            'display_name'=>'Torrent Administrator',
+            'description'=>'Torrent Administrator'
             ]
         ]);
 

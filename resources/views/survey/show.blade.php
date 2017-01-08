@@ -392,6 +392,8 @@
                     {!! Form::open(array('url'=>'audit/upload', 'files'=>'true')) !!}
                     {{ Form::hidden('a_survey_id', $ASurveys->id) }}
                     {{ Form::hidden('b_survey_id', $ASurveys->bsurveys->id) }}
+                    {{ Form::hidden('GPSCoordinate_points', $GPSCoordinate_points) }}
+
                         @include('layouts.partial.file_upload_fields')
                         <input type="submit" name="submit" class="next btn btn-info" value="Submit" />
                     {!! Form::close() !!}

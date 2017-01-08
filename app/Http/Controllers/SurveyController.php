@@ -18,6 +18,8 @@ use JsValidator;
 use Redirect;
 use Session;
 use Validator;
+use App\User;
+use App\SurveyLog;
 
 class SurveyController extends Controller
 {
@@ -69,7 +71,9 @@ class SurveyController extends Controller
 
     public function getSurvey()
     {
-        $Office = Office::where('is_active', true)->orderBy('office_name')->pluck('office_name', 'id');
+        //$user=User::with('roles')->where();
+        //dd($user);
+        $Office = Office::orderBy('office_name')->pluck('office_name', 'id');
         $Office->prepend('Please Select Industrial Area', '');
         $ASurveyValidationRules = JsValidator::make($this->ASurveyValidationRules, $this->ASurveyMessages);
         return view('survey.index', compact('id', 'Office'))->with(['ASurveyValidationRules' => $ASurveyValidationRules]);
@@ -81,9 +85,7 @@ class SurveyController extends Controller
         if ($v->fails()) {
             return redirect()->back()->withErrors($v->errors());
         }
-
-        $user = Auth::user();
-        $input['user_id'] = $user['id'];
+        $input['user_id'] = Auth::user()->id;
         $input['torrent_id'] = 1;
         $ASurvey = ASurvey::create($input);
         if ($input['is_applied'] == 0) {
@@ -366,17 +368,12 @@ class SurveyController extends Controller
             $user_role = 'rm';
         }
 
-        if ($user->hasRole('torrent') == 1) {
-            $torrent_id = 2;
+        if ($user->hasRole('torrent')) {            
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
-                ->where('torrent_id', $torrent_id)
-                ->where('is_active', 1)
+                ->where('torrent_id', Auth::user()->id)
                 ->orderBy('id', 'DESC')
-                ->paginate(5)->all();
-            //echo "<pre>";
-            //print_r($ASurveys);
-            // dd($ASurveys[0]['bsurveys']->id);
+                ->paginate(5)->all();            
             return view('survey.dashboard', compact('ASurveys', 'user_role'))
                 ->with('i', ($request->input('page', 1) - 1) * 5);
         } else {
@@ -430,22 +427,35 @@ class SurveyController extends Controller
     {
         if (!empty($request['changeVar'])) {
             $ASurveys = ASurvey::find($request['changeVal']);
+            $SurveyLogArray = array(
+                        'user_id'=>Auth::user()->id,
+                        'a_survey_id'=>$ASurveys->id,                        
+                        'ip_address'=>$_SERVER['REMOTE_ADDR']
+                        );
             switch ($request['changeVar']) {
                 case 'active':
                     $ASurveys->is_active = 1;
                     $ASurveys->save();
+                    $SurveyLogArray['is_status']='active';
+                    SurveyLog::create($SurveyLogArray);
                     break;
                 case 'approve':
                     $ASurveys->is_approved = 1;
                     $ASurveys->save();
+                    $SurveyLogArray['is_status']='approved';
+                    SurveyLog::create($SurveyLogArray);
                     break;
                 case 'completed':
                     $ASurveys->is_completed = 1;
                     $ASurveys->save();
+                    $SurveyLogArray['is_status']='completed';
+                    SurveyLog::create($SurveyLogArray);
                     break;
                 case 'certified':
                     $ASurveys->is_certified = 1;
                     $ASurveys->save();
+                    $SurveyLogArray['is_status']='certified';
+                    SurveyLog::create($SurveyLogArray);
                     break;
             }
             return view('layouts.partial.access_nav', compact('ASurveys'));

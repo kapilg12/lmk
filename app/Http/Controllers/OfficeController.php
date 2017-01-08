@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Office;
 use App\Country;
 use App\State;
+use Auth;
 class OfficeController extends Controller
 {
     /**

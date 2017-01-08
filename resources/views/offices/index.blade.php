@@ -23,7 +23,7 @@
 			<th width="280px">Action</th>
 		</tr>
 	@foreach ($data as $key => $office)
-		
+		@if(in_array($office->id, Auth::user()->options['allowedOffices']))		
 			<tr>
 				<td>{{ ++$i }}</td>
 				<td>{{ $office->office_name }}</td>				
@@ -35,7 +35,7 @@
 		        	{!! Form::close() !!}
 				</td>
 			</tr>
-		
+		@endif
 	@endforeach
 	</table>
 	{!! $data->render() !!}	

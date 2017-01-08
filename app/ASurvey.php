@@ -4,6 +4,7 @@ namespace App;
 
 use App\BSgWater;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class ASurvey extends Model
 {
@@ -12,6 +13,15 @@ class ASurvey extends Model
     ];
     protected $table = 'a_surveys';
     protected $fillable = ['user_id', 'torrent_id', 'office_id', 'allow_area', 'establishment_name', 'postel_address', 'pin_code', 'nature_of_establishment', 'contact_person_name', 'designation', 'contact_number', 'email', 'website', 'is_active', 'is_approved', 'is_completed', 'is_certified', 'is_applied', 'created_at', 'updated_at'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('active', function(Builder $builder) {
+            $builder->where('is_active', 1);            
+        });        
+    }
 
     public function users()
     {

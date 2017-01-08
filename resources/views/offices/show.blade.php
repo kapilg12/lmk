@@ -18,6 +18,7 @@
                 </thead>
                 <tbody>
                 @foreach($officeDetail->children as $subOfficeDetail)
+                @if(in_array($subOfficeDetail->id, Auth::user()->options['allowedOffices']))
                 <tr>
                   <td>{{++$i}}</td>
                   <td>{{$subOfficeDetail->office_name}}</td>
@@ -29,6 +30,7 @@
 		        	{!! Form::close() !!}
                   </td>
                 </tr>
+                @endif
                 @endforeach
                 </tbody>
                 </table>

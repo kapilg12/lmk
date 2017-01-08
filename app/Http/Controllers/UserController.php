@@ -121,6 +121,11 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
+
+        $input['options']['country'] = $input['country'];
+        $input['options']['state'] = $input['state'];
+        $input['options']['allowedOffices'] = $input['allowedOffices'];
+        
         $user->update($input);
         DB::table('role_user')->where('user_id', $id)->delete();
 

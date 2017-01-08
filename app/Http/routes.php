@@ -37,7 +37,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get("users/create", ['as' => 'users.create', 'uses' => "UserController@create", 'middleware' => ['permission:user-create']]);
     Route::post("users/store", ['as' => 'users.store', 'uses' => "UserController@store", 'middleware' => ['permission:user-create']]);
 
-    Route::post("users/update", ['as' => 'users.update', 'uses' => "UserController@update", 'middleware' => ['permission:user-edit']]);
+    Route::patch("users/update/{id}", ['as' => 'users.update', 'uses' => "UserController@update", 'middleware' => ['permission:user-edit']]);
 
     Route::get('users/show/{id}', ['as' => 'users.show', 'uses' => 'UserController@show']);
     Route::get('users/{id}/edit', ['as' => 'users.edit', 'uses' => 'UserController@edit', 'middleware' => ['permission:user-edit']]);

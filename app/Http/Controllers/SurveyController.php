@@ -366,17 +366,12 @@ class SurveyController extends Controller
             $user_role = 'rm';
         }
 
-        if ($user->hasRole('torrent') == 1) {
-            $torrent_id = 2;
+        if ($user->hasRole('torrent')) {            
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
-                ->where('torrent_id', $torrent_id)
-                ->where('is_active', 1)
+                ->where('torrent_id', Auth::user()->id)
                 ->orderBy('id', 'DESC')
-                ->paginate(5)->all();
-            //echo "<pre>";
-            //print_r($ASurveys);
-            // dd($ASurveys[0]['bsurveys']->id);
+                ->paginate(5)->all();            
             return view('survey.dashboard', compact('ASurveys', 'user_role'))
                 ->with('i', ($request->input('page', 1) - 1) * 5);
         } else {

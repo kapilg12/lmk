@@ -7,12 +7,12 @@
     <div class="col-md-10">
         <div class="row">
             <div class="col-md-8">
-                <h4><span style="text-transform: capitalize;">{{$user_role}}</span>: Welcome to your Dashboard Panel</h4>
+                <h4><span style="text-transform: capitalize;">{{Auth::user()->name}}</span>: Welcome to your Dashboard Panel</h4>
             </div>
 
             <div class="col-md-4">
                 <div class="pull-right">
-                    @if('rm' == $user_role || 'superadmin' == $user_role)
+                    @if(Auth::user()->ability(array('rm','superadmin','devadmin'),array()))
                         <a class="btn btn-success" href="{{ url('/audit') }}"> Create New Audit</a>
                     @endif
                 </div>
@@ -20,7 +20,7 @@
         </div>
         <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Data Table With Full Features</h3>
+              <h3 class="box-title">Audit Details</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                     @foreach ($ASurveys as $key => $ASurvey)
-
+                    @if(in_array($ASurvey->offices['id'],Auth::user()->options['allowedOffices']))
                     <tr >
                         <th scope="row">{{ ++$i }}</th>
                         <td>{{$ASurvey->offices['office_name']}}</td>
@@ -50,7 +50,7 @@
                         <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>
-                            @if($user_role == 'torrent')
+                            @if(Auth::user()->ability(array('torrent'),array()))
                               <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}"><strong><i class="fa fa-eye"></i></strong></a>
                             @else
                                 <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
@@ -60,6 +60,7 @@
                             @endif
                         </td>
                     </tr>
+                    @endif
                     @endforeach
                 </tbody>
               </table>

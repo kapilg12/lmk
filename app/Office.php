@@ -6,6 +6,7 @@ use App\Scope\ActiveScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Baum;
+use Auth;
 class Office extends Baum\Node
 {
   	protected $table = 'offices';
@@ -43,6 +44,7 @@ class Office extends Baum\Node
 
         static::addGlobalScope('active', function(Builder $builder) {
             $builder->where('is_active', 1);
+            $builder->whereIn('id', Auth::user()->options['allowedOffices']);
         });
     }
 

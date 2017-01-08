@@ -38,9 +38,11 @@ class SurveyController extends Controller
         'contact_number' => 'required|digits_between:7,10',
         'email' => 'required|email',
         'website' => 'required|url',
+        'is_applied' => 'required',
     ];
     protected $ASurveyMessages = [
         'office_id.required' => 'Select your Industrial Area.',
+        'is_applied.required' => 'Please Select At Least One.',
     ];
     protected $BSurveyValidationRules = [
         'total_land_area' => 'required|numeric',
@@ -79,13 +81,24 @@ class SurveyController extends Controller
         if ($v->fails()) {
             return redirect()->back()->withErrors($v->errors());
         }
+
         $user = Auth::user();
         $input['user_id'] = $user['id'];
         $input['torrent_id'] = 1;
         $ASurvey = ASurvey::create($input);
-        $a_survey_id = $ASurvey['id'];
-        Session::put('a_survey_id', $a_survey_id);
-        return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
+        if ($input['is_applied'] == 0) {
+            //$input['is_applied'] = 0;
+            //dd($input);
+
+            return redirect()->action('SurveyController@getSurveyNotApplied');
+        } else {
+            //$input['is_applied'] = '1';
+            //$ASurvey = ASurvey::create($input);
+            $a_survey_id = $ASurvey['id'];
+            Session::put('a_survey_id', $a_survey_id);
+            return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
+        }
+
     }
 
     public function getSurveyStep(Request $request, $step)
@@ -103,7 +116,7 @@ class SurveyController extends Controller
                 array('aName' => 'Tubewell', 'aValue' => 'tubewell', 'dAttr' => '4'),
             );
             $a_survey_id = Session::get('a_survey_id');
-            $a_survey_id = 1;
+            //$a_survey_id = 1;
             return view('survey.step_' . $step, ['a_survey_id' => $a_survey_id, 'listData' => $Gps])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
         } else {
             return redirect('/audit');
@@ -337,9 +350,14 @@ class SurveyController extends Controller
     {
         return view('survey.success');
     }
+    public function getSurveyNotApplied()
+    {
+        return view('survey.not_appled');
+    }
+
     public function getDashboard(Request $request)
     {
-        $user = Auth::user();        
+        $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
             $user_role = 'superadmin';
         } else if ($user->hasRole('torrent') == 1) {
@@ -409,28 +427,28 @@ class SurveyController extends Controller
     }
 
     public function changeStatus(Request $request)
-    {        
-        if(!empty($request['changeVar'])){
+    {
+        if (!empty($request['changeVar'])) {
             $ASurveys = ASurvey::find($request['changeVal']);
-            switch ($request['changeVar']) {                
+            switch ($request['changeVar']) {
                 case 'active':
                     $ASurveys->is_active = 1;
-                    $ASurveys->save();                                        
+                    $ASurveys->save();
                     break;
-                case 'approve':    
+                case 'approve':
                     $ASurveys->is_approved = 1;
-                    $ASurveys->save();                                        
+                    $ASurveys->save();
                     break;
-                case 'completed':    
+                case 'completed':
                     $ASurveys->is_completed = 1;
-                    $ASurveys->save();                                        
+                    $ASurveys->save();
                     break;
-                case 'certified':    
+                case 'certified':
                     $ASurveys->is_certified = 1;
-                    $ASurveys->save();                                        
-                    break;        
+                    $ASurveys->save();
+                    break;
             }
-            return view('layouts.partial.access_nav',compact('ASurveys'));
+            return view('layouts.partial.access_nav', compact('ASurveys'));
         }
     }
 
@@ -564,7 +582,35 @@ class SurveyController extends Controller
                 Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
             }
         }
-
-        //dd($updateArr);
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $ASurvey = ASurvey::find($id);
+        $Office = Office::where('is_active', true)->orderBy('office_name')->pluck('office_name', 'id');
+        return view('survey.edit', compact('ASurvey', 'Office'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $input = $request->all();
+        $ASurvey = ASurvey::find($input['id']);
+        $ASurvey->update($input);
+        $a_survey_id = $ASurvey['id'];
+        Session::put('a_survey_id', $a_survey_id);
+        return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
+    }
+
 }

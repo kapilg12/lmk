@@ -27,7 +27,7 @@ Route::get('/', function () {
  */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get("/login", ['as'=>'login','uses' => "UserController@login"]);
+    Route::get("/login", ['as' => 'login', 'uses' => "UserController@login"]);
     Route::post("/login", ['uses' => "UserController@postLogin"]);
 });
 
@@ -53,7 +53,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('offices/create', ['as' => 'offices.create', 'uses' => 'OfficeController@create', 'middleware' => ['permission:office-create']]);
     Route::post('offices/store', ['as' => 'offices.store', 'uses' => 'OfficeController@store', 'middleware' => ['permission:office-create']]);
     Route::post('offices/update', ['as' => 'offices.update', 'uses' => 'OfficeController@update', 'middleware' => ['permission:office-edit']]);
-    Route::get('offices/show/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show','middleware' => ['permission:office-show']]);
+    Route::get('offices/show/{id}', ['as' => 'offices.show', 'uses' => 'OfficeController@show', 'middleware' => ['permission:office-show']]);
     Route::get('offices/{id}/edit', ['as' => 'offices.edit', 'uses' => 'OfficeController@edit', 'middleware' => ['permission:office-edit']]);
     Route::delete('offices/{id}', ['as' => 'offices.destroy', 'uses' => 'OfficeController@destroy', 'middleware' => ['permission:office-delete']]);
 
@@ -63,7 +63,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('roles', ['as' => 'roles.index', 'uses' => 'RoleController@index', 'middleware' => ['permission:role-list|role-create|role-edit|role-delete|role-show']]);
     Route::get('roles/create', ['as' => 'roles.create', 'uses' => 'RoleController@create', 'middleware' => ['permission:role-create']]);
     Route::post('roles/create', ['as' => 'roles.store', 'uses' => 'RoleController@store', 'middleware' => ['permission:role-create']]);
-    Route::get('roles/{id}', ['as' => 'roles.show', 'uses' => 'RoleController@show','middleware' => ['permission:role-show']]);
+    Route::get('roles/{id}', ['as' => 'roles.show', 'uses' => 'RoleController@show', 'middleware' => ['permission:role-show']]);
     Route::get('roles/{id}/edit', ['as' => 'roles.edit', 'uses' => 'RoleController@edit', 'middleware' => ['permission:role-edit']]);
     Route::patch('roles/{id}', ['as' => 'roles.update', 'uses' => 'RoleController@update', 'middleware' => ['permission:role-edit']]);
     Route::delete('roles/{id}', ['as' => 'roles.destroy', 'uses' => 'RoleController@destroy', 'middleware' => ['permission:role-delete']]);
@@ -73,11 +73,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('audit/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
     Route::post('audit/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
     Route::get('audit/done', 'SurveyController@getSurveyDone');
+    Route::get('audit/failed', 'SurveyController@getSurveyNotApplied');
     Route::get('dashboard', 'SurveyController@getDashboard');
     Route::get('audit/show/{id}', 'SurveyController@show');
     Route::post('audit/upload', 'SurveyController@postShow');
-
+    Route::get('audit/{id}/edit', ['as' => 'survey.edit', 'uses' => 'SurveyController@edit']);
+    Route::patch('audit/update', 'SurveyController@update');
+    //Route::resource('audit', 'SurveyController');
     Route::post('audit/changeStatus
-        ',['as'=>'survey.changeStatus','uses'=>'SurveyController@changeStatus','middleware'=>['role:superadmin|devadmin']]);
+        ', ['as' => 'survey.changeStatus', 'uses' => 'SurveyController@changeStatus', 'middleware' => ['role:superadmin|devadmin']]);
     //Route::resource('surveys', 'SurveyController');
 });

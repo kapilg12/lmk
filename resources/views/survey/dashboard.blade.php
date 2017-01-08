@@ -28,7 +28,8 @@
                    <tr>
                         <th>No</th>
                         <th>Office</th>
-                        <th>Establishment Name</th>
+                        <!--<th>Establishment Name</th>-->
+                        <th>Is Applied</th>
                         <th>Is Active</th>
                         <th>Is Approved</th>
                         <th>Is Completed</th>
@@ -42,16 +43,20 @@
                     <tr >
                         <th scope="row">{{ ++$i }}</th>
                         <td>{{$ASurvey->offices['office_name']}}</td>
-                        <td>{{ $ASurvey->establishment_name }}</td>
+                        <!--<td>{{ $ASurvey->establishment_name }}</td>-->
+                        <td>@if($ASurvey->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-danger">Not Applied</span> @endif</td>
                         <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>
                             @if($user_role == 'torrent')
-                              <a class="btn btn-info" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}">Show</a>
+                              <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}"><strong><i class="fa fa-eye"></i></strong></a>
                             @else
-                                <a class="btn btn-info" href="{{ url('audit/show',$ASurvey->id) }}">Show</a>
+                                <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
+                            @endif
+                            @if($ASurvey->is_applied == '0')
+                                <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
                             @endif
                         </td>
                     </tr>

@@ -44,7 +44,7 @@ class Office extends Baum\Node
 
         static::addGlobalScope('active', function(Builder $builder) {
             $builder->where('is_active', 1);
-            $builder->whereIn('id', Auth::user()->options['allowedOffices']);
+            //$builder->whereIn('id', Auth::user()->options['allowedOffices']);
         });
     }
 

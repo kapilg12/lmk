@@ -86,7 +86,8 @@ class SurveyController extends Controller
             return redirect()->back()->withErrors($v->errors());
         }
         $input['user_id'] = Auth::user()->id;
-        $input['torrent_id'] = 1;
+        $input['torrent_id'] = 2;
+        $input['is_active'] = 1;
         $ASurvey = ASurvey::create($input);
         if ($input['is_applied'] == 0) {
             //$input['is_applied'] = 0;
@@ -140,7 +141,7 @@ class SurveyController extends Controller
                 if ($v->fails()) {
                     return redirect()->back()->withErrors($v->errors());
                 }
-                $BSurvey['a_survey_id'] = 1;
+                $BSurvey['a_survey_id'] = $a_survey_id;
                 $BSurvey['total_land_area'] = $input['total_land_area'];
                 $BSurvey['total_land_area'] = $input['total_land_area'];
                 $BSurvey['roof_top_area'] = $input['roof_top_area'];

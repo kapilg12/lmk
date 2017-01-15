@@ -38,9 +38,11 @@
 		</td>
 		<td>
 			<a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>
+			@if(Auth::user()->id != $user->id)
 			<a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Edit</a>
 			{!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline','onclick'=>'return getConfirmation();']) !!}
             {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+            @endif
         	{!! Form::close() !!}
 		</td>
 	</tr>

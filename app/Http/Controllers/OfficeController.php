@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Office;
 use App\Country;
 use App\State;
+use App\User;
 use Auth;
 class OfficeController extends Controller
 {
@@ -64,12 +65,24 @@ class OfficeController extends Controller
         );
         //dd($officeArray);
         $office = Office::create($officeArray);
+        $users = User::whereHas('roles' , function($q){
+            $q->where('name', 'devadmin');
+            $q->OrWhere('name', 'superadmin');
+        })->get();
+        foreach ($users as $value) {
+            $options = $value->options;
+            $options['allowedOffices'][] = $office->id;
+            $value->options = $options;
+            $value->save();
+        }
         if($request['office_id']!=''){
         	$root = Office::find($request['office_id']);
         	$office->makeChildOf($root);
-        }        
+        }                
+        
+
         return redirect()->route('offices.index')
-            ->with('success', 'Office created successfully');
+           ->with('success', 'Office created successfully');
     }
     public function update(Request $request)
     {
@@ -90,6 +103,17 @@ class OfficeController extends Controller
     	$officeArray->office_pin=$request['office_pin'];
         
         $office = $officeArray->update();        
+        $users = User::whereHas('roles' , function($q){
+            $q->where('name', 'devadmin');
+            $q->OrWhere('name', 'superadmin');
+        })->get();
+        foreach ($users as $value) {
+            $options = $value->options;
+            $options['allowedOffices'][] = $office->id;
+            $value->options = $options;
+            $value->save();
+        }
+
         if($request['office_id']!=''){
             $root = Office::find($request['office_id']);            
             $officeArray->makeChildOf($root);

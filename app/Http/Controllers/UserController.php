@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::where('id','!=','1')->orderBy('id', 'DESC')->paginate(5);
+        $data = User::orderBy('id', 'DESC')->paginate(5);
         //dd($data);
         return view('users.index', compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
@@ -59,8 +59,8 @@ class UserController extends Controller
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-        $input['options']['country'] = $input['country'];
-        $input['options']['state'] = $input['state'];
+        $input['options']['country'] = isset($input['country'])?$input['country']:'';
+        $input['options']['state'] = isset($input['state'])?$input['state']:'';
         $input['options']['allowedOffices'] = $input['allowedOffices'];
 
         $user = User::create($input);
@@ -122,8 +122,8 @@ class UserController extends Controller
 
         $user = User::find($id);
 
-        $input['options']['country'] = $input['country'];
-        $input['options']['state'] = $input['state'];
+        $input['options']['country'] = isset($input['country'])?$input['country']:'';
+        $input['options']['state'] = isset($input['state'])?$input['state']:'';
         $input['options']['allowedOffices'] = $input['allowedOffices'];
         
         $user->update($input);

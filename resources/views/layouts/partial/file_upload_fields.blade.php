@@ -18,8 +18,8 @@
                 {!! Form::file('site_layout_plan', array('id' => 'site_layout_plan', 'class' => 'form-control')) !!}
                 <p class="errors">{!!$errors->first('site_layout_plan')!!}</p>
             </div>
-            <div class="form-group">
+            {{-- <div class="form-group">
                 {!! Form::label('attachgpxfile', trans('Attach GPX File (Only gpx Extension File)'), array('class' => '')) !!}
                 {!! Form::file('attachgpxfile',  array('id' => 'attachgpxfile', 'class' => 'form-control')) !!}
                 <p class="errors">{!!$errors->first('attachgpxfile')!!}</p>
-            </div>
+            </div> --}}

@@ -388,7 +388,7 @@ class SurveyController extends Controller
     }
     public function show($id)
     {
-
+        $attachmentsValidationRules='';
         //$attachmentsValidationRules = JsValidator::make($this->AttachmentValidationRules);
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {

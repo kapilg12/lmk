@@ -50,9 +50,6 @@ class AddColumnIsActiveInSometable extends Migration
         Schema::table('b_attachments', function ($table) {
             $table->dropColumn('is_active');
         });
-        Schema::table('b_sg_waters', function ($table) {
-            $table->dropColumn('is_active');
-        });
         Schema::table('c_one_surveys', function ($table) {
             $table->dropColumn('is_active');
         });

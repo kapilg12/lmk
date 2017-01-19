@@ -71,7 +71,7 @@ class SurveyController extends Controller
     {
         //$user=User::with('roles')->where();
         //dd($user);
-        $ASurveyValidationRules='';
+        $ASurveyValidationRules = '';
         $Office = Office::orderBy('office_name')->pluck('office_name', 'id');
         $Office->prepend('Please Select Industrial Area', '');
         //$ASurveyValidationRules = JsValidator::make($this->ASurveyValidationRules, $this->ASurveyMessages);
@@ -79,11 +79,11 @@ class SurveyController extends Controller
     }
     public function postSurvey(Request $request)
     {
-        $v='';
+        $v = '';
         $input = $request->all();
         //$v = Validator::make($input, $this->ASurveyValidationRules);
         /*if ($v->fails()) {
-            return redirect()->back()->withErrors($v->errors());
+        return redirect()->back()->withErrors($v->errors());
         }*/
         $input['user_id'] = Auth::user()->id;
         $input['torrent_id'] = 2;
@@ -128,18 +128,19 @@ class SurveyController extends Controller
     }
     public function postSurveyStep(Request $request, $step)
     {
-        $v='';
+        $v = '';
         //$this->validate($request, $rules);
         $a_survey_id = Session::get('a_survey_id');
         //$a_survey_id = 1;
         //$b_survey_id = 4;
         $input = $request->all();
         $user = Auth::user();
+
         switch ($step) {
             case 2:
                 //$v = Validator::make($input, $this->BSurveyValidationRules);
                 /*if ($v->fails()) {
-                    return redirect()->back()->withErrors($v->errors());
+                return redirect()->back()->withErrors($v->errors());
                 }*/
                 $BSurvey['a_survey_id'] = $a_survey_id;
                 $BSurvey['total_land_area'] = $input['total_land_area'];
@@ -169,11 +170,11 @@ class SurveyController extends Controller
                 $BSurvey['water_bodies_ponds_depth'] = $input['water_bodies_ponds_depth'];
                 $BSurvey['water_bodies_ponds_diameter'] = $input['water_bodies_ponds_diameter'];
                 $BSurvey['source_of_availability_of_surface_water'] = $input['source_of_availability_of_surface_water'];
-                //$BSurvey['water_supply_from_RIICO'] = $input['water_supply_from_RIICO'];
+
                 $BSurvey['water_supply_from_RIICO'] = '';
                 $BSurvey = BSurvey::create($BSurvey);
                 $b_survey_id = $BSurvey['id'];
-                //$b_survey_id = 4;
+                //$b_survey_id = 9;
 
                 $BSgWater = array();
                 foreach ($input['tubewell_borewell'] as $key => $value) {
@@ -228,124 +229,115 @@ class SurveyController extends Controller
                         }
                     }
                 }
+                $GPSCoordinateWaypointArr = array_merge($GPSCoordinateWaypointPlotArr, $GPSCoordinateWaypointTubewellArr);
                 $Gpscoordinate = array_merge($GpscoordinatePlot, $GpscoordinateTubewell);
                 Gpscoordinate::insert($Gpscoordinate);
 
                 // getting all of the post data
-                $attachmentArr = array();
-                $attachmentArr['user_id'] = $user['id'];
-                $attachmentArr['a_survey_id'] = $a_survey_id;
-                $attachmentArr['b_survey_id'] = $b_survey_id;
-                // checking file is valid.
-                if (isset($input['area_location'])) {
-                    if ($input['area_location']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
 
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['area_location'] = $fileName;
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                $finalFileUploadArr = array();
+                $WaterSupplyFromRIICOBillArr = array();
+                $AreaLocationArr = array();
+                $SourcesSWGWArr = array();
+                $ExistingRWHStructureArr = array();
+                $SiteLayoutPlanArr = array();
+                $GPXFileArr = array();
+
+                // checking file is valid.
+                //dd($input);
+                if (isset($input['WaterSupplyFromRIICOBill']) && !empty($input['WaterSupplyFromRIICOBill']) && !is_null($input['WaterSupplyFromRIICOBill'][0])) {
+                    $WaterSupplyFromRIICOBillArr = $this->multipleUpload($input['WaterSupplyFromRIICOBill'], 'WaterSupplyFromRIICOBill', $a_survey_id, $b_survey_id, $user['id']);
                 }
-                if (isset($input['sources_sw_gw'])) {
-                    if ($input['sources_sw_gw']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['sources_sw_gw'] = $fileName;
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+
+                if (isset($input['area_location']) && !empty($input['area_location']) && !is_null($input['area_location'][0])) {
+                    $AreaLocationArr = $this->multipleUpload($input['area_location'], 'area_location', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                if (isset($input['sources_sw_gw']) && !empty($input['sources_sw_gw']) && !is_null($input['sources_sw_gw'][0])) {
+                    $SourcesSWGWArr = $this->multipleUpload($input['sources_sw_gw'], 'sources_sw_gw', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                if (isset($input['existing_rwh_structure']) && !empty($input['existing_rwh_structure']) && !is_null($input['existing_rwh_structure'][0])) {
+                    $ExistingRWHStructureArr = $this->multipleUpload($input['existing_rwh_structure'], 'existing_rwh_structure', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                if (isset($input['site_layout_plan']) && !empty($input['site_layout_plan']) && !is_null($input['site_layout_plan'][0])) {
+                    $SiteLayoutPlanArr = $this->multipleUpload($input['site_layout_plan'], 'site_layout_plan', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                $finalFileUploadArr = array_merge($WaterSupplyFromRIICOBillArr, $AreaLocationArr, $SourcesSWGWArr, $ExistingRWHStructureArr, $SiteLayoutPlanArr);
+                if (!empty($finalFileUploadArr)) {
+                    BAttachment::insert($finalFileUploadArr);
+                }
+
+                if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
+                    $GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+                    BAttachment::create($GPXFileArr);
+                }
+
+                /*if (isset($input['sources_sw_gw'])) {
+                if ($input['sources_sw_gw']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['sources_sw_gw'] = $fileName;
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
                 if (isset($input['existing_rwh_structure'])) {
-                    if ($input['existing_rwh_structure']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['existing_rwh_structure'] = $fileName;
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                if ($input['existing_rwh_structure']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['existing_rwh_structure'] = $fileName;
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
                 if (isset($input['site_layout_plan'])) {
-                    if ($input['site_layout_plan']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['site_layout_plan'] = $fileName;
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                if ($input['site_layout_plan']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['site_layout_plan'] = $fileName;
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
                 }
-                if (isset($input['attachgpxfile'])) {
-                    if ($input['attachgpxfile']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['attachgpxfile'] = $fileName;
-                            $GPSCoordinate_points = $GPSCoordinateWaypointArr;
-                            $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
 
+                dd($attachmentArr);
                 if (array_key_exists("area_location", $attachmentArr) ||
-                    array_key_exists("sources_sw_gw", $attachmentArr) ||
-                    array_key_exists("existing_rwh_structure", $attachmentArr) ||
-                    array_key_exists("site_layout_plan", $attachmentArr) ||
-                    array_key_exists("attachgpxfile", $attachmentArr)) {
+                array_key_exists("sources_sw_gw", $attachmentArr) ||
+                array_key_exists("existing_rwh_structure", $attachmentArr) ||
+                array_key_exists("site_layout_plan", $attachmentArr) ||
+                array_key_exists("attachgpxfile", $attachmentArr)) {
 
-                    $attachmentArr['created_at'] = date('Y-m-d H:i:s');
-                    $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
-                    BAttachment::create($attachmentArr);
-                }
+                BAttachment::create($attachmentArr);
+                }*/
                 break;
             case 3:
                 //$rules = ['color' => 'required|min:3'];
@@ -427,7 +419,7 @@ class SurveyController extends Controller
     }
     public function show($id)
     {
-        $attachmentsValidationRules='';
+        $attachmentsValidationRules = '';
         //$attachmentsValidationRules = JsValidator::make($this->AttachmentValidationRules);
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
@@ -875,131 +867,169 @@ class SurveyController extends Controller
                         }
                     }
                 }
+                $GPSCoordinateWaypointArr = array_merge($GPSCoordinateWaypointPlotArr, $GPSCoordinateWaypointTubewellArr);
                 $Gpscoordinate = array_merge($GpscoordinatePlot, $GpscoordinateTubewell);
                 //Gpscoordinate::insert($Gpscoordinate);
                 $this->auditLog($a_survey_id, 'gps_coordinate_update', 'Plot and Tubewell Way Point updated.');
 
                 // getting all of the post data
-                $attachmentArr = array();
+
+                $finalFileUploadArr = array();
+                $WaterSupplyFromRIICOBillArr = array();
+                $AreaLocationArr = array();
+                $SourcesSWGWArr = array();
+                $ExistingRWHStructureArr = array();
+                $SiteLayoutPlanArr = array();
+                $GPXFileArr = array();
+
+                // checking file is valid.
+
+                if (isset($input['WaterSupplyFromRIICOBill']) && !empty($input['WaterSupplyFromRIICOBill']) && !is_null($input['WaterSupplyFromRIICOBill'][0])) {
+                    $WaterSupplyFromRIICOBillArr = $this->multipleUpload($input['WaterSupplyFromRIICOBill'], 'WaterSupplyFromRIICOBill', $a_survey_id, $b_survey_id, $user['id']);
+                }
+
+                if (isset($input['area_location']) && !empty($input['area_location']) && !is_null($input['area_location'][0])) {
+                    $AreaLocationArr = $this->multipleUpload($input['area_location'], 'area_location', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                if (isset($input['sources_sw_gw']) && !empty($input['sources_sw_gw']) && !is_null($input['sources_sw_gw'][0])) {
+                    $SourcesSWGWArr = $this->multipleUpload($input['sources_sw_gw'], 'sources_sw_gw', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                if (isset($input['existing_rwh_structure']) && !empty($input['existing_rwh_structure']) && !is_null($input['existing_rwh_structure'][0])) {
+                    $ExistingRWHStructureArr = $this->multipleUpload($input['existing_rwh_structure'], 'existing_rwh_structure', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                if (isset($input['site_layout_plan']) && !empty($input['site_layout_plan']) && !is_null($input['site_layout_plan'][0])) {
+                    $SiteLayoutPlanArr = $this->multipleUpload($input['site_layout_plan'], 'site_layout_plan', $a_survey_id, $b_survey_id, $user['id']);
+                }
+                $finalFileUploadArr = array_merge($WaterSupplyFromRIICOBillArr, $AreaLocationArr, $SourcesSWGWArr, $ExistingRWHStructureArr, $SiteLayoutPlanArr);
+                if (!empty($finalFileUploadArr)) {
+                    BAttachment::insert($finalFileUploadArr);
+                }
+
+                if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
+                    $GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+                    BAttachment::create($GPXFileArr);
+                }
+                // getting all of the post data
+                /*$attachmentArr = array();
                 $attachmentArr['user_id'] = $user['id'];
                 $attachmentArr['a_survey_id'] = $a_survey_id;
                 $attachmentArr['b_survey_id'] = $id;
                 // checking file is valid.
                 if (isset($input['area_location'])) {
-                    if ($input['area_location']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
+                if ($input['area_location']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
 
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['area_location'] = $fileName;
-                            $this->auditLog($a_survey_id, 'file_upload', 'New area location upload.');
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['area_location'] = $fileName;
+                $this->auditLog($a_survey_id, 'file_upload', 'New area location upload.');
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
                 if (isset($input['sources_sw_gw']) && !empty($input['sources_sw_gw'])) {
-                    if ($input['sources_sw_gw']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['sources_sw_gw'] = $fileName;
-                            $this->auditLog($a_survey_id, 'file_upload', 'New Soureces SW GW file uploads.');
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                if ($input['sources_sw_gw']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['sources_sw_gw'] = $fileName;
+                $this->auditLog($a_survey_id, 'file_upload', 'New Soureces SW GW file uploads.');
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
                 if (isset($input['existing_rwh_structure']) && !empty($input['existing_rwh_structure'])) {
-                    if ($input['existing_rwh_structure']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['existing_rwh_structure'] = $fileName;
-                            $this->auditLog($a_survey_id, 'file_upload', 'New Existing RWH Structure.');
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                if ($input['existing_rwh_structure']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['existing_rwh_structure'] = $fileName;
+                $this->auditLog($a_survey_id, 'file_upload', 'New Existing RWH Structure.');
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
                 if (isset($input['site_layout_plan']) && !empty($input['site_layout_plan'])) {
-                    if ($input['site_layout_plan']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['site_layout_plan'] = $fileName;
-                            $this->auditLog($a_survey_id, 'file_upload', 'New Site Plan Uploded.');
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                if ($input['site_layout_plan']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['site_layout_plan'] = $fileName;
+                $this->auditLog($a_survey_id, 'file_upload', 'New Site Plan Uploded.');
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
                 if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
-                    if ($input['attachgpxfile']->isValid()) {
-                        $destinationPath = 'uploads'; // upload path
-                        $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
-                        $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
-                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-                        $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
-                        // sending back with message
-                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
-                            $attachmentArr['attachgpxfile'] = $fileName;
-                            $this->auditLog($a_survey_id, 'file_upload', 'New GPX File uploaded.');
-                            $GPSCoordinate_points = $GPSCoordinateWaypointArr;
-                            $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
-                            $this->auditLog($a_survey_id, 'gps_coordinate_update', 'GPS Corrdinate updated after gpx file uploaded.');
-                            Session::flash('success', 'Upload successfully');
-                        } else {
-                            Session::flash('failed', 'Not Uploaded');
-                        }
-                    } else {
-                        // sending back with error message.
-                        Session::flash('error', 'uploaded file is not valid');
-                    }
+                if ($input['attachgpxfile']->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
+                // sending back with message
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['attachgpxfile'] = $fileName;
+                $this->auditLog($a_survey_id, 'file_upload', 'New GPX File uploaded.');
+                $GPSCoordinate_points = $GPSCoordinateWaypointArr;
+                $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
+                $this->auditLog($a_survey_id, 'gps_coordinate_update', 'GPS Corrdinate updated after gpx file uploaded.');
+                Session::flash('success', 'Upload successfully');
+                } else {
+                Session::flash('failed', 'Not Uploaded');
+                }
+                } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+                }
                 }
 
                 if (array_key_exists("area_location", $attachmentArr) ||
-                    array_key_exists("sources_sw_gw", $attachmentArr) ||
-                    array_key_exists("existing_rwh_structure", $attachmentArr) ||
-                    array_key_exists("site_layout_plan", $attachmentArr) ||
-                    array_key_exists("attachgpxfile", $attachmentArr)) {
+                array_key_exists("sources_sw_gw", $attachmentArr) ||
+                array_key_exists("existing_rwh_structure", $attachmentArr) ||
+                array_key_exists("site_layout_plan", $attachmentArr) ||
+                array_key_exists("attachgpxfile", $attachmentArr)) {
 
-                    $attachmentArr['created_at'] = date('Y-m-d H:i:s');
-                    $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
-                    BAttachment::create($attachmentArr);
-                }
+                $attachmentArr['created_at'] = date('Y-m-d H:i:s');
+                $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
+                BAttachment::create($attachmentArr);
+                }*/
                 break;
             case 3:
                 COneSurvey::where('a_survey_id', $a_survey_id)
@@ -1057,10 +1087,6 @@ class SurveyController extends Controller
      * gps_coordinate_created,gps_coordinate_update,swg_water_created,swg_water_update,
      * update,applied,not_applied,file_upload,active,approved,completed,certified
      *
-     *
-     *
-     *
-     *
      */
     private function auditLog($a_survey_id, $status, $comment)
     {
@@ -1078,6 +1104,112 @@ class SurveyController extends Controller
             'updated_at' => $d,
         );
         SurveyLog::create($log);
+
+    }
+
+    private function multipleUpload($files, $type, $a_survey_id, $b_survey_id, $userId)
+    {
+        $msg = '';
+        $a = '';
+        if ('WaterSupplyFromRIICOBill' == $type) {
+            $msg = 'Water Supply From RIICO, if avaliable, take copy of last 3 bills';
+            $a = 'Water Supply From RIICO Bill file uploaded.';
+        } else if ('area_location' == $type) {
+            $msg = 'Area Location';
+            $a = 'Area Location file uploaded.';
+        } else if ('sources_sw_gw' == $type) {
+            $msg = 'Sources SW/GW Water';
+            $a = 'Sources SW/GW Water file uploaded.';
+        } else if ('existing_rwh_structure' == $type) {
+            $msg = 'Existing RWH Structure';
+            $a = 'Existing RWH Structure file uploaded.';
+        } else if ('site_layout_plan' == $type) {
+            $msg = 'Site Layout Plan';
+            $a = 'Site Layout Plan file uploaded.';
+        }
+
+        $d = date('Y-m-d H:i:s');
+        $attachmentArr = array();
+        $uploadcount = 0;
+        $file_count = count($files);
+        $uploadFileArr = array();
+        foreach ($files as $file) {
+            if ($file->isValid()) {
+                $destinationPath = 'uploads'; // upload path
+                $extension = $file->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $file->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                $uploadFileArr[$uploadcount][$type] = $fileName;
+                //$upload_success = $file->move($destinationPath, $filename);
+                $file->move($destinationPath, $fileName); // uploading file to given path
+                $uploadcount++;
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        if ($uploadcount == $file_count) {
+            // sending back with message
+            $i = 0;
+            foreach ($uploadFileArr as $uploadFile) {
+                $fileName = $uploadFile[$type];
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+
+                    $attachmentArr[$i]['user_id'] = $userId;
+                    $attachmentArr[$i]['a_survey_id'] = $a_survey_id;
+                    $attachmentArr[$i]['b_survey_id'] = $b_survey_id;
+                    $attachmentArr[$i]['image_path'] = $fileName;
+                    $attachmentArr[$i]['slug'] = $type;
+                    $attachmentArr[$i]['comment'] = $msg . ' Image.';
+                    $attachmentArr[$i]['created_at'] = $d;
+                    $attachmentArr[$i]['updated_at'] = $d;
+                    $msg = $a . ' (' . $fileName . ')';
+                    $this->auditLog($a_survey_id, 'file_upload', $msg);
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+                $i++;
+            }
+
+        } else {
+            Session::flash('failed', 'Not Uploaded');
+        }
+        return $attachmentArr;
+    }
+    private function singleUpload($file, $type, $a_survey_id, $b_survey_id, $userId, $GPSCoordinateWaypointArr)
+    {
+        $attachmentArr = array();
+        $d = date('Y-m-d H:i:s');
+        if ($file->isValid()) {
+            $destinationPath = 'uploads'; // upload path
+            $extension = $file->getClientOriginalExtension(); // getting image extension
+            $orgfileName = $file->getClientOriginalName(); // getting image getClientOriginalName
+            $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+            $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
+            // sending back with message
+            if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                $attachmentArr['attachgpxfile'] = $fileName;
+                $attachmentArr['user_id'] = $userId;
+                $attachmentArr['a_survey_id'] = $a_survey_id;
+                $attachmentArr['b_survey_id'] = $b_survey_id;
+                $attachmentArr['image_path'] = $fileName;
+                $attachmentArr['slug'] = 'gpxfile';
+                $attachmentArr['comment'] = 'GPX File.';
+                $attachmentArr['created_at'] = $d;
+                $attachmentArr['updated_at'] = $d;
+                $GPSCoordinate_points = $GPSCoordinateWaypointArr;
+                $msg = "GPX File uploaded (" . $fileName . ")";
+                $this->auditLog($a_survey_id, 'file_upload', $msg);
+                $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
+                Session::flash('success', 'Upload successfully');
+            } else {
+                Session::flash('failed', 'Not Uploaded');
+            }
+        } else {
+            // sending back with error message.
+            Session::flash('error', 'uploaded file is not valid');
+        }
 
     }
 

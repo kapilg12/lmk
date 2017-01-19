@@ -3,8 +3,8 @@
 <!--{{ dump($ASurveys) }}-->
 
 <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
+    <div class="col-sm-1 col-md-1"></div>
+    <div class="col-sm-10 col-md-10">
         <div class="row">
             <div class="col-md-8">
                 <h4><span style="text-transform: capitalize;">{{Auth::user()->name}}</span>: Welcome to your Dashboard Panel</h4>
@@ -28,12 +28,12 @@
                    <tr>
                         <th>No</th>
                         <th>Office</th>
-                        <!--<th>Establishment Name</th>-->
+                        <th>Address</th>
                         <th>Is Applied</th>
                         <th>Is Active</th>
-                        <th>Is Approved</th>
+                        <!--<th>Is Approved</th>
                         <th>Is Completed</th>
-                        <th>Is Certified</th>
+                        <th>Is Certified</th>-->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -43,19 +43,19 @@
                     <tr >
                         <th scope="row">{{ ++$i }}</th>
                         <td>{{$ASurvey->offices['office_name']}}</td>
-                        <!--<td>{{ $ASurvey->establishment_name }}</td>-->
+                        <td>{{ $ASurvey->postel_address }}</td>
                         <td>@if($ASurvey->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-danger">Not Applied</span> @endif</td>
                         <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
-                        <td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                        <!--<td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
                         <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
-                        <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                        <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>-->
                         <td>
                             @if(Auth::user()->ability(array('torrent'),array()))
                               <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}"><strong><i class="fa fa-eye"></i></strong></a>
                             @else
                                 <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
                             @endif
-                            @if($ASurvey->is_applied == '0')
+                            @if($ASurvey->is_applied == '0' || $ASurvey->is_applied == '1')
                                 <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
                             @endif
                         </td>
@@ -67,6 +67,6 @@
             </div><!-- /.box-body -->
         </div><!-- /.box -->
     </div>
-    <div class="col-md-1"></div>
+    <div class="col-sm-1 col-md-1"></div>
 </div>
 @endsection

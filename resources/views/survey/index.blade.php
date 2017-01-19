@@ -13,7 +13,7 @@
             {!! Form::select('office_id', $Office, null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::label('allow_area', trans('Allow Area'), array('class' => '')) !!}
+            {!! Form::label('allow_area', trans('Allow Area (Sqm)'), array('class' => '')) !!}
             {!! Form::text('allow_area', null, array('id' => 'allow_area', 'class' => 'form-control', 'placeholder' => trans('Allow Area'), 'title' => trans('Allow Area'))) !!}
         </div>
 

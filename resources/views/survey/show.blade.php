@@ -130,7 +130,7 @@
          @endif
 
         <div class="tab-content">
-        @if(Auth::user()->ability(array('superadmin'),array()) || Auth::user()->ability(array('torrent'),array()) || Auth::user()->ability(array('rm'),array()) || Auth::user()->ability(array('devadmin'),array()))        
+        @if(Auth::user()->ability(array('superadmin'),array()) || Auth::user()->ability(array('torrent'),array()) || Auth::user()->ability(array('rm'),array()) || Auth::user()->ability(array('devadmin'),array()))
           <div class="active tab-pane" id="activity">
             <!-- The timeline -->
             <ul class="timeline timeline-inverse">
@@ -194,7 +194,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>                         
+                        </table>
                 </div><!-- /.box-body -->
                 </div>
               </li>
@@ -211,7 +211,7 @@
                     <div class="box-body box-profile">
                          <ul class="list-group ">
                             <li class="list-group-item">
-                              <b>Average Annual Railfall in the area in mm</b> <a class="pull-right">{{ $ASurveys->bsurveys->average_annual_rainfall }}</a>
+                              <b>Average Annual Rainfall in the area in mm</b> <a class="pull-right">{{ $ASurveys->bsurveys->average_annual_rainfall }}</a>
                             </li>
                             <li class="list-group-item">
                               <b>Number of Rainy days in a year</b> <a class="pull-right">{{ $ASurveys->bsurveys->number_of_rainy_day }}</a>
@@ -405,7 +405,7 @@
               </li>
             </ul>
           </div><!-- /.tab-pane -->
-          @endif          
+          @endif
           @if(Auth::user()->ability(array('superadmin'),array()) || Auth::user()->ability(array('torrent'),array()) || Auth::user()->ability(array('devadmin'),array()))
           <div class="tab-pane" id="timeline">
             <!-- The timeline -->

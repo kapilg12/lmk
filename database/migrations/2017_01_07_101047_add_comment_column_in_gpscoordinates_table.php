@@ -25,8 +25,8 @@ class AddCommentColumnInGpscoordinatesTable extends Migration
     public function down()
     {
         Schema::table('gpscoordinates', function ($table) {
-            $table->text('gpxfile');
-            $table->text('comment');
+            $table->dropColumn('gpxfile');
+            $table->dropColumn('comment');
         });
     }
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddGpxfilColumnInBAttachmentsTable extends Migration
+class AddColumnBillWaterSupplyFromRIICOBillInBAttachmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -11,9 +11,8 @@ class AddGpxfilColumnInBAttachmentsTable extends Migration
      */
     public function up()
     {
-
         Schema::table('b_attachments', function ($table) {
-            $table->string('attachgpxfile')->nullable()->after('site_layout_plan');
+            $table->string('WaterSupplyFromRIICOBill')->nullable()->after('b_survey_id');
         });
     }
 
@@ -25,7 +24,8 @@ class AddGpxfilColumnInBAttachmentsTable extends Migration
     public function down()
     {
         Schema::table('b_attachments', function ($table) {
-            $table->dropColumn('attachgpxfile');
+            $table->dropColumn('WaterSupplyFromRIICOBill');
         });
+
     }
 }

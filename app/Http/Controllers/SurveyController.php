@@ -39,7 +39,6 @@ class SurveyController extends Controller
         'designation' => 'required|alpha',
         'contact_number' => 'required|digits_between:7,10',
         'email' => 'required|email',
-        'website' => 'required|url',
         'is_applied' => 'required',
     ];
     protected $ASurveyMessages = [
@@ -47,13 +46,12 @@ class SurveyController extends Controller
         'is_applied.required' => 'Please Select At Least One.',
     ];
     protected $BSurveyValidationRules = [
-        'total_land_area' => 'required|numeric',
-        'roof_top_area' => 'required|numeric',
-        'road_paved_area' => 'required|numeric',
-        'green_belt_area' => 'required|numeric',
-        'open_land' => 'required|numeric',
-        'GPSCoordinate_area' => 'required',
-        'GPSCoordinate_waypoint' => 'required',
+        'total_land_area' => 'required',
+        'roof_top_area' => 'required',
+        'road_paved_area' => 'required',
+        'green_belt_area' => 'required',
+        'open_land' => 'required',
+        'GPSCoordinate_waypoint_plot' => 'required',
         'area_location' => 'mimes:jpeg,jpg,pdf',
         'sources_sw_gw' => 'mimes:jpeg,jpg,pdf',
         'existing_rwh_structure' => 'mimes:jpeg,jpg,pdf,doc,docx',
@@ -150,6 +148,12 @@ class SurveyController extends Controller
                 $BSurvey['road_paved_area'] = $input['road_paved_area'];
                 $BSurvey['green_belt_area'] = $input['green_belt_area'];
                 $BSurvey['open_land'] = $input['open_land'];
+                if (isset($input['GPSCoordinate_waypoint_plot']) && !empty($input['GPSCoordinate_waypoint_plot'])) {
+                    $BSurvey['GPSCoordinate_waypoint_plot'] = $input['GPSCoordinate_waypoint_plot'];
+                }
+                if (isset($input['GPSCoordinate_waypoint_tubewell']) && !empty($input['GPSCoordinate_waypoint_tubewell'])) {
+                    $BSurvey['GPSCoordinate_waypoint_tubewell'] = $input['GPSCoordinate_waypoint_tubewell'];
+                }
                 $BSurvey['average_annual_rainfall'] = $input['average_annual_rainfall'];
                 $BSurvey['number_of_rainy_day'] = $input['number_of_rainy_day'];
                 $BSurvey['nature_of_aquifer'] = $input['nature_of_aquifer'];
@@ -165,7 +169,8 @@ class SurveyController extends Controller
                 $BSurvey['water_bodies_ponds_depth'] = $input['water_bodies_ponds_depth'];
                 $BSurvey['water_bodies_ponds_diameter'] = $input['water_bodies_ponds_diameter'];
                 $BSurvey['source_of_availability_of_surface_water'] = $input['source_of_availability_of_surface_water'];
-                $BSurvey['water_supply_from_RIICO'] = $input['water_supply_from_RIICO'];
+                //$BSurvey['water_supply_from_RIICO'] = $input['water_supply_from_RIICO'];
+                $BSurvey['water_supply_from_RIICO'] = '';
                 $BSurvey = BSurvey::create($BSurvey);
                 $b_survey_id = $BSurvey['id'];
                 //$b_survey_id = 4;
@@ -181,23 +186,49 @@ class SurveyController extends Controller
                     $BSgWater[$key]['updated_at'] = date('Y-m-d H:i:s');
                 }
                 BSgWater::insert($BSgWater);
-                $Gpscoordinate = array();
+                $GpscoordinatePlot = array();
+                $GpscoordinateTubewell = array();
                 $i = 0;
-                $GPSCoordinateWaypointArr = explode(',', $input['GPSCoordinate_waypoint']);
-                foreach ($GPSCoordinateWaypointArr as $GPSCoordinateWaypoint) {
-                    $Gpscoordinate[$i]['a_survey_id'] = $a_survey_id;
-                    $Gpscoordinate[$i]['b_survey_id'] = $b_survey_id;
-                    $Gpscoordinate[$i]['GPSCoordinate_area'] = $input['GPSCoordinate_area'];
-                    $Gpscoordinate[$i]['GPSCoordinate_type'] = $input['GPSCoordinate_area'];
-                    $Gpscoordinate[$i]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
-                    $Gpscoordinate[$i]['GPSCoordinate_latitude'] = '0';
-                    $Gpscoordinate[$i]['GPSCoordinate_longitude'] = '0';
-                    $Gpscoordinate[$i]['gpxfile'] = '';
-                    $Gpscoordinate[$i]['comment'] = $input['GPSCoordinate_comment'];
-                    $Gpscoordinate[$i]['created_at'] = date('Y-m-d H:i:s');
-                    $Gpscoordinate[$i]['updated_at'] = date('Y-m-d H:i:s');
-                    ++$i;
+                $t = 0;
+                if (isset($input['GPSCoordinate_waypoint_plot']) && !empty($input['GPSCoordinate_waypoint_plot'])) {
+                    $GPSCoordinateWaypointPlotArr = explode(',', $input['GPSCoordinate_waypoint_plot']);
+                    if (is_array($GPSCoordinateWaypointPlotArr)) {
+                        foreach ($GPSCoordinateWaypointPlotArr as $GPSCoordinateWaypoint) {
+                            $GpscoordinatePlot[$i]['a_survey_id'] = $a_survey_id;
+                            $GpscoordinatePlot[$i]['b_survey_id'] = $b_survey_id;
+                            $GpscoordinatePlot[$i]['GPSCoordinate_area'] = 'Plot';
+                            $GpscoordinatePlot[$i]['GPSCoordinate_type'] = 'Plot';
+                            $GpscoordinatePlot[$i]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
+                            $GpscoordinatePlot[$i]['GPSCoordinate_latitude'] = '0';
+                            $GpscoordinatePlot[$i]['GPSCoordinate_longitude'] = '0';
+                            $GpscoordinatePlot[$i]['gpxfile'] = '';
+                            $GpscoordinatePlot[$i]['comment'] = $input['GPSCoordinate_comment'];
+                            $GpscoordinatePlot[$i]['created_at'] = date('Y-m-d H:i:s');
+                            $GpscoordinatePlot[$i]['updated_at'] = date('Y-m-d H:i:s');
+                            ++$i;
+                        }
+                    }
                 }
+                if (isset($input['GPSCoordinate_waypoint_tubewell']) && !empty($input['GPSCoordinate_waypoint_tubewell'])) {
+                    $GPSCoordinateWaypointTubewellArr = explode(',', $input['GPSCoordinate_waypoint_tubewell']);
+                    if (is_array($GPSCoordinateWaypointTubewellArr)) {
+                        foreach ($GPSCoordinateWaypointTubewellArr as $GPSCoordinateWaypoint) {
+                            $GpscoordinateTubewell[$t]['a_survey_id'] = $a_survey_id;
+                            $GpscoordinateTubewell[$t]['b_survey_id'] = $b_survey_id;
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_area'] = 'Tubewell';
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_type'] = 'Tubewell';
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_latitude'] = '0';
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_longitude'] = '0';
+                            $GpscoordinateTubewell[$t]['gpxfile'] = '';
+                            $GpscoordinateTubewell[$t]['comment'] = $input['GPSCoordinate_comment'];
+                            $GpscoordinateTubewell[$t]['created_at'] = date('Y-m-d H:i:s');
+                            $GpscoordinateTubewell[$t]['updated_at'] = date('Y-m-d H:i:s');
+                            ++$t;
+                        }
+                    }
+                }
+                $Gpscoordinate = array_merge($GpscoordinatePlot, $GpscoordinateTubewell);
                 Gpscoordinate::insert($Gpscoordinate);
 
                 // getting all of the post data
@@ -304,9 +335,17 @@ class SurveyController extends Controller
                         Session::flash('error', 'uploaded file is not valid');
                     }
                 }
-                $attachmentArr['created_at'] = date('Y-m-d H:i:s');
-                $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
-                BAttachment::create($attachmentArr);
+
+                if (array_key_exists("area_location", $attachmentArr) ||
+                    array_key_exists("sources_sw_gw", $attachmentArr) ||
+                    array_key_exists("existing_rwh_structure", $attachmentArr) ||
+                    array_key_exists("site_layout_plan", $attachmentArr) ||
+                    array_key_exists("attachgpxfile", $attachmentArr)) {
+
+                    $attachmentArr['created_at'] = date('Y-m-d H:i:s');
+                    $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
+                    BAttachment::create($attachmentArr);
+                }
                 break;
             case 3:
                 //$rules = ['color' => 'required|min:3'];
@@ -440,26 +479,30 @@ class SurveyController extends Controller
                 case 'active':
                     $ASurveys->is_active = 1;
                     $ASurveys->save();
-                    $SurveyLogArray['is_status'] = 'active';
-                    SurveyLog::create($SurveyLogArray);
+                    //$SurveyLogArray['is_status'] = 'active';
+                    //SurveyLog::create($SurveyLogArray);
+                    $this->auditLog($ASurveys->id, 'active', 'Audit Active.');
                     break;
                 case 'approve':
                     $ASurveys->is_approved = 1;
                     $ASurveys->save();
                     $SurveyLogArray['is_status'] = 'approved';
-                    SurveyLog::create($SurveyLogArray);
+                    //SurveyLog::create($SurveyLogArray,);
+                    $this->auditLog($ASurveys->id, 'approved', 'Audit approved.');
                     break;
                 case 'completed':
                     $ASurveys->is_completed = 1;
                     $ASurveys->save();
                     $SurveyLogArray['is_status'] = 'completed';
-                    SurveyLog::create($SurveyLogArray);
+                    //SurveyLog::create($SurveyLogArray);
+                    $this->auditLog($ASurveys->id, 'completed', 'Audit completed.');
                     break;
                 case 'certified':
                     $ASurveys->is_certified = 1;
                     $ASurveys->save();
                     $SurveyLogArray['is_status'] = 'certified';
-                    SurveyLog::create($SurveyLogArray);
+                    //SurveyLog::create($SurveyLogArray);
+                    $this->auditLog($ASurveys->id, 'certified', 'Audit certified.');
                     break;
             }
             return view('layouts.partial.access_nav', compact('ASurveys'));
@@ -472,8 +515,8 @@ class SurveyController extends Controller
         $user = Auth::user();
         // getting all of the post data
         $attachmentArr = array();
-        //$attachmentArr['user_id'] = $user['id'];
-        $attachmentArr['user_id'] = 2;
+        $attachmentArr['user_id'] = $user['id'];
+        //$attachmentArr['user_id'] = 2;
         $a_survey_id = $input['a_survey_id'];
         $b_survey_id = $input['b_survey_id'];
         $attachmentArr['a_survey_id'] = $a_survey_id;
@@ -629,7 +672,413 @@ class SurveyController extends Controller
         $ASurvey->update($input);
         $a_survey_id = $ASurvey['id'];
         Session::put('a_survey_id', $a_survey_id);
-        return redirect()->action('SurveyController@getSurveyStep', ['step' => 2]);
+        return redirect()->action('SurveyController@getSurveyStepEdit', ['step' => 2]);
+    }
+
+    public function getSurveyStepEdit(Request $request, $step)
+    {
+        $id = Session::get('a_survey_id');
+        $user = Auth::user();
+        if ($user->hasRole('superadmin') == 1) {
+            $user_role = 'superadmin';
+        } else if ($user->hasRole('torrent') == 1) {
+            $user_role = 'torrent';
+        } else {
+            $user_role = 'rm';
+        }
+
+        if ($request->session()->has('a_survey_id')) {
+            $BSurveyValidationRules = '';
+            $bsgwaterArr = '';
+            $conesurveys = '';
+            $ctwosurveys = '';
+            switch ($step) {
+                case 2:
+                    $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
+                    $ASurveys = ASurvey::with('bsurveys')
+                        ->with('bsgwater')
+                        ->with('gpscoordinates')
+                        ->with('attachments')
+                        ->find($id);
+                    //echo count($ASurveys->bsgwater);
+                    $a = count($ASurveys->bsgwater);
+                    $v = 1;
+                    for ($i = 0; $i < 4; $i++) {
+                        if ($v <= $a) {
+                            $bsgwaterArr[$i]['tubewell_borewell'] = $ASurveys->bsgwater[$i]['tubewell_borewell'];
+                            $bsgwaterArr[$i]['depth_of_s_pump'] = $ASurveys->bsgwater[$i]['depth_of_s_pump'];
+                            $bsgwaterArr[$i]['current_water_abstraction'] = $ASurveys->bsgwater[$i]['current_water_abstraction'];
+                        } else {
+
+                            $bsgwaterArr[$i]['tubewell_borewell'] = '';
+                            $bsgwaterArr[$i]['depth_of_s_pump'] = '';
+                            $bsgwaterArr[$i]['current_water_abstraction'] = '';
+                        }
+                        $v++;
+                    }
+
+                    break;
+                case 3:
+                    $ASurveys = ASurvey::with('conesurveys')->find($id);
+                    $a = count($ASurveys->conesurveys);
+                    $v = 1;
+                    for ($i = 0; $i < 4; $i++) {
+                        if ($v <= $a) {
+                            $conesurveys[$i]['details_of_water_requirement'] = $ASurveys->conesurveys[$i]['details_of_water_requirement'];
+                            $conesurveys[$i]['requirement_CGWA_permission'] = $ASurveys->conesurveys[$i]['requirement_CGWA_permission'];
+                            $conesurveys[$i]['existing_requirement'] = $ASurveys->conesurveys[$i]['existing_requirement'];
+                            $conesurveys[$i]['no_of_operational_day'] = $ASurveys->conesurveys[$i]['no_of_operational_day'];
+                            $conesurveys[$i]['annual_requirement'] = $ASurveys->conesurveys[$i]['annual_requirement'];
+                        } else {
+                            $conesurveys[$i]['details_of_water_requirement'] = '';
+                            $conesurveys[$i]['requirement_CGWA_permission'] = '';
+                            $conesurveys[$i]['existing_requirement'] = '';
+                            $conesurveys[$i]['no_of_operational_day'] = '';
+                            $conesurveys[$i]['annual_requirement'] = '';
+                        }
+                        $v++;
+                    }
+                    break;
+                case 4:
+                    $ASurveys = ASurvey::with('ctwosurveys')->find($id);
+                    $a = count($ASurveys->ctwosurveys);
+                    $v = 1;
+                    for ($i = 0; $i < 8; $i++) {
+                        if ($v <= $a) {
+                            $ctwosurveys[$i]['breakup_of_recycled_water_usage'] = $ASurveys->ctwosurveys[$i]['breakup_of_recycled_water_usage'];
+                            $ctwosurveys[$i]['cum_day'] = $ASurveys->ctwosurveys[$i]['cum_day'];
+                            $ctwosurveys[$i]['cum_year'] = $ASurveys->ctwosurveys[$i]['cum_year'];
+
+                        } else {
+                            $ctwosurveys[$i]['breakup_of_recycled_water_usage'] = '';
+                            $ctwosurveys[$i]['cum_day'] = '';
+                            $ctwosurveys[$i]['cum_year'] = '';
+                        }
+                        $v++;
+                    }
+                    break;
+                default:
+                    abort(400, "No rules for this step!");
+            }
+
+            $a_survey_id = Session::get('a_survey_id');
+
+            return view('survey.edit_step_' . $step, compact('ASurveys'), ['step' => $step, 'a_survey_id' => $a_survey_id, 'ASurveys' => $ASurveys, 'bsgwaterArr' => $bsgwaterArr, 'conesurveys' => $conesurveys, 'ctwosurveys' => $ctwosurveys])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+        } else {
+            return redirect('/audit');
+        }
+
+    }
+    public function getSurveyStepUpdate(Request $request, $step)
+    {
+        $a_survey_id = Session::get('a_survey_id');
+        $input = $request->all();
+        $user = Auth::user();
+        $d = date('Y-m-d H:i:s');
+        switch ($step) {
+            case 2:
+                $v = Validator::make($input, $this->BSurveyValidationRules);
+                if ($v->fails()) {
+                    return redirect()->back()->withErrors($v->errors());
+                }
+                $id = $input['id'];
+                $b = BSurvey::find($id);
+
+                $BSurvey['a_survey_id'] = $a_survey_id;
+                $BSurvey['total_land_area'] = $input['total_land_area'];
+                $BSurvey['total_land_area'] = $input['total_land_area'];
+                $BSurvey['roof_top_area'] = $input['roof_top_area'];
+                $BSurvey['road_paved_area'] = $input['road_paved_area'];
+                $BSurvey['green_belt_area'] = $input['green_belt_area'];
+                $BSurvey['open_land'] = $input['open_land'];
+                if (isset($input['GPSCoordinate_waypoint_plot']) && !empty($input['GPSCoordinate_waypoint_plot'])) {
+                    $BSurvey['GPSCoordinate_waypoint_plot'] = $input['GPSCoordinate_waypoint_plot'];
+                }
+                if (isset($input['GPSCoordinate_waypoint_tubewell']) && !empty($input['GPSCoordinate_waypoint_tubewell'])) {
+                    $BSurvey['GPSCoordinate_waypoint_tubewell'] = $input['GPSCoordinate_waypoint_tubewell'];
+                }
+                $BSurvey['average_annual_rainfall'] = $input['average_annual_rainfall'];
+                $BSurvey['number_of_rainy_day'] = $input['number_of_rainy_day'];
+                $BSurvey['nature_of_aquifer'] = $input['nature_of_aquifer'];
+                $BSurvey['nature_of_terrain'] = $input['nature_of_terrain'];
+                $BSurvey['nature_of_soil'] = $input['nature_of_soil'];
+                $BSurvey['recharge_well_depth'] = $input['recharge_well_depth'];
+                $BSurvey['recharge_well_diameter'] = $input['recharge_well_diameter'];
+                $BSurvey['recharge_pit_depth'] = $input['recharge_pit_depth'];
+                $BSurvey['recharge_pit_diameter'] = $input['recharge_pit_diameter'];
+                $BSurvey['recharge_trenches_l'] = $input['recharge_trenches_l'];
+                $BSurvey['recharge_trenches_w'] = $input['recharge_trenches_w'];
+                $BSurvey['recharge_trenches_d'] = $input['recharge_trenches_d'];
+                $BSurvey['water_bodies_ponds_depth'] = $input['water_bodies_ponds_depth'];
+                $BSurvey['water_bodies_ponds_diameter'] = $input['water_bodies_ponds_diameter'];
+                $BSurvey['source_of_availability_of_surface_water'] = $input['source_of_availability_of_surface_water'];
+                $BSurvey['water_supply_from_RIICO'] = '';
+                //$BSurvey = BSurvey::create($BSurvey);
+                //$b->update($BSurvey);
+
+                $this->auditLog($a_survey_id, 'b_audit_updated', 'b_survery table data updated.');
+                /*BSgWater::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);*/
+                $BSgWater = array();
+                foreach ($input['tubewell_borewell'] as $key => $value) {
+                    $BSgWater[$key]['a_survey_id'] = $a_survey_id;
+                    $BSgWater[$key]['b_survey_id'] = $id;
+                    $BSgWater[$key]['tubewell_borewell'] = $input['tubewell_borewell'][$key];
+                    $BSgWater[$key]['depth_of_s_pump'] = $input['depth_of_s_pump'][$key];
+                    $BSgWater[$key]['current_water_abstraction'] = $input['current_water_abstraction'][$key];
+                    $BSgWater[$key]['created_at'] = date('Y-m-d H:i:s');
+                    $BSgWater[$key]['updated_at'] = date('Y-m-d H:i:s');
+                }
+
+                //BSgWater::insert($BSgWater);
+                $this->auditLog($a_survey_id, 'swg_water_update', 'SWG Water Updated table.');
+                //Gpscoordinate::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);
+
+                $GpscoordinatePlot = array();
+                $GpscoordinateTubewell = array();
+                $i = 0;
+                $t = 0;
+                if (isset($input['GPSCoordinate_waypoint_plot']) && !empty($input['GPSCoordinate_waypoint_plot'])) {
+                    $GPSCoordinateWaypointPlotArr = explode(',', $input['GPSCoordinate_waypoint_plot']);
+                    if (is_array($GPSCoordinateWaypointPlotArr)) {
+                        foreach ($GPSCoordinateWaypointPlotArr as $GPSCoordinateWaypoint) {
+                            $GpscoordinatePlot[$i]['a_survey_id'] = $a_survey_id;
+                            $GpscoordinatePlot[$i]['b_survey_id'] = $id;
+                            $GpscoordinatePlot[$i]['GPSCoordinate_area'] = 'Plot';
+                            $GpscoordinatePlot[$i]['GPSCoordinate_type'] = 'Plot';
+                            $GpscoordinatePlot[$i]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
+                            $GpscoordinatePlot[$i]['GPSCoordinate_latitude'] = '0';
+                            $GpscoordinatePlot[$i]['GPSCoordinate_longitude'] = '0';
+                            $GpscoordinatePlot[$i]['gpxfile'] = '';
+                            $GpscoordinatePlot[$i]['comment'] = $input['GPSCoordinate_comment'];
+                            $GpscoordinatePlot[$i]['created_at'] = date('Y-m-d H:i:s');
+                            $GpscoordinatePlot[$i]['updated_at'] = date('Y-m-d H:i:s');
+                            ++$i;
+                        }
+                    }
+                }
+                if (isset($input['GPSCoordinate_waypoint_tubewell']) && !empty($input['GPSCoordinate_waypoint_tubewell'])) {
+                    $GPSCoordinateWaypointTubewellArr = explode(',', $input['GPSCoordinate_waypoint_tubewell']);
+                    if (is_array($GPSCoordinateWaypointTubewellArr)) {
+                        foreach ($GPSCoordinateWaypointTubewellArr as $GPSCoordinateWaypoint) {
+                            $GpscoordinateTubewell[$t]['a_survey_id'] = $a_survey_id;
+                            $GpscoordinateTubewell[$t]['b_survey_id'] = $id;
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_area'] = 'Tubewell';
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_type'] = 'Tubewell';
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_latitude'] = '0';
+                            $GpscoordinateTubewell[$t]['GPSCoordinate_longitude'] = '0';
+                            $GpscoordinateTubewell[$t]['gpxfile'] = '';
+                            $GpscoordinateTubewell[$t]['comment'] = $input['GPSCoordinate_comment'];
+                            $GpscoordinateTubewell[$t]['created_at'] = date('Y-m-d H:i:s');
+                            $GpscoordinateTubewell[$t]['updated_at'] = date('Y-m-d H:i:s');
+                            ++$t;
+                        }
+                    }
+                }
+                $Gpscoordinate = array_merge($GpscoordinatePlot, $GpscoordinateTubewell);
+                //Gpscoordinate::insert($Gpscoordinate);
+                $this->auditLog($a_survey_id, 'gps_coordinate_update', 'Plot and Tubewell Way Point updated.');
+
+                // getting all of the post data
+                $attachmentArr = array();
+                $attachmentArr['user_id'] = $user['id'];
+                $attachmentArr['a_survey_id'] = $a_survey_id;
+                $attachmentArr['b_survey_id'] = $id;
+                // checking file is valid.
+                if (isset($input['area_location'])) {
+                    if ($input['area_location']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
+
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['area_location'] = $fileName;
+                            $this->auditLog($a_survey_id, 'file_upload', 'New area location upload.');
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['sources_sw_gw']) && !empty($input['sources_sw_gw'])) {
+                    if ($input['sources_sw_gw']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['sources_sw_gw'] = $fileName;
+                            $this->auditLog($a_survey_id, 'file_upload', 'New Soureces SW GW file uploads.');
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['existing_rwh_structure']) && !empty($input['existing_rwh_structure'])) {
+                    if ($input['existing_rwh_structure']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['existing_rwh_structure'] = $fileName;
+                            $this->auditLog($a_survey_id, 'file_upload', 'New Existing RWH Structure.');
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['site_layout_plan']) && !empty($input['site_layout_plan'])) {
+                    if ($input['site_layout_plan']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['site_layout_plan'] = $fileName;
+                            $this->auditLog($a_survey_id, 'file_upload', 'New Site Plan Uploded.');
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+                if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
+                    if ($input['attachgpxfile']->isValid()) {
+                        $destinationPath = 'uploads'; // upload path
+                        $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
+                        $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
+                        $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
+                        $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
+                        // sending back with message
+                        if (file_exists(public_path() . '/uploads/' . $fileName)) {
+                            $attachmentArr['attachgpxfile'] = $fileName;
+                            $this->auditLog($a_survey_id, 'file_upload', 'New GPX File uploaded.');
+                            $GPSCoordinate_points = $GPSCoordinateWaypointArr;
+                            $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
+                            $this->auditLog($a_survey_id, 'gps_coordinate_update', 'GPS Corrdinate updated after gpx file uploaded.');
+                            Session::flash('success', 'Upload successfully');
+                        } else {
+                            Session::flash('failed', 'Not Uploaded');
+                        }
+                    } else {
+                        // sending back with error message.
+                        Session::flash('error', 'uploaded file is not valid');
+                    }
+                }
+
+                if (array_key_exists("area_location", $attachmentArr) ||
+                    array_key_exists("sources_sw_gw", $attachmentArr) ||
+                    array_key_exists("existing_rwh_structure", $attachmentArr) ||
+                    array_key_exists("site_layout_plan", $attachmentArr) ||
+                    array_key_exists("attachgpxfile", $attachmentArr)) {
+
+                    $attachmentArr['created_at'] = date('Y-m-d H:i:s');
+                    $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
+                    BAttachment::create($attachmentArr);
+                }
+                break;
+            case 3:
+                COneSurvey::where('a_survey_id', $a_survey_id)
+                    ->update(['is_active' => 0]);
+                $COneSurvey = array();
+                foreach ($input['details_of_water_requirement'] as $key => $value) {
+                    $COneSurvey[$key]['a_survey_id'] = $a_survey_id;
+                    $COneSurvey[$key]['details_of_water_requirement'] = $input['details_of_water_requirement'][$key];
+                    $COneSurvey[$key]['requirement_CGWA_permission'] = $input['requirement_CGWA_permission'][$key];
+                    $COneSurvey[$key]['existing_requirement'] = $input['existing_requirement'][$key];
+                    $COneSurvey[$key]['no_of_operational_day'] = $input['no_of_operational_day'][$key];
+                    $COneSurvey[$key]['annual_requirement'] = $input['annual_requirement'][$key];
+                    $COneSurvey[$key]['created_at'] = date('Y-m-d H:i:s');
+                    $COneSurvey[$key]['updated_at'] = date('Y-m-d H:i:s');
+                }
+                COneSurvey::insert($COneSurvey);
+                $this->auditLog($a_survey_id, 'c_audit_updated', 'Step 3 updated.');
+                break;
+            case 4:
+                CTwoSurvey::where('a_survey_id', $a_survey_id)
+                    ->update(['is_active' => 0]);
+                $CTwoSurvey = array();
+                foreach ($input['breakup_of_recycled_water_usage'] as $key => $value) {
+
+                    if (!empty($input['breakup_of_recycled_water_usage'][$key]) && !empty($input['cum_day'][$key]) && !empty($input['cum_year'][$key])) {
+                        $CTwoSurvey[$key]['a_survey_id'] = $a_survey_id;
+                        $CTwoSurvey[$key]['breakup_of_recycled_water_usage'] = $input['breakup_of_recycled_water_usage'][$key];
+                        $CTwoSurvey[$key]['cum_day'] = $input['cum_day'][$key];
+                        $CTwoSurvey[$key]['cum_year'] = $input['cum_year'][$key];
+                        $CTwoSurvey[$key]['created_at'] = date('Y-m-d H:i:s');
+                        $CTwoSurvey[$key]['updated_at'] = date('Y-m-d H:i:s');
+                    }
+                }
+
+                CTwoSurvey::insert($CTwoSurvey);
+                $this->auditLog($a_survey_id, 'c_audit_updated', 'Step 4 updated');
+                break;
+            default:
+                abort(400, "No rules for this step!");
+        }
+
+        if ($step == $this->lastStep) {
+
+            $this->auditLog($a_survey_id, 'completed', 'Audit completely Updated.');
+            return redirect()->action('SurveyController@getSurveyDone');
+        }
+
+        return redirect()->action('SurveyController@getSurveyStepEdit', ['step' => $step + 1]);
+    }
+
+    /*
+     *
+     * status we have:
+     * a_audit_created,b_audit_created,b_audit_updated,c_audit_created,c_audit_updated,
+     * gps_coordinate_created,gps_coordinate_update,swg_water_created,swg_water_update,
+     * update,applied,not_applied,file_upload,active,approved,completed,certified
+     *
+     *
+     *
+     *
+     *
+     */
+    private function auditLog($a_survey_id, $status, $comment)
+    {
+        //echo $comment;die;
+        $user = Auth::user();
+        $d = date('Y-m-d H:i:s');
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        $log = array(
+            'user_id' => $user['id'],
+            'a_survey_id' => $a_survey_id,
+            'is_status' => $status,
+            'comment' => $comment,
+            'ip_address' => $ipAddress,
+            'created_at' => $d,
+            'updated_at' => $d,
+        );
+        SurveyLog::create($log);
+
     }
 
 }

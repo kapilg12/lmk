@@ -16,7 +16,8 @@
 			<p>{{ $message }}</p>
 		</div>
 	@endif
-	<table class="table table-bordered">
+	<table id="example1" class="table table-bordered">
+	<thead>
 		<tr>
 			<th>No</th>
 			<th>Name</th>
@@ -24,7 +25,9 @@
 			<th>Roles</th>
 			<th width="280px">Action</th>
 		</tr>
+		</thead>
 	@foreach ($data as $key => $user)
+	<tbody>
 	<tr>
 		<td>{{ ++$i }}</td>
 		<td>{{ $user->name }}</td>
@@ -38,7 +41,7 @@
 		</td>
 		<td>
 			<a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>
-			@if(Auth::user()->id != $user->id)
+			@if(Auth::user()->id != $user->id || Auth::user()->hasRole("devadmin"))
 			<a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Edit</a>
 			{!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline','onclick'=>'return getConfirmation();']) !!}
             {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
@@ -46,6 +49,7 @@
         	{!! Form::close() !!}
 		</td>
 	</tr>
+	</tbody>
 	@endforeach
 	</table>
 	{!! $data->render() !!}

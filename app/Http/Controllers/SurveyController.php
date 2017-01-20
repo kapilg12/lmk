@@ -69,23 +69,26 @@ class SurveyController extends Controller
     public function getSurvey()
     {
         //$user=User::with('roles')->where();
-        //dd($user);
+        /*$users = User::whereHas('roles' , function($q){
+    $q->where('name', 'devadmin');
+})->get();
+        dd($users);*/
         $ASurveyValidationRules = '';
         $Office = Office::orderBy('office_name')->pluck('office_name', 'id');
         $Office->prepend('Please Select Industrial Area', '');
-        //$ASurveyValidationRules = JsValidator::make($this->ASurveyValidationRules, $this->ASurveyMessages);
+        $ASurveyValidationRules = JsValidator::make($this->ASurveyValidationRules, $this->ASurveyMessages);
         return view('survey.index', compact('id', 'Office'))->with(['ASurveyValidationRules' => $ASurveyValidationRules]);
     }
     public function postSurvey(Request $request)
     {
         $v = '';
         $input = $request->all();
-        //$v = Validator::make($input, $this->ASurveyValidationRules);
-        /*if ($v->fails()) {
+        $v = Validator::make($input, $this->ASurveyValidationRules);
+        if ($v->fails()) {
         return redirect()->back()->withErrors($v->errors());
-        }*/
+        }
         $input['user_id'] = Auth::user()->id;
-        $input['torrent_id'] = 2;
+        $input['torrent_id'] = 3;
         $input['is_active'] = 1;
         $ASurvey = ASurvey::create($input);
         if ($input['is_applied'] == 0) {
@@ -109,7 +112,7 @@ class SurveyController extends Controller
             $BSurveyValidationRules = '';
             switch ($step) {
                 case 2:
-                    //$BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
+                    $BSurveyValidationRules = JsValidator::make($this->BSurveyValidationRules);
                     break;
             }
             $Gps = array(
@@ -130,17 +133,15 @@ class SurveyController extends Controller
         $v = '';
         //$this->validate($request, $rules);
         $a_survey_id = Session::get('a_survey_id');
-        //$a_survey_id = 1;
-        //$b_survey_id = 4;
         $input = $request->all();
         $user = Auth::user();
 
         switch ($step) {
             case 2:
-                //$v = Validator::make($input, $this->BSurveyValidationRules);
-                /*if ($v->fails()) {
+                $v = Validator::make($input, $this->BSurveyValidationRules);
+                if ($v->fails()) {
                 return redirect()->back()->withErrors($v->errors());
-                }*/
+                }
                 $BSurvey['a_survey_id'] = $a_survey_id;
                 $BSurvey['total_land_area'] = $input['total_land_area'];
                 $BSurvey['total_land_area'] = $input['total_land_area'];
@@ -420,7 +421,7 @@ class SurveyController extends Controller
     public function show($id)
     {
         $attachmentsValidationRules = '';
-        //$attachmentsValidationRules = JsValidator::make($this->AttachmentValidationRules);
+        $attachmentsValidationRules = JsValidator::make($this->AttachmentValidationRules);
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
             $user_role = 'superadmin';

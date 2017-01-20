@@ -11,16 +11,6 @@
             </div>
         </div>
     </div>
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     {!! Form::open(array("url"=>"offices/update", "name"=>"frmaddOffice","id"=>"frmaddOffice", 'method'=>'POST')) !!}
     <input type="hidden" name="id" id="id" value="{{$office->id}}" />
     
@@ -103,6 +93,7 @@
     </div>
     {!! Form::close() !!}
 @endsection
+@section("js")
 <script type="text/javascript">
     function loadState(){        
         $.ajax({
@@ -130,3 +121,7 @@
         });        
     }
 </script>
+        <!-- Laravel Javascript Validation -->
+ <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+ {!! $officeValidationRules !!}
+ @endsection

@@ -10,6 +10,8 @@ use App\Country;
 use App\State;
 use App\User;
 use Auth;
+use JsValidator;
+
 class OfficeController extends Controller
 {
     /**
@@ -17,6 +19,21 @@ class OfficeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $officeValidationRules = [
+        "country_id"=>"required",
+        "state_id"=>"required",
+        "office_name"=>"required|alpha",
+        "officer_name"=>"alpha",
+        "office_pin"=>"digits:6",
+        "office_phone"=>"digits_between:10,12",
+        "office_mobile"=>"digits:10",
+        "office_email"=>"email"
+    ];
+    protected $officeValidationMessages = [
+        "country_id.required"=>"Please select country.",
+        "state_id.required"=>"Please select state.",
+        "office_name.required"=>"Please enter area office.",
+    ];
     public function index(Request $request)
     {
         $data = Office::with('children')->where('parent_id',null)->orderBy('id', 'DESC')->paginate(5);
@@ -26,16 +43,18 @@ class OfficeController extends Controller
 
     public function create()
     {
+        $officeValidationRules = JsValidator::make($this->officeValidationRules, $this->officeValidationMessages);
     	$countries = Country::lists('title','id');
-    	return view("offices.create",compact('countries'));
+    	return view("offices.create",compact('countries'))->with(["officeValidationRules"=>$officeValidationRules]);
     }
     public function edit($id)
     {
+         $officeValidationRules = JsValidator::make($this->officeValidationRules, $this->officeValidationMessages);
     	$countries = Country::lists('title','id');    	
     	$office = Office::with(['states','states.countries'])->find($id);
     	$states = State::where('country_id',$office->states['country_id'])->lists('title','id');
     	$offices = Office::where('state_id',$office->state_id)->where('parent_id',NULL)->lists('office_name','id');
-    	return view("offices.edit",compact('countries','office','states','offices'));
+    	return view("offices.edit",compact('countries','office','states','offices'))->with(["officeValidationRules"=>$officeValidationRules]);;
     	//dd($office);
     }
 

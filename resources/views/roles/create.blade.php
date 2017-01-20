@@ -34,11 +34,14 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Permission:</strong>
-                <br/>
+                </div>
                 @foreach($permission as $value)
+                <div class="col-xs-3 col-sm-3 col-md-3">
+                                <div class="form-group">     
                 	<label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
                 	{{ $value->display_name }}</label>
-                	<br/>
+                	</div>
+                    </div>
                 @endforeach
             </div>
         </div>

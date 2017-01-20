@@ -10,7 +10,6 @@
         "zizaco/entrust": "5.2.x-dev",
         "laravelcollective/html": "5.2.0",
         "baum/baum": "~1.1",
-        "barryvdh/laravel-debugbar": "^2.3",
         "proengsoft/laravel-jsvalidation": "~1.1"
     },
     "require-dev": {

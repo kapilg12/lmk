@@ -158,8 +158,7 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Baum\Providers\BaumServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
-        Proengsoft\JsValidation\JsValidationServiceProvider::class,
+        //Proengsoft\JsValidation\JsValidationServiceProvider::class,
 
     ],
 
@@ -209,8 +208,7 @@ return [
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
+        //'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
 
     ],
 

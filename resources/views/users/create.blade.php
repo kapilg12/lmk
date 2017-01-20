@@ -103,4 +103,7 @@
             $("."+$(this).data('val')).prop('checked',$(this).is(':checked'));
         });
     </script>
+<!-- Laravel Javascript Validation -->
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+{!! $userValidationRules !!}
 @endsection

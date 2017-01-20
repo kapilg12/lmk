@@ -10,6 +10,7 @@ use App\Country;
 use Auth;
 use DB;
 use Hash;
+use JsValidator;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -19,6 +20,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $userValidationRules = [
+        "name"=>"required|alpha",
+        "email"=>"required|email|unique:users,email",
+        "password"=>"required",
+        "confirm-password"=>"required|same:password",
+        "roles"=>"required"
+    ];
+    protected $userValidationMessages = [
+    "email.unique"=>"Email already exists",
+        'roles.required' => 'Select Role',
+        'confirm-password.same' => 'Confirm password not matched with password.',
+    ];
     public function index(Request $request)
     {
         $data = User::orderBy('id', 'DESC')->paginate(5);
@@ -34,11 +47,12 @@ class UserController extends Controller
      */
     public function create()
     {
+        $userValidationRules = JsValidator::make($this->userValidationRules, $this->userValidationMessages);
         $roles = Role::where('id','!=',1)->lists('display_name', 'id');
         /*$offices = Office::with(['children','states','states.countries'])->where('parent_id',null)->orderBy('id', 'DESC')->get();*/
         $globalOffices = Country::with(['states','states.offices','states.offices.children'])->get();
         //dd($globalOffices);
-        return view('users.create', compact('roles','globalOffices'));
+        return view('users.create', compact('roles','globalOffices'))->with(["userValidationRules"=>$userValidationRules]);
     }
 
     /**
@@ -50,12 +64,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //dd(array($request->input('roles'), $request->all()));
-        $this->validate($request, [
+        /*$this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
             'roles' => 'required',
-        ]);
+        ]);*/
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
@@ -90,11 +104,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        $userValidationRules = JsValidator::make($this->userValidationRules, $this->userValidationMessages);
         $user = User::find($id);
         $roles = Role::where('id','!=',1)->lists('display_name', 'id');
         $userRole = $user->roles->lists('id', 'id')->toArray();
         $globalOffices = Country::with(['states','states.offices','states.offices.children'])->get();
-        return view('users.edit', compact('user', 'roles', 'userRole','globalOffices'));
+        return view('users.edit', compact('user', 'roles', 'userRole','globalOffices'))->with(["userValidationRules"=>$userValidationRules]);
     }
 
     /**
@@ -106,12 +121,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        /*$this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'same:confirm-password',
             'roles' => 'required',
-        ]);
+        ]);*/
 
         $input = $request->all();
         if (!empty($input['password'])) {

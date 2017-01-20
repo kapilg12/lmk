@@ -15,7 +15,6 @@ use App\SurveyLog;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
-use Input;
 use JsValidator;
 use Redirect;
 use Session;
@@ -401,19 +400,20 @@ class SurveyController extends Controller
         } else {
             $user_role = 'rm';
         }
-
+        $i = 0;
         if ($user->hasRole('torrent')) {
             $ASurveys = ASurvey::with('offices')
-                ->with('bsurveys')
                 ->where('torrent_id', Auth::user()->id)
-                ->orderBy('id', 'DESC')
-                ->paginate(5)->all();
-            return view('survey.dashboard', compact('ASurveys', 'user_role'))
-                ->with('i', ($request->input('page', 1) - 1) * 5);
+                ->orderBy('id', 'DESC')->get();
+            return view('survey.dashboard', compact('ASurveys', 'user_role', 'i'));
+
         } else {
-            $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->paginate(5);
-            return view('survey.dashboard', compact('ASurveys', 'user_role'))
-                ->with('i', ($request->input('page', 1) - 1) * 5);
+            //$ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->paginate(5)->all();
+            //return view('survey.dashboard', compact('ASurveys', 'user_role'))
+            //   ->with('i', ($request->input('page', 1) - 1) * 5);
+
+            $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
+            return view('survey.dashboard', compact('ASurveys', 'user_role', 'i'));
         }
 
     }
@@ -450,12 +450,12 @@ class SurveyController extends Controller
                 $GPSCoordinate_points .= ',' . $gpscoordinate->GPSCoordinate_point;
             }
         }
-        //dd($ASurveys->bsurveys->id);
-        //$GPSCoordinate_points = array('085', '086', '087', '088', '089');
-        //$f = '20170107163139_Current.gpx';
-        //$r = $this->getLatLogFromXML($f, $GPSCoordinate_points, $id);
-        //dd($GPSCoordinate_points);
-        return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
+        if (count($ASurveys->bsurveys) > 0) {
+            return view('survey.show', compact('ASurveys', 'user_role'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
+        } else {
+            return view('errors.audit_not_completed');
+        }
+
     }
 
     public function changeStatus(Request $request)
@@ -755,7 +755,12 @@ class SurveyController extends Controller
 
             $a_survey_id = Session::get('a_survey_id');
 
-            return view('survey.edit_step_' . $step, compact('ASurveys'), ['step' => $step, 'a_survey_id' => $a_survey_id, 'ASurveys' => $ASurveys, 'bsgwaterArr' => $bsgwaterArr, 'conesurveys' => $conesurveys, 'ctwosurveys' => $ctwosurveys])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+            if (isset($ASurveys->bsurveys) && $ASurveys->bsurveys != null) {
+                return view('survey.edit_step_' . $step, ['step' => $step, 'a_survey_id' => $a_survey_id, 'ASurveys' => $ASurveys, 'bsgwaterArr' => $bsgwaterArr, 'conesurveys' => $conesurveys, 'ctwosurveys' => $ctwosurveys])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
+            } else {
+                return redirect()->action('SurveyController@getSurveyStep', $step);
+            }
+
         } else {
             return redirect('/audit');
         }

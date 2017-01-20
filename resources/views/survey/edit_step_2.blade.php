@@ -7,7 +7,10 @@
     <h2>Step 2:- General Data Sheet for Industry Establishment</h2>
     {!! Form::open(['method' => 'PATCH','url' => ['audit/updatestep', $step],'files'=>'true']) !!}
     {{ Form::hidden('a_survey_id', $a_survey_id) }}
-    {{ Form::hidden('id', $ASurveys->bsurveys->id) }}
+
+        {{ Form::hidden('id', $ASurveys->bsurveys->id) }}
+
+
 
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
          <h3>B: Area Specifications</h3>

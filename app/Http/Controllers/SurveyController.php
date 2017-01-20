@@ -779,8 +779,8 @@ class SurveyController extends Controller
                     return redirect()->back()->withErrors($v->errors());
                 }
                 $id = $input['id'];
-                $b = BSurvey::find($id);
-
+                //$b = BSurvey::find($id);
+                BSgWater::where('id', $id)->where('a_survey_id', $a_survey_id)->update(['is_active' => 0]);
                 $BSurvey['a_survey_id'] = $a_survey_id;
                 $BSurvey['total_land_area'] = $input['total_land_area'];
                 $BSurvey['total_land_area'] = $input['total_land_area'];
@@ -810,11 +810,10 @@ class SurveyController extends Controller
                 $BSurvey['water_bodies_ponds_diameter'] = $input['water_bodies_ponds_diameter'];
                 $BSurvey['source_of_availability_of_surface_water'] = $input['source_of_availability_of_surface_water'];
                 $BSurvey['water_supply_from_RIICO'] = '';
-                //$BSurvey = BSurvey::create($BSurvey);
-                //$b->update($BSurvey);
+                $BSurvey = BSurvey::create($BSurvey);
 
                 $this->auditLog($a_survey_id, 'b_audit_updated', 'b_survery table data updated.');
-                /*BSgWater::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);*/
+                BSgWater::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);
                 $BSgWater = array();
                 foreach ($input['tubewell_borewell'] as $key => $value) {
                     $BSgWater[$key]['a_survey_id'] = $a_survey_id;
@@ -826,9 +825,10 @@ class SurveyController extends Controller
                     $BSgWater[$key]['updated_at'] = date('Y-m-d H:i:s');
                 }
 
-                //BSgWater::insert($BSgWater);
+                BSgWater::insert($BSgWater);
                 $this->auditLog($a_survey_id, 'swg_water_update', 'SWG Water Updated table.');
-                //Gpscoordinate::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);
+
+                Gpscoordinate::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);
 
                 $GpscoordinatePlot = array();
                 $GpscoordinateTubewell = array();
@@ -874,7 +874,7 @@ class SurveyController extends Controller
                 }
                 $GPSCoordinateWaypointArr = array_merge($GPSCoordinateWaypointPlotArr, $GPSCoordinateWaypointTubewellArr);
                 $Gpscoordinate = array_merge($GpscoordinatePlot, $GpscoordinateTubewell);
-                //Gpscoordinate::insert($Gpscoordinate);
+                Gpscoordinate::insert($Gpscoordinate);
                 $this->auditLog($a_survey_id, 'gps_coordinate_update', 'Plot and Tubewell Way Point updated.');
 
                 // getting all of the post data

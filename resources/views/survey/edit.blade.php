@@ -65,6 +65,7 @@
                 </label>
             </div>
         </fieldset>
+
        <fieldset style="margin-top: 20px;margin-bottom: 5px;">
           <input type="submit" name="submit" class="next btn btn-info" value="Submit" />
         </fieldset>

@@ -12,34 +12,33 @@
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
          <h3>B: Area Specifications</h3>
            <div class="form-group">
-                {!! Form::label('total_land_area', trans('total land area'), array('class' => '')) !!}
+                {!! Form::label('total_land_area', trans('total land area (Sqm)'), array('class' => '')) !!}
                 {!! Form::text('total_land_area', null, array('id' => 'total_land_area', 'class' => 'form-control', 'placeholder' => trans('total land area'), 'title' => trans('total land area'))) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('roof_top_area', trans('roof top area'), array('class' => '')) !!}
+                {!! Form::label('roof_top_area', trans('roof top area (Sqm)'), array('class' => '')) !!}
                 {!! Form::text('roof_top_area', null, array('id' => 'roof top area', 'class' => 'form-control', 'placeholder' => trans('roof top area'), 'title' => trans('roof top area'))) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('road_paved_area', trans('road paved area'), array('class' => '')) !!}
+                {!! Form::label('road_paved_area', trans('road paved area (Sqm)'), array('class' => '')) !!}
                 {!! Form::text('road_paved_area', null, array('id' => 'road paved area', 'class' => 'form-control', 'placeholder' => trans('road paved area'), 'title' => trans('road paved area'))) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('green_belt_area', trans('green belt area'), array('class' => '')) !!}
+                {!! Form::label('green_belt_area', trans('green belt area (Sqm)'), array('class' => '')) !!}
                 {!! Form::text('green_belt_area', null, array('id' => 'green_belt_area', 'class' => 'form-control', 'placeholder' => trans('green belt area'), 'title' => trans('green belt area'))) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('open_land', trans('open land'), array('class' => '')) !!}
+                {!! Form::label('open_land', trans('open land (Sqm)'), array('class' => '')) !!}
                 {!! Form::text('open_land', null, array('id' => 'open_land', 'class' => 'form-control', 'placeholder' => trans('open land'), 'title' => trans('open land'))) !!}
             </div>
         </fieldset>
         <fieldset style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>GPSCoordinate:</h3>
-            <div class="form-group">
-            <div class="row">
+            <!--<div class="form-group">
+                <div class="row">
                     <div class="col-md-12">
                         {!! Form::label('GPSCoordinate_area', trans('Area Type Of GPSCoordinate'), array('class' => '')) !!}
-                       <!--  {!! Form::select('GPSCoordinate_area', [ '' => 'Please Select Area', 'shed' => 'shed','building' => 'Building', 'tubewell' => 'Tubewell'], null, array('id' => 'area_type', 'class' => 'form-control')) !!} -->
                        <select name="GPSCoordinate_area" id="area_type" class="form-control">
                          <option selected disabled>Please Select Area</option>
                          @foreach($listData as $data)
@@ -49,12 +48,20 @@
 
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="form-group" id="waypoint">
-                {!! Form::label('GPSCoordinate_waypoint', trans('Way Point'), array('class' => '')) !!}
+                {!! Form::label('GPSCoordinate_waypoint_plot', trans('Way Point Plot'), array('class' => '')) !!}
                 <div class="row">
                     <div class="col-md-12 gpsCord" id="0">
-                         {!! Form::text('GPSCoordinate_waypoint', null, array('id' => 'GPSCoordinate_waypoint', 'class' => 'form-control', 'placeholder' => trans('Way point: 085,086,087'), 'title' => trans('latitude'))) !!}
+                         {!! Form::text('GPSCoordinate_waypoint_plot', null, array('id' => 'GPSCoordinate_waypoint_plot', 'class' => 'form-control', 'placeholder' => trans('Way point: 085,086,087'), 'title' => trans('latitude'))) !!}
+                    </div>
+                 </div>
+            </div>
+            <div class="form-group" id="waypoint">
+                {!! Form::label('GPSCoordinate_waypoint_tubewell', trans('Way Point Tubewell'), array('class' => '')) !!}
+                <div class="row">
+                    <div class="col-md-12 gpsCord" id="0">
+                         {!! Form::text('GPSCoordinate_waypoint_tubewell', null, array('id' => 'GPSCoordinate_waypoint_tubewell', 'class' => 'form-control', 'placeholder' => trans('Way point: 085,086,087'), 'title' => trans('latitude'))) !!}
                     </div>
                  </div>
             </div>
@@ -296,7 +303,7 @@
                 <a href="javascript:void(0);" id="addmore">Add more...</a>
             </fieldset>
         </fieldset>
-        <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
+        <!--<fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             @if(Session::has('error'))
              <p class="errors">{!! Session::get('error') !!}</p>
             @endif
@@ -304,7 +311,7 @@
                 {!! Form::label('water_supply_from_RIICO', trans('water supply from RIICO'), array('class' => '')) !!}
                 {!! Form::text('water_supply_from_RIICO', null, array('id' => 'water_supply_from_RIICO', 'class' => 'form-control', 'placeholder' => trans('water supply from RIICO'), 'title' => trans('water supply from RIICO'))) !!}
             </div>
-        </fieldset>
+        </fieldset>-->
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>Uploads :</h3>
              @include('layouts.partial.file_upload_fields')

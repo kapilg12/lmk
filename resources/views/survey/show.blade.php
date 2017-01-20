@@ -355,26 +355,31 @@
                 <div class="timeline-item">
                   <h3 class="timeline-header">Area/Location Site Layout Pians uploaded Picutes</h3>
                   <div class="timeline-body">
-                    <table class="table table-striped">
-                        <tr>
-                          <th style="width: 10px">#</th>
-                          <th>Area Location</th>
-                          <th>Sources SW GW</th>
-                          <th>Concept plan-RWHS</th>
-                          <th>Site Layout Plan</th>
-                          <th>GPX File</th>
-                        </tr>
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                              <th style="width: 10px">#</th>
+                              <th>Type</th>
+                              <th>Image/file</th>
+                              <th>Comment</th>
+                              <th>Action</th>
+                            </tr>
+                        </thead>
+                         <tbody>
                         {{--*/ $i = 0 /*--}}
                          @foreach ($ASurveys->attachments as $key => $attachment)
                             <tr>
                               <td>{{++$i}}</td>
-                              <td><a href="{!! asset('uploads/').'/'.$attachment->area_location !!}" target="_new">{{$attachment->area_location}}</a></td>
-                              <td><a href="{!! asset('uploads/').'/'.$attachment->sources_sw_gw !!}" target="_new">{{$attachment->sources_sw_gw}}</a></td>
-                              <td><a href="{!! asset('uploadsimg/').'/'.$attachment->existing_rwh_structure !!}" target="_new">{{$attachment->existing_rwh_structure}}</a></td>
-                              <td><a href="{!! asset('uploads/').'/'.$attachment->site_layout_plan !!}" target="_new">{{$attachment->site_layout_plan}}</a></td>
-                              <td><a href="{!! asset('uploads/').'/'.$attachment->attachgpxfile !!}" target="_new">{{$attachment->attachgpxfile}}</a></td>
+                              <td class="center">{{$attachment->display_name}}</a>
+                               </td>
+                               <td class="center"><a href="{!! asset('uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a>
+                               </td>
+                               <td class="center">{{$attachment->comment}}</td>
+                               <td class="center"><a href="{!! asset('uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a>
+                               </td>
                             </tr>
                         @endforeach
+                         </tbody>
                     </table>
                    <!-- <img src="{!! asset('dist/img/docx_mac.png') !!}" width="100" height="100" alt="..." class="margin">
                     <img src="{!! asset('dist/img/p1.png') !!}" width="100" height="100" alt="..." class="margin">

@@ -392,28 +392,24 @@ class SurveyController extends Controller
     }
 
     public function getDashboard(Request $request)
-    {
-        $user = Auth::user();
-        if ($user->hasRole('superadmin') == 1) {
-            $user_role = 'superadmin';
-        } else if ($user->hasRole('torrent') == 1) {
-            $user_role = 'torrent';
-        } else {
-            $user_role = 'rm';
-        }
+    {        
+        $users = User::whereHas("roles",function($q){
+            $q->where("name","torrentadmin");
+        })->lists("id","name");
         $i = 0;
-        if ($user->hasRole('torrent')) {
+        if (Auth::user()->hasRole('torrentadmin')) {
             $ASurveys = ASurvey::with('offices')
                 ->where('torrent_id', Auth::user()->id)
-                ->orderBy('id', 'DESC')
-                ->get();
-            //return view('survey.dashboard', compact('ASurveys', 'user_role', 'i'));
+                ->orderBy('id', 'DESC')->get();
+            return view('survey.dashboard', compact('ASurveys', 'i'));
 
         } else {
-            $ASurveys = ASurvey::with('offices')
-                ->orderBy('id', 'DESC')
-                ->get();
-            //return view('survey.dashboard', compact('ASurveys', 'user_role', 'i'));
+            //$ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->paginate(5)->all();
+            //return view('survey.dashboard', compact('ASurveys', 'user_role'))
+            //   ->with('i', ($request->input('page', 1) - 1) * 5);
+
+            $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
+            return view('survey.dashboard', compact('ASurveys', 'i',"users"));
         }
         return view('survey.dashboard', compact('ASurveys', 'user_role', 'i'));
 
@@ -425,8 +421,8 @@ class SurveyController extends Controller
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
             $user_role = 'superadmin';
-        } else if ($user->hasRole('torrent') == 1) {
-            $user_role = 'torrent';
+        } else if ($user->hasRole('torrentadmin') == 1) {
+            $user_role = 'torrentadmin';
         } else {
             $user_role = 'rm';
         }
@@ -441,7 +437,7 @@ class SurveyController extends Controller
                 ->find($id);
         } else if ($user_role == 'rm') {
             $ASurveys = ASurvey::find($id);
-        } else if ($user_role == 'torrent') {
+        } else if ($user_role == 'torrentadmin') {
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
                 ->find($id);
         }
@@ -704,8 +700,8 @@ class SurveyController extends Controller
         $user = Auth::user();
         if ($user->hasRole('superadmin') == 1) {
             $user_role = 'superadmin';
-        } else if ($user->hasRole('torrent') == 1) {
-            $user_role = 'torrent';
+        } else if ($user->hasRole('torrentadmin') == 1) {
+            $user_role = 'torrentadmin';
         } else {
             $user_role = 'rm';
         }
@@ -1127,17 +1123,13 @@ class SurveyController extends Controller
     private function auditLog($a_survey_id, $status, $comment)
     {
         //echo $comment;die;
-        $user = Auth::user();
-        $d = date('Y-m-d H:i:s');
-        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        $user = Auth::user();        
         $log = array(
             'user_id' => $user['id'],
             'a_survey_id' => $a_survey_id,
             'is_status' => $status,
             'comment' => $comment,
-            'ip_address' => $ipAddress,
-            'created_at' => $d,
-            'updated_at' => $d,
+            'ip_address' => $_SERVER['REMOTE_ADDR']
         );
         SurveyLog::create($log);
 
@@ -1259,6 +1251,14 @@ class SurveyController extends Controller
             Session::flash('error', 'uploaded file is not valid');
         }
 
+    }
+
+    public function assignUsers(Request $request)
+    {
+        ASurvey::where("id",$request["aid"])->update(["torrent_id"=>$request["uid"]]);
+
+        $message = "Audit id ".$request["aid"]." assigned to Torrent user ".$request["uid"]." by superadmin user".Auth::user()->name;
+        $this->auditLog($request["aid"], "audit_assigned_superadmin", $message);
     }
 
 }

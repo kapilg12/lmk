@@ -84,5 +84,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     //Route::resource('audit', 'SurveyController');
     Route::post('audit/changeStatus
         ', ['as' => 'survey.changeStatus', 'uses' => 'SurveyController@changeStatus', 'middleware' => ['role:superadmin|devadmin']]);
+    Route::post("audit/assignUsers",["as"=>"survey.assignUsers","uses"=>"SurveyController@assignUsers","middleware"=>["role:superadmin|devadmin"]]);
     //Route::resource('surveys', 'SurveyController');
 });

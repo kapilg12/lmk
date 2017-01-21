@@ -67,6 +67,16 @@
                                     @if($ASurvey->is_applied == '0' || $ASurvey->is_applied == '1')
                                         <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
                                     @endif
+                                    <div class="btn-group">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach($users as $value=>$key)
+                          <li><a href="#" onclick="assignUsers('{{$key}}','{{$ASurvey->id}}')">{{$value}}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
                                 @endif
                             </td>
                         </tr>
@@ -80,4 +90,19 @@
     </div>
    <!--<div class="col-xs-12 col-sm-1 col-md-1 col-lg-1"></div>-->
 </div>
+@endsection
+@section("js")
+<script type="text/javascript">
+    function assignUsers(key="",aid="")
+    {        
+        $.ajax({
+            type:"POST",
+            url:"/audit/assignUsers",
+            data:{"uid":key,"aid":aid},
+            success:function(data){
+                alert("Audit assigned successfully.");
+            }
+        });
+    }
+</script>
 @endsection

@@ -35,20 +35,6 @@
         </fieldset>
         <fieldset style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>GPSCoordinate:</h3>
-            <!--<div class="form-group">
-                <div class="row">
-                    <div class="col-md-12">
-                        {!! Form::label('GPSCoordinate_area', trans('Area Type Of GPSCoordinate'), array('class' => '')) !!}
-                       <select name="GPSCoordinate_area" id="area_type" class="form-control">
-                         <option selected disabled>Please Select Area</option>
-                         @foreach($listData as $data)
-                         <option value="{{ $data['aValue'] }}" data-point="{{ $data['dAttr'] }}">{{ $data['aName'] }}</option>
-                         @endforeach
-                    </select>
-
-                    </div>
-                </div>
-            </div>-->
             <div class="form-group" id="waypoint">
                 {!! Form::label('GPSCoordinate_waypoint_plot', trans('Way Point Plot'), array('class' => '')) !!}
                 <div class="row">
@@ -73,74 +59,6 @@
                     </div>
                  </div>
             </div>
-            <!--<div class="form-group" id="gps">
-                <div class="row">
-                    <div class="col-md-6 gpsCord hide" id="0">
-                        {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point A latitude longitude'), array('class' => '')) !!}
-                        <div class="row">
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_A', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_A', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
-                            </div>
-                       </div>
-                    </div>
-                    <div class="col-md-6 gpsCord hide" id="1">
-                        {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point B latitude longitude'), array('class' => '')) !!}
-                        <div class="row">
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude_B', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude_B', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
-                            </div>
-                       </div>
-                    </div>
-                </div>
-                <div class="top-buffer"></div>
-                <div class="row">
-                    <div class="col-md-6 gpsCord hide" id="2">
-                        {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point C latitude longitude'), array('class' => '')) !!}
-                        <div class="row">
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
-                            </div>
-                       </div>
-                    </div>
-                    <div class="col-md-6 gpsCord hide" id="3">
-                        {!! Form::label('GPSCoordinate_latitude_longitude', trans('GPSCoordinate Point D latitude longitude'), array('class' => '')) !!}
-                        <div class="row">
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_latitude[]', null, array('id' => 'GPSCoordinate_latitude', 'class' => 'form-control', 'placeholder' => trans('latitude'), 'title' => trans('latitude'))) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('GPSCoordinate_longitude[]', null, array('id' => 'GPSCoordinate_longitude', 'class' => 'form-control', 'placeholder' => trans('longitude'), 'title' => trans('longitude'))) !!}
-                            </div>
-                       </div>
-                    </div>
-                </div>
-            </div>
-            <div></div>
-            <div class="form-group">
-                {!! Form::label('GPSCoordinate_B', trans('GPSCoordinate B'), array('class' => '')) !!}
-                {!! Form::text('GPSCoordinate_B', null, array('id' => 'GPSCoordinate_B', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate B'), 'title' => trans('GPSCoordinate B'))) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('GPSCoordinate_C', trans('GPSCoordinate C'), array('class' => '')) !!}
-                {!! Form::text('GPSCoordinate_C', null, array('id' => 'GPSCoordinate_C', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate C'), 'title' => trans('GPSCoordinate C'))) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('GPSCoordinate_D', trans('GPSCoordinate D'), array('class' => '')) !!}
-                {!! Form::text('GPSCoordinate_D', null, array('id' => 'GPSCoordinate_D', 'class' => 'form-control', 'placeholder' => trans('GPSCoordinate D'), 'title' => trans('GPSCoordinate D'))) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('space_available', trans('space available'), array('class' => '')) !!}
-                {!! Form::text('space_available', null, array('id' => 'space_available', 'class' => 'form-control', 'placeholder' => trans('space available'), 'title' => trans('space available'))) !!}
-            </div>-->
         </fieldset>
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>Average Annual Rainfall :</h3>
@@ -303,20 +221,10 @@
                 <a href="javascript:void(0);" id="addmore">Add more...</a>
             </fieldset>
         </fieldset>
-        <!--<fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
-            @if(Session::has('error'))
-             <p class="errors">{!! Session::get('error') !!}</p>
-            @endif
-            <div class="form-group">
-                {!! Form::label('water_supply_from_RIICO', trans('water supply from RIICO'), array('class' => '')) !!}
-                {!! Form::text('water_supply_from_RIICO', null, array('id' => 'water_supply_from_RIICO', 'class' => 'form-control', 'placeholder' => trans('water supply from RIICO'), 'title' => trans('water supply from RIICO'))) !!}
-            </div>
-        </fieldset>-->
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>Uploads :</h3>
              @include('layouts.partial.file_upload_fields')
         </fieldset>
-
         <fieldset style="margin-top: 20px;margin-bottom: 5px;">
           <input type="submit" name="submit" class="next btn btn-info" value="Submit" />
         </fieldset>

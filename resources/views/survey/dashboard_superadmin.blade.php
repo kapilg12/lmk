@@ -49,14 +49,36 @@
                             <td>{{ $ASurvey->postel_address }}</td>
                             <td>@if($ASurvey->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-danger">Not Applied</span> @endif</td>
                             <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
-
+                            <!--<td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                            <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
+                            <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>-->
                             <td>
-                                <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
-                                @if(isset($ASurvey->bsurveys['id']) && !empty($ASurvey->bsurveys['id']))
-                                 <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}"><strong><i class="fa fa-eye"></i></strong></a>
-                                @else
-                                    <a class="btn btn-primary btn-sm" href="javascript:void(0);">Audit Not Completed</a>
+                             @if(Auth::user()->ability(array('superadmin','devadmin'),array()))
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @foreach($users as $value=>$key)
+                                          <li><a href="#" onclick="assignUsers('{{$key}}','{{$ASurvey->id}}')">{{$value}}</a></li>
+                                          @endforeach
+                                        </ul>
+                                    </div>
+                                    @if($ASurvey->is_applied == '0' || $ASurvey->is_applied == '1')
+                                        <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
+                                    @endif
                                 @endif
+                                @if(Auth::user()->ability(array('torrentadmin'),array()))
+                                    @if(isset($ASurvey->bsurveys['id']) && !empty($ASurvey->bsurveys['id'])){
+                                     <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}"><strong><i class="fa fa-eye"></i></strong></a>
+                                    @else
+                                        <a class="btn btn-primary btn-sm" href="javascript:void(0);">Audit Not Completed</a>
+                                    @endif
+                                @else
+                                    <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
+                                @endif
+
+
                             </td>
                         </tr>
                         @endif

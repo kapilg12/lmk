@@ -70,8 +70,8 @@ class SurveyController extends Controller
     {
         //$user=User::with('roles')->where();
         /*$users = User::whereHas('roles' , function($q){
-    $q->where('name', 'devadmin');
-})->get();
+        $q->where('name', 'devadmin');
+        })->get();
         dd($users);*/
         $ASurveyValidationRules = '';
         $Office = Office::orderBy('office_name')->pluck('office_name', 'id');
@@ -85,7 +85,7 @@ class SurveyController extends Controller
         $input = $request->all();
         $v = Validator::make($input, $this->ASurveyValidationRules);
         if ($v->fails()) {
-        return redirect()->back()->withErrors($v->errors());
+            return redirect()->back()->withErrors($v->errors());
         }
         $input['user_id'] = Auth::user()->id;
         $input['torrent_id'] = 3;
@@ -140,7 +140,7 @@ class SurveyController extends Controller
             case 2:
                 $v = Validator::make($input, $this->BSurveyValidationRules);
                 if ($v->fails()) {
-                return redirect()->back()->withErrors($v->errors());
+                    return redirect()->back()->withErrors($v->errors());
                 }
                 $BSurvey['a_survey_id'] = $a_survey_id;
                 $BSurvey['total_land_area'] = $input['total_land_area'];
@@ -392,27 +392,31 @@ class SurveyController extends Controller
     }
 
     public function getDashboard(Request $request)
-    {        
-        $users = User::whereHas("roles",function($q){
-            $q->where("name","torrentadmin");
-        })->lists("id","name");
+    {
+        $users = User::whereHas("roles", function ($q) {
+            $q->where("name", "torrentadmin");
+        })->lists("id", "name");
         $i = 0;
         if (Auth::user()->hasRole('torrentadmin')) {
             $ASurveys = ASurvey::with('offices')
                 ->where('torrent_id', Auth::user()->id)
                 ->orderBy('id', 'DESC')->get();
-            return view('survey.dashboard', compact('ASurveys', 'i'));
-
+            return view('survey.dashboard_torrent', compact('ASurveys', 'i'));
         } else {
-            //$ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->paginate(5)->all();
-            //return view('survey.dashboard', compact('ASurveys', 'user_role'))
-            //   ->with('i', ($request->input('page', 1) - 1) * 5);
 
-            $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
-            return view('survey.dashboard', compact('ASurveys', 'i',"users"));
+            if (Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('devadmin')) {
+                $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
+                return view('survey.dashboard_superadmin', compact('ASurveys', 'i', "users"));
+            } else if (Auth::user()->hasRole('rm')) {
+                $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
+                return view('survey.dashboard_rm', compact('ASurveys', 'i'));
+            } else {
+                $ASurveys = ASurvey::with('offices')
+                    ->where('user_id', Auth::user()->id)
+                    ->orderBy('id', 'DESC')->get();
+                return view('survey.dashboard', compact('ASurveys', 'i'));
+            }
         }
-        return view('survey.dashboard', compact('ASurveys', 'user_role', 'i'));
-
     }
     public function show($id)
     {
@@ -423,10 +427,12 @@ class SurveyController extends Controller
             $user_role = 'superadmin';
         } else if ($user->hasRole('torrentadmin') == 1) {
             $user_role = 'torrentadmin';
-        } else {
+        } else if ($user->hasRole('rm') == 1) {
             $user_role = 'rm';
+        } else {
+            $user_role = 'visitor';
         }
-        if ($user_role == 'superadmin') {
+        if ($user_role == 'superadmin' || $user_role == 'visitor') {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
                 ->with('bsgwater')
@@ -435,12 +441,14 @@ class SurveyController extends Controller
                 ->with('conesurveys')
                 ->with('ctwosurveys')
                 ->find($id);
-        } else if ($user_role == 'rm') {
-            $ASurveys = ASurvey::find($id);
         } else if ($user_role == 'torrentadmin') {
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
                 ->find($id);
+        } else if ($user_role == 'rm') {
+            $ASurveys = ASurvey::find($id);
+
         }
+
         $GPSCoordinate_points = '';
         if (isset($ASurveys->bsurveys->GPSCoordinate_waypoint_plot)) {
             $GPSCoordinate_points .= $ASurveys->bsurveys->GPSCoordinate_waypoint_plot;
@@ -448,13 +456,26 @@ class SurveyController extends Controller
         if (isset($ASurveys->bsurveys->GPSCoordinate_waypoint_tubewell)) {
             $GPSCoordinate_points .= ',' . $ASurveys->bsurveys->GPSCoordinate_waypoint_tubewell;
         }
-
-        if (count($ASurveys->bsurveys) > 0) {
-            // echo $ASurveys->attachments[0]['slug'];
-            //dd($ASurveys->attachments);
-            return view('survey.show', compact('ASurveys', 'user_role', 'AttacmentArr'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
+        if ($user_role == 'superadmin') {
+            if (isset($ASurveys->bsurveys) && count($ASurveys->bsurveys) > 0) {
+                return view('survey.show_superadmin', compact('ASurveys', 'user_role', 'AttacmentArr'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
+            } else {
+                return view('errors.audit_not_completed');
+            }
+        } else if ($user_role == 'torrentadmin') {
+            if (isset($ASurveys->bsurveys) && count($ASurveys->bsurveys) > 0) {
+                return view('survey.show_torrent', compact('ASurveys', 'user_role', 'AttacmentArr'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
+            } else {
+                return view('errors.audit_not_completed');
+            }
+        } else if ($user_role == 'rm') {
+            return view('survey.show_rm', compact('ASurveys', 'user_role'));
         } else {
-            return view('errors.audit_not_completed');
+            if (isset($ASurveys->bsurveys) && count($ASurveys->bsurveys) > 0) {
+                return view('survey.show', compact('ASurveys', 'user_role', 'AttacmentArr'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
+            } else {
+                return view('errors.audit_not_completed');
+            }
         }
 
     }
@@ -1123,13 +1144,13 @@ class SurveyController extends Controller
     private function auditLog($a_survey_id, $status, $comment)
     {
         //echo $comment;die;
-        $user = Auth::user();        
+        $user = Auth::user();
         $log = array(
             'user_id' => $user['id'],
             'a_survey_id' => $a_survey_id,
             'is_status' => $status,
             'comment' => $comment,
-            'ip_address' => $_SERVER['REMOTE_ADDR']
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
         );
         SurveyLog::create($log);
 
@@ -1255,9 +1276,9 @@ class SurveyController extends Controller
 
     public function assignUsers(Request $request)
     {
-        ASurvey::where("id",$request["aid"])->update(["torrent_id"=>$request["uid"]]);
+        ASurvey::where("id", $request["aid"])->update(["torrent_id" => $request["uid"]]);
 
-        $message = "Audit id ".$request["aid"]." assigned to Torrent user ".$request["uid"]." by superadmin user".Auth::user()->name;
+        $message = "Audit id " . $request["aid"] . " assigned to Torrent user " . $request["uid"] . " by superadmin user" . Auth::user()->name;
         $this->auditLog($request["aid"], "audit_assigned_superadmin", $message);
     }
 

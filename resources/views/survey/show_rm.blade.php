@@ -5,22 +5,14 @@
     @include('layouts.partial.sidebar')
     <div class="col-md-9">
       <div class="nav-tabs-custom">
-        @include('layouts.partial.tabbar')
-
-        <div class="tab-content">
-            <div class="active tab-pane" id="activity">
-                @include('layouts.partial.activity')
-            </div><!-- /.tab-pane -->
-            <div class="tab-pane" id="timeline">
-                @include('layouts.partial.timeline')
-            </div><!-- /.tab-pane -->
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#settings" data-toggle="tab">A: Details of Basic Informations</a></li>
+        </ul>
+            @include('layouts.partial.settings')
         </div><!-- /.tab-content -->
       </div><!-- /.nav-tabs-custom -->
     </div><!-- /.col -->
 </div><!-- /.row -->
-<!-- Laravel Javascript Validation -->
- <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
- {!! $attachmentsValidationRules !!}
 @endsection
 @section('js')
 <script type="text/javascript">

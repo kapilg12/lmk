@@ -1,5 +1,5 @@
 
- @if(Auth::user()->ability(array('superadmin,devadmin,torrent'),array()))
+@if(Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('visitor'))
 <div class="form-group">
     {!! Form::label('WaterSupplyFromRIICOBill', trans('Water Supply From RIICO, if avaliable, take copy of last 3 bills  (Only JPG and PDF Extension File)'), array('class' => '')) !!}
     {!! Form::file('WaterSupplyFromRIICOBill[]',  array('multiple'=>true, 'id' => 'WaterSupplyFromRIICOBill', 'class' => 'form-control')) !!}
@@ -26,10 +26,13 @@
     <p class="errors">{!!$errors->first('site_layout_plan')!!}</p>
 </div>
 @endif
-@if(Auth::user()->ability(array('superadmin,devadmin'),array()))
+@if(Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('visitor'))
 <div class="form-group">
     {!! Form::label('attachgpxfile', trans('Attach GPX File (Only gpx Extension File)'), array('class' => '')) !!}
     {!! Form::file('attachgpxfile',  array('id' => 'attachgpxfile', 'class' => 'form-control')) !!}
     <p class="errors">{!!$errors->first('attachgpxfile')!!}</p>
 </div>
+@endif
+@if(Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('torrentadmin'))
+<input type="submit" name="submit" class="next btn btn-info" value="Submit" />
 @endif

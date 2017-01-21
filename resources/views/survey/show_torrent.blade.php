@@ -2,16 +2,18 @@
 @section('content')
 {{-- dump($ASurveys) --}}
 <div class="row">
-    @include('layouts.partial.sidebar')
-    <div class="col-md-9">
+    <div class="col-md-12">
       <div class="nav-tabs-custom">
-        @include('layouts.partial.tabbar')
-
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#activity" data-toggle="tab">B: Area Specification</a></li>
+            <li><a href="#timeline" data-toggle="tab">C: Details Of Water</a></li>
+        </ul>
         <div class="tab-content">
             <div class="active tab-pane" id="activity">
                 @include('layouts.partial.activity')
             </div><!-- /.tab-pane -->
             <div class="tab-pane" id="timeline">
+                <!-- The timeline -->
                 @include('layouts.partial.timeline')
             </div><!-- /.tab-pane -->
         </div><!-- /.tab-content -->
@@ -19,8 +21,8 @@
     </div><!-- /.col -->
 </div><!-- /.row -->
 <!-- Laravel Javascript Validation -->
- <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
- {!! $attachmentsValidationRules !!}
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+{!! $attachmentsValidationRules !!}
 @endsection
 @section('js')
 <script type="text/javascript">

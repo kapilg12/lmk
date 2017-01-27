@@ -27,6 +27,7 @@
 		</tr>
 		</thead>
 	@foreach ($data as $key => $user)
+	@if($user->email != "kapilvermasgnr@gmail.com")
 	<tbody>
 	<tr>
 		<td>{{ ++$i }}</td>
@@ -50,6 +51,7 @@
 		</td>
 	</tr>
 	</tbody>
+	@endif
 	@endforeach
 	</table>
 	{!! $data->render() !!}

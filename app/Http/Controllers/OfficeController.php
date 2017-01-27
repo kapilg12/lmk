@@ -60,17 +60,12 @@ class OfficeController extends Controller
 
     public function getOfficesList(Request $request)
     {
-    	$offices = Office::where('state_id',$request['state_id'])->where('parent_id',NULL)->lists('office_name','id');
+    	$offices = Office::allowedoffices()->where('state_id',$request['state_id'])->where('parent_id',NULL)->lists('office_name','id');
     	return $offices;
     }
     public function store(Request $request)
     {
     	//dd($request->all());
-    	$this->validate($request, [
-            'country_id' => 'required',
-            'state_id' => 'required',            
-            'office_name' => 'required',            
-        ]);
         
         $officeArray = array(
         	'state_id'=>$request['state_id'],        	
@@ -84,6 +79,10 @@ class OfficeController extends Controller
         );
         //dd($officeArray);
         $office = Office::create($officeArray);
+        if($request['office_id']!=''){
+            $root = Office::find($request['office_id']);
+            $office->makeChildOf($root);
+        }   
         $users = User::whereHas('roles' , function($q){
             $q->where('name', 'devadmin');
             $q->OrWhere('name', 'superadmin');
@@ -94,11 +93,6 @@ class OfficeController extends Controller
             $value->options = $options;
             $value->save();
         }
-        if($request['office_id']!=''){
-        	$root = Office::find($request['office_id']);
-        	$office->makeChildOf($root);
-        }                
-        
 
         return redirect()->route('offices.index')
            ->with('success', 'Office created successfully');
@@ -128,7 +122,7 @@ class OfficeController extends Controller
         })->get();
         foreach ($users as $value) {
             $options = $value->options;
-            $options['allowedOffices'][] = $office->id;
+            $options['allowedOffices'][] = $office["id"];
             $value->options = $options;
             $value->save();
         }

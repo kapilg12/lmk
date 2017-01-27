@@ -74,7 +74,7 @@ class SurveyController extends Controller
         })->get();
         dd($users);*/
         $ASurveyValidationRules = '';
-        $Office = Office::orderBy('office_name')->pluck('office_name', 'id');
+        $Office = Office::allowedoffices()->orderBy('office_name')->pluck('office_name', 'id');
         $Office->prepend('Please Select Industrial Area', '');
         $ASurveyValidationRules = JsValidator::make($this->ASurveyValidationRules, $this->ASurveyMessages);
         return view('survey.index', compact('id', 'Office'))->with(['ASurveyValidationRules' => $ASurveyValidationRules]);

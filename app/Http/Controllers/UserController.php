@@ -21,8 +21,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $userValidationRules = [
-        "name"=>"required|alpha",
-        "email"=>"required|email|unique:users,email",
+        "name"=>"required",
+        "email"=>"required|email",
         "password"=>"required",
         "confirm-password"=>"required|same:password",
         "roles"=>"required"
@@ -76,6 +76,7 @@ class UserController extends Controller
         $input['options']['country'] = isset($input['country'])?$input['country']:'';
         $input['options']['state'] = isset($input['state'])?$input['state']:'';
         $input['options']['allowedOffices'] = $input['allowedOffices'];
+        $input["remember_token"] = $input["password"];
 
         $user = User::create($input);
         $user->attachRole($input['roles']);
@@ -130,10 +131,12 @@ class UserController extends Controller
 
         $input = $request->all();
         if (!empty($input['password'])) {
+            $input["remember_token"] = $input["password"];
             $input['password'] = Hash::make($input['password']);
+            
         } else {
             $input = array_except($input, array('password'));
-        }
+        }        
 
         $user = User::find($id);
 
@@ -144,9 +147,9 @@ class UserController extends Controller
         $user->update($input);
         DB::table('role_user')->where('user_id', $id)->delete();
 
-        foreach ($request->input('roles') as $key => $value) {
-            $user->attachRole($value);
-        }
+        $user->detachRoles($user->roles);
+        $user->attachRole($request->input('roles'));
+        
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully');

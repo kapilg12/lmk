@@ -68,20 +68,20 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::patch('roles/{id}', ['as' => 'roles.update', 'uses' => 'RoleController@update', 'middleware' => ['permission:role-edit']]);
     Route::delete('roles/{id}', ['as' => 'roles.destroy', 'uses' => 'RoleController@destroy', 'middleware' => ['permission:role-delete']]);
 
-    Route::get('audit', 'SurveyController@getSurvey');
-    Route::post('audit', 'SurveyController@postSurvey');
-    Route::get('audit/step/{step}', 'SurveyController@getSurveyStep')->where(['step' => '[2-4]']);
-    Route::post('audit/step/{step}', 'SurveyController@postSurveyStep')->where(['step' => '[2-4]']);
-    Route::get('audit/done', 'SurveyController@getSurveyDone');
-    Route::get('audit/failed', 'SurveyController@getSurveyNotApplied');
-    Route::get('dashboard', 'SurveyController@getDashboard');
-    Route::get('audit/show/{id}', 'SurveyController@show');
-    Route::post('audit/upload', 'SurveyController@postShow');
+    Route::get('audit', ["uses"=>'SurveyController@getSurvey',"middleware"=>["permission:audit-list"]]);
+    Route::post('audit', ["uses"=>'SurveyController@postSurvey']);
+    Route::get('audit/step/{step}', ["uses"=>'SurveyController@getSurveyStep'])->where(['step' => '[2-4]']);
+    Route::post('audit/step/{step}', ["uses"=>'SurveyController@postSurveyStep'])->where(['step' => '[2-4]']);
+    Route::get('audit/done', ["uses"=>'SurveyController@getSurveyDone']);
+    Route::get('audit/failed', ["uses"=>'SurveyController@getSurveyNotApplied']);
+    Route::get('dashboard', ["uses"=>'SurveyController@getDashboard']);
+    Route::get('audit/show/{id}', ["uses"=>'SurveyController@show']);
+    Route::post('audit/upload', ["uses"=>'SurveyController@postShow']);
     Route::get('audit/{id}/edit', ['as' => 'survey.edit', 'uses' => 'SurveyController@edit']);
-    Route::patch('audit/update', 'SurveyController@update');
-    Route::get('audit/editstep/{step}', 'SurveyController@getSurveyStepEdit')->where(['step' => '[2-4]']);
-    Route::patch('audit/updatestep/{step}', 'SurveyController@getSurveyStepUpdate')->where(['step' => '[2-4]']);
-    //Route::resource('audit', 'SurveyController');
+    Route::patch('audit/update', ["uses"=>'SurveyController@update']);
+    Route::get('audit/editstep/{step}', ["uses"=>'SurveyController@getSurveyStepEdit'])->where(['step' => '[2-4]']);
+    Route::patch('audit/updatestep/{step}', ["uses"=>'SurveyController@getSurveyStepUpdate'])->where(['step' => '[2-4]']);
+    //Route::resource('audit', '["uses"=>'SurveyController');
     Route::post('audit/changeStatus
         ', ['as' => 'survey.changeStatus', 'uses' => 'SurveyController@changeStatus', 'middleware' => ['role:superadmin|devadmin']]);
     Route::post("audit/assignUsers",["as"=>"survey.assignUsers","uses"=>"SurveyController@assignUsers","middleware"=>["role:superadmin|devadmin"]]);

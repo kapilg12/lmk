@@ -16,9 +16,7 @@ class DatabaseSeeder extends Seeder
         
         $this->call(RoleSeed::class);
         
-        $this->call(UserSeeder::class);
-
-        $this->call(ASurverysTableSeeder::class);        
+        $this->call(UserSeeder::class);      
         
         //Model::guard();
     }

@@ -29,15 +29,16 @@ class RoleSeed extends Seeder
             'name'=>'torrentadmin',
             'display_name'=>'Torrent Administrator',
             'description'=>'Torrent Administrator'
-            ]
+            ]            
         ]);
 
         $roleID = DB::table('roles')->select('id','name')->get();
         $permissions = DB::table('permissions')->select('id','name')->get();
-        $excludeArray = array('role-list','role-create','role-edit','role-delete','role-show');
+        $excludePermissionArray = array('role-list','role-create','role-edit','role-delete','role-show');
+        $excludeRoleArray = array("superadmin","torrentadmin");
         foreach ($roleID as $key => $RoleValue) {
             foreach ($permissions as $key => $value) {
-                if($RoleValue->name=='superadmin' && in_array($value->name,$excludeArray))
+                if(in_array($RoleValue->name, $excludeRoleArray) && in_array($value->name,$excludePermissionArray))
                     continue;
                 DB::table('permission_role')->insert([
                     'permission_id'=>$value->id,

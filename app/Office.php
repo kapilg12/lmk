@@ -53,7 +53,7 @@ class Office extends Baum\Node
     	return $this->belongsTo('App\State','state_id');
     }
 
-    public function scopeActive($query){
-        return $query->where('is_active',1);
+    public function scopeAllowedoffices($query){
+        return $query->whereIn('id', Auth::user()->options['allowedOffices']);
     }
 }

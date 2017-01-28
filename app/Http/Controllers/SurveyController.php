@@ -803,7 +803,6 @@ class SurveyController extends Controller
             }
 
             $a_survey_id = Session::get('a_survey_id');
-dd($ASurveys);
             if (isset($ASurveys->bsurveys) && $ASurveys->bsurveys != null) {
                 return view('survey.edit_step_' . $step, ['step' => $step, 'a_survey_id' => $a_survey_id, 'ASurveys' => $ASurveys, 'bsgwaterArr' => $bsgwaterArr, 'conesurveys' => $conesurveys, 'ctwosurveys' => $ctwosurveys])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
             } else {

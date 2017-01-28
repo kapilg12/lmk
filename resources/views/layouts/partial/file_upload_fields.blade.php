@@ -26,7 +26,7 @@
     <p class="errors">{!!$errors->first('site_layout_plan')!!}</p>
 </div>
 @endif
-@if(Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('visitor'))
+@if(Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('auditor'))
 <div class="form-group">
     {!! Form::label('attachgpxfile', trans('Attach GPX File (Only gpx Extension File)'), array('class' => '')) !!}
     {!! Form::file('attachgpxfile',  array('id' => 'attachgpxfile', 'class' => 'form-control')) !!}

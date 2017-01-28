@@ -67,19 +67,20 @@
             <h3>Average Annual Rainfall :</h3>
             <div class="form-group">
                 {!! Form::label('average_annual_rainfall', trans('average annual rainfall'), array('class' => '')) !!}
-                {!! Form::text('average_annual_rainfall', null, array('id' => 'average_annual_rainfall', 'class' => 'form-control', 'placeholder' => trans('average annual rainfall'), 'title' => trans('average annual rainfall'))) !!}
+                {!! Form::text('average_annual_rainfall', $ASurveys->bsurveys->average_annual_rainfall, array('id' => 'average_annual_rainfall', 'class' => 'form-control', 'placeholder' => trans('average annual rainfall'), 'title' => trans('average annual rainfall'))) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('number_of_rainy_day', trans('number of rainy day'), array('class' => '')) !!}
-                {!! Form::text('number_of_rainy_day', null, array('id' => 'number_of_rainy_day', 'class' => 'form-control', 'placeholder' => trans('number of rainy day'), 'title' => trans('number of rainy day'))) !!}
+                {!! Form::text('number_of_rainy_day', $ASurveys->bsurveys->number_of_rainy_day, array('id' => 'number_of_rainy_day', 'class' => 'form-control', 'placeholder' => trans('number of rainy day'), 'title' => trans('number of rainy day'))) !!}
             </div>
         </fieldset>
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <h3>Nature :</h3>
             <div class="form-group">
                 {!! Form::label('nature_of_aquifer', trans('nature of aquifer'), array('class' => '')) !!}
+                 {{--*/ $nature_of_aquifer = explode(',', $ASurveys->bsurveys->nature_of_aquifer); /*--}}
                 {!! Form::select('nature_of_aquifer', [ '' => 'Please Select Nature of
-                Aquifer', 'impermeable-area' => 'Impermeable Area','non_porous_area' => 'NON Porous Area', 'hard_rock_area' => 'Hard Rock Area', 'alluvial_area' => 'Alluvial Area'], array($ASurveys->bsurveys->nature_of_aquifer), array('multiple' => true,'id' => 'nature_of_aquifer', 'class' => 'form-control')) !!}
+                Aquifer', 'impermeable-area' => 'Impermeable Area','non_porous_area' => 'NON Porous Area', 'hard_rock_area' => 'Hard Rock Area', 'alluvial_area' => 'Alluvial Area'], $nature_of_aquifer, array('multiple' => true,'id' => 'nature_of_aquifer', 'class' => 'form-control')) !!}
             </div>
             <div class="form-group">
                 {{--*/ $a = explode(',', $ASurveys->bsurveys->nature_of_terrain); /*--}}

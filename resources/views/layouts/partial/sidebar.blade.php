@@ -1,4 +1,4 @@
-<div class="col-md-3">
+
         <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
@@ -19,25 +19,25 @@
                   <a class="pull-right">{{ $ASurveys->nature_of_establishment }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Email</b> <a class="pull-right">{{ $ASurveys->email }}</a>
+                  <b>Email</b> <br><a class="pull-right">{{ $ASurveys->email }}</a>
                 </li>
                 <li class="list-group-item">
                   <b>Website</b> <a class="pull-right">{{ $ASurveys->website }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Is Applied</b> <a class="pull-right">@if($ASurveys->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label-warning">Not Applied</span> @endif</a>
+                  <b>Is Applied</b> <a class="pull-right">@if($ASurveys->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-warning">Not Applied</span> @endif</a>
                 </li>
                  <li class="list-group-item">
-                  <b>Is Active</b> <a class="pull-right">@if($ASurveys->is_active == '1') <span class="label label-success">Active</span> @else <span class="label-warning"> Pending</span> @endif</a>
+                  <b>Is Active</b> <a class="pull-right">@if($ASurveys->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning"> Pending</span> @endif</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Is Approved</b> <a class="pull-right">@if($ASurveys->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label-warning"> Pending</span> @endif</a>
+                  <b>Is Approved</b> <a class="pull-right">@if($ASurveys->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning"> Pending</span> @endif</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Is Completed</b> <a class="pull-right">@if($ASurveys->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label-warning"> Pending</span> @endif</a>
+                  <b>Is Completed</b> <a class="pull-right">@if($ASurveys->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning"> Pending</span> @endif</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Is Certified</b> <a class="pull-right">@if($ASurveys->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label-warning"> Pending</span> @endif</a>
+                  <b>Is Certified</b> <a class="pull-right">@if($ASurveys->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning"> Pending</span> @endif</a>
                 </li>
 
               </ul>
@@ -62,4 +62,4 @@
             </div><!-- /.box-body -->
           </div><!-- /.box -->
 
-    </div><!-- /.col -->
+

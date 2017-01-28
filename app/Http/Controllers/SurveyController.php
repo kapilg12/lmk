@@ -712,7 +712,8 @@ class SurveyController extends Controller
         $ASurvey->update($input);
         $a_survey_id = $ASurvey['id'];
         Session::put('a_survey_id', $a_survey_id);
-        return redirect()->action('SurveyController@getSurveyStepEdit', ['step' => 2]);
+        //return redirect()->action('SurveyController@getSurveyStepEdit', ['step' => 2]);
+        return redirect("/audit/editstep/2");
     }
 
     public function getSurveyStepEdit(Request $request, $step)
@@ -802,7 +803,7 @@ class SurveyController extends Controller
             }
 
             $a_survey_id = Session::get('a_survey_id');
-
+dd($ASurveys);
             if (isset($ASurveys->bsurveys) && $ASurveys->bsurveys != null) {
                 return view('survey.edit_step_' . $step, ['step' => $step, 'a_survey_id' => $a_survey_id, 'ASurveys' => $ASurveys, 'bsgwaterArr' => $bsgwaterArr, 'conesurveys' => $conesurveys, 'ctwosurveys' => $ctwosurveys])->with(['BSurveyValidationRules' => $BSurveyValidationRules]);
             } else {

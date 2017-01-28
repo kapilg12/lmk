@@ -52,7 +52,7 @@
                             <td>
                                 @if(Auth::user()->ability(array('torrentadmin'),array()))
                                     @if(isset($ASurvey->bsurveys['id']) && !empty($ASurvey->bsurveys['id']))
-                                     <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->bsurveys['id']) }}"><strong><i class="fa fa-eye"></i></strong></a>
+                                     <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
                                     @else
                                         <a class="btn btn-primary btn-sm" href="javascript:void(0);">Audit Not Completed</a>
                                     @endif

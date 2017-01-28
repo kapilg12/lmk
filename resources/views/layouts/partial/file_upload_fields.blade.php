@@ -1,5 +1,5 @@
 
-@if(Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('visitor'))
+@if(Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin') || Auth::user()->hasRole('auditor') || Auth::user()->hasRole('superadmin'))
 <div class="form-group">
     {!! Form::label('WaterSupplyFromRIICOBill', trans('Water Supply From RIICO, if avaliable, take copy of last 3 bills  (Only JPG and PDF Extension File)'), array('class' => '')) !!}
     {!! Form::file('WaterSupplyFromRIICOBill[]',  array('multiple'=>true, 'id' => 'WaterSupplyFromRIICOBill', 'class' => 'form-control')) !!}

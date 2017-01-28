@@ -6,6 +6,7 @@
 
     <h4>Step 3:- Data Sheet for Medium / Large Scale Industries and WATER Instensive Inds</h4>
     {!! Form::open() !!}
+    
         <fieldset  style="border: 1px solid #ccc;border-radius: 4px;padding: 20px;margin-bottom: 5px;">
             <div class="set1">
                 <div class="form-group">

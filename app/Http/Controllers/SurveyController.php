@@ -51,19 +51,19 @@ class SurveyController extends Controller
         'green_belt_area' => 'required',
         'open_land' => 'required',
         'GPSCoordinate_waypoint_plot' => 'required',
-        'area_location' => 'mimes:jpeg,jpg,pdf',
+        /*'area_location' => 'mimes:jpeg,jpg,pdf',
         'sources_sw_gw' => 'mimes:jpeg,jpg,pdf',
         'existing_rwh_structure' => 'mimes:jpeg,jpg,pdf,doc,docx',
         'site_layout_plan' => 'mimes:jpeg,jpg,pdf',
-        'attachgpxfile' => 'mimes:gpx',
+        'attachgpxfile' => 'mimes:gpx',*/
     ];
 
     protected $AttachmentValidationRules = [
-        'area_location' => 'mimes:jpeg,jpg,pdf',
+        /*'area_location' => 'mimes:jpeg,jpg,pdf',
         'sources_sw_gw' => 'mimes:jpeg,jpg,pdf',
         'existing_rwh_structure' => 'mimes:jpeg,jpg,pdf,doc,docx',
         'site_layout_plan' => 'mimes:jpeg,jpg,pdf',
-        'attachgpxfile' => 'mimes:gpx',
+        'attachgpxfile' => 'mimes:gpx',*/
     ];
 
     public function getSurvey()
@@ -88,7 +88,7 @@ class SurveyController extends Controller
             return redirect()->back()->withErrors($v->errors());
         }
         $input['user_id'] = Auth::user()->id;
-        $input['torrent_id'] = 3;
+        //$input['torrent_id'] = 0;
         $input['is_active'] = 1;
         $ASurvey = ASurvey::create($input);
         if ($input['is_applied'] == 0) {
@@ -826,9 +826,10 @@ class SurveyController extends Controller
                 if ($v->fails()) {
                     return redirect()->back()->withErrors($v->errors());
                 }
-                $id = $input['id'];
+                $b_survey_id=$id = $input['id'];
+
                 //$b = BSurvey::find($id);
-                BSgWater::where('id', $id)->where('a_survey_id', $a_survey_id)->update(['is_active' => 0]);
+                BSurvey::where('a_survey_id', $a_survey_id)->update(['is_active' => 0]);
                 $BSurvey['a_survey_id'] = $a_survey_id;
                 $BSurvey['total_land_area'] = $input['total_land_area'];
                 $BSurvey['total_land_area'] = $input['total_land_area'];

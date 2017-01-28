@@ -210,6 +210,7 @@ class SurveyController extends Controller
                         }
                     }
                 }
+                $GPSCoordinateWaypointTubewellArr = array();
                 if (isset($input['GPSCoordinate_waypoint_tubewell']) && !empty($input['GPSCoordinate_waypoint_tubewell'])) {
                     $GPSCoordinateWaypointTubewellArr = explode(',', $input['GPSCoordinate_waypoint_tubewell']);
                     if (is_array($GPSCoordinateWaypointTubewellArr)) {
@@ -228,7 +229,10 @@ class SurveyController extends Controller
                             ++$t;
                         }
                     }
+                } else {
+                    $GpscoordinateTubewell = array();
                 }
+
                 $GPSCoordinateWaypointArr = array_merge($GPSCoordinateWaypointPlotArr, $GPSCoordinateWaypointTubewellArr);
                 $Gpscoordinate = array_merge($GpscoordinatePlot, $GpscoordinateTubewell);
                 Gpscoordinate::insert($Gpscoordinate);
@@ -841,6 +845,7 @@ class SurveyController extends Controller
                         }
                     }
                 }
+                $GPSCoordinateWaypointTubewellArr = array();
                 if (isset($input['GPSCoordinate_waypoint_tubewell']) && !empty($input['GPSCoordinate_waypoint_tubewell'])) {
                     $GPSCoordinateWaypointTubewellArr = explode(',', $input['GPSCoordinate_waypoint_tubewell']);
                     if (is_array($GPSCoordinateWaypointTubewellArr)) {

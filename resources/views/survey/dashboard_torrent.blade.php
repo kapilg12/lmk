@@ -9,14 +9,6 @@
             <div class="col-md-8">
                 <h4><span style="text-transform: capitalize;">{{Auth::user()->name}}</span>: Welcome to your Dashboard Panel</h4>
             </div>
-
-            <div class="col-md-4">
-                <div class="pull-right">
-                    @if(Auth::user()->ability(array('rm','superadmin','devadmin'),array()))
-                        <a class="btn btn-success" href="{{ url('/audit') }}"> Create New Audit</a>
-                    @endif
-                </div>
-            </div>
         </div>
         <div class="box">
             <div class="box-header">

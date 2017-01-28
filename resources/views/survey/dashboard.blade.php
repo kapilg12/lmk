@@ -12,9 +12,7 @@
 
             <div class="col-md-4">
                 <div class="pull-right">
-                    @if(Auth::user()->ability(array('devadmin',"auditor"),array("audit-create")))
-                        <a class="btn btn-success" href="{{ url('/audit') }}"> Create New Audit</a>
-                    @endif
+                    <a class="btn btn-success" href="{{ url('/audit') }}"> Create New Audit</a>
                 </div>
             </div>
         </div>

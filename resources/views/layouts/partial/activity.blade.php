@@ -236,10 +236,10 @@
                           <td>{{++$i}}</td>
                           <td class="center">{{$attachment->display_name}}</a>
                            </td>
-                           <td class="center"><a href="{!! asset('uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a>
+                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a>
                            </td>
                            <td class="center">{{$attachment->comment}}</td>
-                           <td class="center"><a href="{!! asset('uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a>
+                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a>
                            </td>
                         </tr>
                     @endforeach

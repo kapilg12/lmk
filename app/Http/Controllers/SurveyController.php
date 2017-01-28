@@ -491,6 +491,13 @@ class SurveyController extends Controller
         $a_survey_id = $input['a_survey_id'];
         $b_survey_id = $input['b_survey_id'];
         // checking file is valid.
+        $finalFileUploadArr = array();
+       $WaterSupplyFromRIICOBillArr = array();
+       $AreaLocationArr = array();
+       $SourcesSWGWArr = array();
+       $ExistingRWHStructureArr = array();
+       $SiteLayoutPlanArr = array();
+       $GPXFileArr = array();
         if (isset($input['WaterSupplyFromRIICOBill']) && !empty($input['WaterSupplyFromRIICOBill']) && !is_null($input['WaterSupplyFromRIICOBill'][0])) {
             $WaterSupplyFromRIICOBillArr = $this->multipleUpload($input['WaterSupplyFromRIICOBill'], 'WaterSupplyFromRIICOBill', $a_survey_id, $b_survey_id, $user['id']);
         }

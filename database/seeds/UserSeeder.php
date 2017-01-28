@@ -35,6 +35,13 @@ class UserSeeder extends Seeder
             'email' => 'torrent@bhujalsanrakshan.com',
             'password' => '$2y$10$zJZ8uhgC6Zqa9EhlnDtc0.h2gjQpM4rKmVdy60CrSQDlNkZ1kizKq',
             'remember_token' => 'helloAdmin',
+        ],
+        [
+            'id' => 4,
+            'name' => 'Auditor',
+            'email' => 'auditor@bhujalsanrakshan.com',
+            'password' => '$2y$10$zJZ8uhgC6Zqa9EhlnDtc0.h2gjQpM4rKmVdy60CrSQDlNkZ1kizKq',
+            'remember_token' => 'helloAdmin',
         ]
         ]);
         DB::table('role_user')->insert(
@@ -50,6 +57,10 @@ class UserSeeder extends Seeder
         [
             'user_id' => 3,
             'role_id' => 3
+        ],
+        [
+            'user_id' => 4,
+            'role_id' => 4
         ]
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1');

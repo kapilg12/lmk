@@ -10,13 +10,6 @@
                 <h4><span style="text-transform: capitalize;">{{Auth::user()->name}}</span>: Welcome to your Dashboard Panel</h4>
             </div>
 
-            <div class="col-md-4">
-                <div class="pull-right">
-                    @if(Auth::user()->ability(array('rm','superadmin','devadmin'),array()))
-                        <a class="btn btn-success" href="{{ url('/audit') }}"> Create New Audit</a>
-                    @endif
-                </div>
-            </div>
         </div>
         <div class="box">
             <div class="box-header">
@@ -49,9 +42,6 @@
                             <td>{{ $ASurvey->postel_address }}</td>
                             <td>@if($ASurvey->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-danger">Not Applied</span> @endif</td>
                             <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
-                            <!--<td>@if($ASurvey->is_approved == '1') <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif</td>
-                            <td>@if($ASurvey->is_completed == '1') <span class="label label-success">Completed</span> @else <span class="label label-warning">Pending</span> @endif</td>
-                            <td>@if($ASurvey->is_certified == '1') <span class="label label-success">Certified</span> @else <span class="label label-warning">Pending</span> @endif</td>-->
                             <td>
                              @if(Auth::user()->ability(array('superadmin','devadmin'),array()))
                                     <div class="btn-group">
@@ -59,7 +49,7 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            @foreach($users as $value=>$key)
+                                            @foreach($assignUsers as $value=>$key)
                                           <li><a href="#" onclick="assignUsers('{{$key}}','{{$ASurvey->id}}')">{{$value}}</a></li>
                                           @endforeach
                                         </ul>

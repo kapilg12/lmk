@@ -689,7 +689,7 @@ class SurveyController extends Controller
                 $BSurvey['water_supply_from_RIICO'] = '';
                 $BSurvey = BSurvey::create($BSurvey);
                 //$new_survey_id = $BSurvey->id;
-                BSurvey::where('a_survey_id', $a_survey_id)->where('is_active', 1)->update(['b_survey_id' => $id]);
+                BSurvey::where('a_survey_id', $a_survey_id)->where('is_active', 1)->update(['id' => $id]);
 
                 $this->auditLog($a_survey_id, 'b_audit_updated', 'b_survery table data updated.');
                 BSgWater::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);

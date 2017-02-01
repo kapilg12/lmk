@@ -49,7 +49,7 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            @foreach($assignUsers as $value=>$key)
+                                            @foreach($users as $value=>$key)
                                           <li><a href="#" onclick="assignUsers('{{$key}}','{{$ASurvey->id}}')">{{$value}}</a></li>
                                           @endforeach
                                         </ul>

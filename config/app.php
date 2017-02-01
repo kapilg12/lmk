@@ -159,7 +159,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Baum\Providers\BaumServiceProvider::class,
         Proengsoft\JsValidation\JsValidationServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
+        #Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
 
@@ -210,7 +210,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        #'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
     ],
 

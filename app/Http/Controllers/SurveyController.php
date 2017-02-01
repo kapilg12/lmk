@@ -688,15 +688,14 @@ class SurveyController extends Controller
                 $BSurvey['source_of_availability_of_surface_water'] = $input['source_of_availability_of_surface_water'];
                 $BSurvey['water_supply_from_RIICO'] = '';
                 $BSurvey = BSurvey::create($BSurvey);
-                //$new_survey_id = $BSurvey->id;
-                BSurvey::where('a_survey_id', $a_survey_id)->where('is_active', 1)->update(['id' => $id]);
-
+                $new_survey_id = $BSurvey->id;
+ 
                 $this->auditLog($a_survey_id, 'b_audit_updated', 'b_survery table data updated.');
                 BSgWater::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);
                 $BSgWater = array();
                 foreach ($input['tubewell_borewell'] as $key => $value) {
                     $BSgWater[$key]['a_survey_id'] = $a_survey_id;
-                    $BSgWater[$key]['b_survey_id'] = $id;
+                    $BSgWater[$key]['b_survey_id'] = $new_survey_id;
                     $BSgWater[$key]['tubewell_borewell'] = $input['tubewell_borewell'][$key];
                     $BSgWater[$key]['depth_of_s_pump'] = $input['depth_of_s_pump'][$key];
                     $BSgWater[$key]['current_water_abstraction'] = $input['current_water_abstraction'][$key];
@@ -718,7 +717,7 @@ class SurveyController extends Controller
                     if (is_array($GPSCoordinateWaypointPlotArr)) {
                         foreach ($GPSCoordinateWaypointPlotArr as $GPSCoordinateWaypoint) {
                             $GpscoordinatePlot[$i]['a_survey_id'] = $a_survey_id;
-                            $GpscoordinatePlot[$i]['b_survey_id'] = $id;
+                            $GpscoordinatePlot[$i]['b_survey_id'] = $new_survey_id;
                             $GpscoordinatePlot[$i]['GPSCoordinate_area'] = 'Plot';
                             $GpscoordinatePlot[$i]['GPSCoordinate_type'] = 'Plot';
                             $GpscoordinatePlot[$i]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
@@ -738,7 +737,7 @@ class SurveyController extends Controller
                     if (is_array($GPSCoordinateWaypointTubewellArr)) {
                         foreach ($GPSCoordinateWaypointTubewellArr as $GPSCoordinateWaypoint) {
                             $GpscoordinateTubewell[$t]['a_survey_id'] = $a_survey_id;
-                            $GpscoordinateTubewell[$t]['b_survey_id'] = $id;
+                            $GpscoordinateTubewell[$t]['b_survey_id'] = $new_survey_id;
                             $GpscoordinateTubewell[$t]['GPSCoordinate_area'] = 'Tubewell';
                             $GpscoordinateTubewell[$t]['GPSCoordinate_type'] = 'Tubewell';
                             $GpscoordinateTubewell[$t]['GPSCoordinate_point'] = $GPSCoordinateWaypoint;
@@ -768,22 +767,23 @@ class SurveyController extends Controller
                 $GPXFileArr = array();
 
                 // checking file is valid.
+                BAttachment::where('a_survey_id', $a_survey_id)->where('b_survey_id', $b_survey_id)->update(['b_survey_id' => $new_survey_id]);
 
                 if (isset($input['WaterSupplyFromRIICOBill']) && !empty($input['WaterSupplyFromRIICOBill']) && !is_null($input['WaterSupplyFromRIICOBill'][0])) {
-                    $WaterSupplyFromRIICOBillArr = $this->multipleUpload($input['WaterSupplyFromRIICOBill'], 'WaterSupplyFromRIICOBill', $a_survey_id, $b_survey_id, $user['id']);
+                    $WaterSupplyFromRIICOBillArr = $this->multipleUpload($input['WaterSupplyFromRIICOBill'], 'WaterSupplyFromRIICOBill', $a_survey_id, $new_survey_id, $user['id']);
                 }
 
                 if (isset($input['area_location']) && !empty($input['area_location']) && !is_null($input['area_location'][0])) {
-                    $AreaLocationArr = $this->multipleUpload($input['area_location'], 'area_location', $a_survey_id, $b_survey_id, $user['id']);
+                    $AreaLocationArr = $this->multipleUpload($input['area_location'], 'area_location', $a_survey_id, $new_survey_id, $user['id']);
                 }
                 if (isset($input['sources_sw_gw']) && !empty($input['sources_sw_gw']) && !is_null($input['sources_sw_gw'][0])) {
-                    $SourcesSWGWArr = $this->multipleUpload($input['sources_sw_gw'], 'sources_sw_gw', $a_survey_id, $b_survey_id, $user['id']);
+                    $SourcesSWGWArr = $this->multipleUpload($input['sources_sw_gw'], 'sources_sw_gw', $a_survey_id, $new_survey_id, $user['id']);
                 }
                 if (isset($input['existing_rwh_structure']) && !empty($input['existing_rwh_structure']) && !is_null($input['existing_rwh_structure'][0])) {
-                    $ExistingRWHStructureArr = $this->multipleUpload($input['existing_rwh_structure'], 'existing_rwh_structure', $a_survey_id, $b_survey_id, $user['id']);
+                    $ExistingRWHStructureArr = $this->multipleUpload($input['existing_rwh_structure'], 'existing_rwh_structure', $a_survey_id, $new_survey_id, $user['id']);
                 }
                 if (isset($input['site_layout_plan']) && !empty($input['site_layout_plan']) && !is_null($input['site_layout_plan'][0])) {
-                    $SiteLayoutPlanArr = $this->multipleUpload($input['site_layout_plan'], 'site_layout_plan', $a_survey_id, $b_survey_id, $user['id']);
+                    $SiteLayoutPlanArr = $this->multipleUpload($input['site_layout_plan'], 'site_layout_plan', $a_survey_id, $new_survey_id, $user['id']);
                 }
                 $finalFileUploadArr = array_merge($WaterSupplyFromRIICOBillArr, $AreaLocationArr, $SourcesSWGWArr, $ExistingRWHStructureArr, $SiteLayoutPlanArr);
                 if (!empty($finalFileUploadArr)) {
@@ -791,7 +791,7 @@ class SurveyController extends Controller
                 }
 
                 if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
-                    $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+                    $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $new_survey_id, $user['id'], $GPSCoordinateWaypointArr);
                     //$GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
                     //BAttachment::create($GPXFileArr);
                 }

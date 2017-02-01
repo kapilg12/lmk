@@ -30,7 +30,7 @@ class SurveyController extends Controller
     protected $ASurveyValidationRules = [
         'office_id' => 'required',
         'allow_area' => 'required|numeric',
-        'establishment_name' => 'required|alpha_spaces',
+        'establishment_name' => 'required',
         'postel_address' => 'required',
         'pin_code' => 'required|digits_between:6,8',
         'nature_of_establishment' => 'required',
@@ -271,8 +271,11 @@ class SurveyController extends Controller
                 }
 
                 if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
-                    $GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
-                    BAttachment::create($GPXFileArr);
+                    $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+                    //$GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+
+                    //dd($GPXFileArr);
+                    //BAttachment::create($GPXFileArr);
                 }
                 break;
             case 3:
@@ -459,112 +462,12 @@ class SurveyController extends Controller
             $GPSCoordinateWaypointArr = explode(',', $input['GPSCoordinate_points']);
         }
         if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
-            $GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
-            BAttachment::create($GPXFileArr);
+            $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+            //$GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+            //BAttachment::create($GPXFileArr);
         }
         return redirect('/audit/show/' . $a_survey_id);
-        /*if (isset($input['area_location'])) {
-    if ($input['area_location']->isValid()) {
-    $destinationPath = 'uploads'; // upload path
-    $extension = $input['area_location']->getClientOriginalExtension(); // getting image extension
-    $orgfileName = $input['area_location']->getClientOriginalName(); // getting image getClientOriginalName
-    $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-    $input['area_location']->move($destinationPath, $fileName); // uploading file to given path
-
-    // sending back with message
-    if (file_exists(public_path() . '/uploads/' . $fileName)) {
-    $attachmentArr['area_location'] = $fileName;
-    Session::flash('success', 'Upload successfully');
-    } else {
-    Session::flash('failed', 'Not Uploaded');
-    }
-    } else {
-    // sending back with error message.
-    Session::flash('error', 'uploaded file is not valid');
-    }
-    }
-    if (isset($input['sources_sw_gw'])) {
-    if ($input['sources_sw_gw']->isValid()) {
-    $destinationPath = 'uploads'; // upload path
-    $extension = $input['sources_sw_gw']->getClientOriginalExtension(); // getting image extension
-    $orgfileName = $input['sources_sw_gw']->getClientOriginalName(); // getting image getClientOriginalName
-    $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-    $input['sources_sw_gw']->move($destinationPath, $fileName); // uploading file to given path
-    // sending back with message
-    if (file_exists(public_path() . '/uploads/' . $fileName)) {
-    $attachmentArr['sources_sw_gw'] = $fileName;
-    Session::flash('success', 'Upload successfully');
-    } else {
-    Session::flash('failed', 'Not Uploaded');
-    }
-    } else {
-    // sending back with error message.
-    Session::flash('error', 'uploaded file is not valid');
-    }
-    }
-    if (isset($input['existing_rwh_structure'])) {
-    if ($input['existing_rwh_structure']->isValid()) {
-    $destinationPath = 'uploads'; // upload path
-    $extension = $input['existing_rwh_structure']->getClientOriginalExtension(); // getting image extension
-    $orgfileName = $input['existing_rwh_structure']->getClientOriginalName(); // getting image getClientOriginalName
-    $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-    $input['existing_rwh_structure']->move($destinationPath, $fileName); // uploading file to given path
-    // sending back with message
-    if (file_exists(public_path() . '/uploads/' . $fileName)) {
-    $attachmentArr['existing_rwh_structure'] = $fileName;
-    Session::flash('success', 'Upload successfully');
-    } else {
-    Session::flash('failed', 'Not Uploaded');
-    }
-    } else {
-    // sending back with error message.
-    Session::flash('error', 'uploaded file is not valid');
-    }
-    }
-    if (isset($input['site_layout_plan'])) {
-    if ($input['site_layout_plan']->isValid()) {
-    $destinationPath = 'uploads'; // upload path
-    $extension = $input['site_layout_plan']->getClientOriginalExtension(); // getting image extension
-    $orgfileName = $input['site_layout_plan']->getClientOriginalName(); // getting image getClientOriginalName
-    $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-    $input['site_layout_plan']->move($destinationPath, $fileName); // uploading file to given path
-    // sending back with message
-    if (file_exists(public_path() . '/uploads/' . $fileName)) {
-    $attachmentArr['site_layout_plan'] = $fileName;
-    Session::flash('success', 'Upload successfully');
-    } else {
-    Session::flash('failed', 'Not Uploaded');
-    }
-    } else {
-    // sending back with error message.
-    Session::flash('error', 'uploaded file is not valid');
-    }
-    }
-    if (isset($input['attachgpxfile'])) {
-    if ($input['attachgpxfile']->isValid()) {
-    $destinationPath = 'uploads'; // upload path
-    $extension = $input['attachgpxfile']->getClientOriginalExtension(); // getting image extension
-    $orgfileName = $input['attachgpxfile']->getClientOriginalName(); // getting image getClientOriginalName
-    $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-    $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
-    // sending back with message
-    if (file_exists(public_path() . '/uploads/' . $fileName)) {
-    $attachmentArr['attachgpxfile'] = $fileName;
-    $GPSCoordinate_points = explode(',', $input['GPSCoordinate_points']);
-    $this->getLatLogFromXML($fileName, $GPSCoordinate_points, $a_survey_id);
-    Session::flash('success', 'Upload successfully');
-    } else {
-    Session::flash('failed', 'Not Uploaded');
-    }
-    } else {
-    // sending back with error message.
-    Session::flash('error', 'uploaded file is not valid');
-    }
-    }
-    $attachmentArr['created_at'] = date('Y-m-d H:i:s');
-    $attachmentArr['updated_at'] = date('Y-m-d H:i:s');
-    BAttachment::create($attachmentArr);
-    return redirect('/audit/show/' . $a_survey_id); */
+       
     }
 
     public function changeStatus(Request $request)
@@ -609,25 +512,7 @@ class SurveyController extends Controller
             return view('layouts.partial.access_nav', compact('ASurveys'));
         }
     }
-    private function getLatLogFromXML($fileName, $wayPointArr, $aid)
-    {
-        $fullName = public_path() . '/uploads/' . $fileName;
-        $xml = simplexml_load_file($fullName);
-        $updateArr = array();
-        foreach ($xml->wpt as $nodes) {
-            if (in_array($nodes->name, $wayPointArr)) {
-                $k = (string) $nodes->name;
-                $updateArr[$k]['lat'] = (string) $nodes['lat'];
-                $updateArr[$k]['lon'] = (string) $nodes['lon'];
-                $lat = $nodes['lat'];
-                $lon = $nodes['lon'];
-                Gpscoordinate::where('GPSCoordinate_point', $k)
-                    ->where('a_survey_id', $aid)
-                    ->update(['GPSCoordinate_latitude' => $lat, 'GPSCoordinate_longitude' => $lon, 'gpxfile' => $fileName]);
-                //Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
-            }
-        }
-    }
+    
 
     /**
      * Edit the form for editing the specified resource.
@@ -820,7 +705,7 @@ class SurveyController extends Controller
                 BSgWater::insert($BSgWater);
                 $this->auditLog($a_survey_id, 'swg_water_update', 'SWG Water Updated table.');
 
-                Gpscoordinate::where('a_survey_id', $a_survey_id)->where('b_survey_id', $id)->update(['is_active' => 0]);
+                Gpscoordinate::where('a_survey_id', $a_survey_id)->where('b_survey_id', $b_survey_id)->update(['is_active' => 0]);
 
                 $GpscoordinatePlot = array();
                 $GpscoordinateTubewell = array();
@@ -904,8 +789,9 @@ class SurveyController extends Controller
                 }
 
                 if (isset($input['attachgpxfile']) && !empty($input['attachgpxfile'])) {
-                    $GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
-                    BAttachment::create($GPXFileArr);
+                    $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+                    //$GPXFileArr = $this->singleUpload($input['attachgpxfile'], 'gpxfile', $a_survey_id, $b_survey_id, $user['id'], $GPSCoordinateWaypointArr);
+                    //BAttachment::create($GPXFileArr);
                 }
 
                 break;
@@ -958,6 +844,13 @@ class SurveyController extends Controller
         return redirect()->action('SurveyController@getSurveyStepEdit', ['step' => $step + 1]);
     }
 
+    public function assignUsers(Request $request)
+    {
+        ASurvey::where("id", $request["aid"])->update(["torrent_id" => $request["uid"]]);
+
+        $message = "Audit id " . $request["aid"] . " assigned to Torrent user " . $request["uid"] . " by superadmin user" . Auth::user()->name;
+        $this->auditLog($request["aid"], "audit_assigned_superadmin", $message);
+    }
     /*
      *
      * status we have:
@@ -1016,7 +909,7 @@ class SurveyController extends Controller
         $uploadFileArr = array();
         foreach ($files as $file) {
             if ($file->isValid()) {
-                $destinationPath = 'public/uploads'; // upload path
+                $destinationPath = public_path() . '/uploads'; // upload path
                 $extension = $file->getClientOriginalExtension(); // getting image extension
                 $orgfileName = $file->getClientOriginalName(); // getting image getClientOriginalName
                 $fileName = $uploadcount . '_' . $df . '_' . $orgfileName; // renameing image
@@ -1059,16 +952,17 @@ class SurveyController extends Controller
         }
         return $attachmentArr;
     }
+
     private function singleUpload($file, $type, $a_survey_id, $b_survey_id, $userId, $GPSCoordinateWaypointArr = array())
     {
         $attachmentArr = array();
         $d = date('Y-m-d H:i:s');
         if ($file->isValid()) {
-            $destinationPath = 'public/uploads'; // upload path
+            $destinationPath = public_path() . '/uploads'; // upload path
             $extension = $file->getClientOriginalExtension(); // getting image extension
             $orgfileName = $file->getClientOriginalName(); // getting image getClientOriginalName
             $fileName = date('YmdHis') . '_' . $orgfileName; // renameing image
-            $input['attachgpxfile']->move($destinationPath, $fileName); // uploading file to given path
+            $file->move($destinationPath, $fileName); // uploading file to given path
             // sending back with message
             if (file_exists(public_path() . '/uploads/' . $fileName)) {
                 $attachmentArr['attachgpxfile'] = $fileName;
@@ -1099,12 +993,26 @@ class SurveyController extends Controller
 
     }
 
-    public function assignUsers(Request $request)
+    private function getLatLogFromXML($fileName, $wayPointArr, $aid)
     {
-        ASurvey::where("id", $request["aid"])->update(["torrent_id" => $request["uid"]]);
-
-        $message = "Audit id " . $request["aid"] . " assigned to Torrent user " . $request["uid"] . " by superadmin user" . Auth::user()->name;
-        $this->auditLog($request["aid"], "audit_assigned_superadmin", $message);
+        $fullName = public_path() . '/uploads/' . $fileName;
+        $xml = simplexml_load_file($fullName);
+        $updateArr = array();
+        
+        foreach ($xml->wpt as $nodes) {
+            if (in_array($nodes->name, $wayPointArr)) {
+                $k = (string) $nodes->name;
+                $updateArr[$k]['lat'] = (string) $nodes['lat'];
+                $updateArr[$k]['lon'] = (string) $nodes['lon'];
+                $lat = $nodes['lat'];
+                $lon = $nodes['lon'];
+                Gpscoordinate::where('GPSCoordinate_point', $k)
+                    ->where('a_survey_id', $aid)
+                    ->update(['GPSCoordinate_latitude' => $lat, 'GPSCoordinate_longitude' => $lon, 'gpxfile' => $fileName]);
+                //Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
+            }
+        }
     }
+    
 
 }

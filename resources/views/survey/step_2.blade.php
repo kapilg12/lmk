@@ -94,11 +94,11 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-6">
-                        {!! Form::label('recharge_well_depth', trans('recharge well depth'), array('class' => '')) !!}
+                        {!! Form::label('recharge_well_depth', trans('recharge well depth(m)'), array('class' => '')) !!}
                         {!! Form::text('recharge_well_depth', null, array('id' => 'recharge_well_depth', 'class' => 'form-control', 'placeholder' => trans('recharge well depth'), 'title' => trans('recharge well depth'))) !!}
                     </div>
                     <div class="col-md-6">
-                        {!! Form::label('recharge_well_diameter', trans('recharge well diameter'), array('class' => '')) !!}
+                        {!! Form::label('recharge_well_diameter', trans('recharge well diameter(m)'), array('class' => '')) !!}
                         {!! Form::text('recharge_well_diameter', null, array('id' => 'recharge_well_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge well diameter'), 'title' => trans('recharge well diameter'))) !!}
                     </div>
                 </div>
@@ -106,11 +106,11 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-6">
-                        {!! Form::label('recharge_pit_depth', trans('recharge pit depth'), array('class' => '')) !!}
+                        {!! Form::label('recharge_pit_depth', trans('recharge pit depth(m)'), array('class' => '')) !!}
                         {!! Form::text('recharge_pit_depth', null, array('id' => 'recharge_pit_depth', 'class' => 'form-control', 'placeholder' => trans('recharge pit depth'), 'title' => trans('recharge pit depth'))) !!}
                     </div>
                     <div class="col-md-6">
-                        {!! Form::label('recharge_pit_diameter', trans('recharge pit diameter'), array('class' => '')) !!}
+                        {!! Form::label('recharge_pit_diameter', trans('recharge pit diameter(m)'), array('class' => '')) !!}
                         {!! Form::text('recharge_pit_diameter', null, array('id' => 'recharge_pit_diameter', 'class' => 'form-control', 'placeholder' => trans('recharge pit diameter'), 'title' => trans('recharge pit diameter'))) !!}
                     </div>
                 </div>
@@ -118,15 +118,15 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-4">
-                        {!! Form::label('recharge_trenches_l', trans('recharge_trenches l'), array('class' => '')) !!}
+                        {!! Form::label('recharge_trenches_l', trans('recharge_trenches (l)'), array('class' => '')) !!}
                         {!! Form::text('recharge_trenches_l', null, array('id' => 'recharge_trenches_l', 'class' => 'form-control', 'placeholder' => trans('recharge_trenches_l'), 'title' => trans('recharge_trenches_l'))) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! Form::label('recharge_trenches_w', trans('recharge trenches w'), array('class' => '')) !!}
+                        {!! Form::label('recharge_trenches_w', trans('recharge trenches (w)'), array('class' => '')) !!}
                         {!! Form::text('recharge_trenches_w', null, array('id' => 'recharge_trenches_w', 'class' => 'form-control', 'placeholder' => trans('recharge trenches w'), 'title' => trans('recharge trenches w'))) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! Form::label('recharge_trenches_d', trans('recharge trenches d'), array('class' => '')) !!}
+                        {!! Form::label('recharge_trenches_d', trans('recharge trenches (d)'), array('class' => '')) !!}
                         {!! Form::text('recharge_trenches_d', null, array('id' => 'recharge_trenches_d', 'class' => 'form-control', 'placeholder' => trans('recharge trenches d'), 'title' => trans('recharge trenches d'))) !!}
                     </div>
                 </div>
@@ -134,11 +134,11 @@
             <div class="form-group">
                <div class="row">
                     <div class="col-md-6">
-                        {!! Form::label('water_bodies_ponds_depth', trans('water bodies ponds depth'), array('class' => '')) !!}
+                        {!! Form::label('water_bodies_ponds_depth', trans('water bodies ponds depth(m)'), array('class' => '')) !!}
                         {!! Form::text('water_bodies_ponds_depth', null, array('id' => 'water_bodies_ponds_depth', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds depth'), 'title' => trans('water bodies ponds depth'))) !!}
                     </div>
                     <div class="col-md-6">
-                        {!! Form::label('water_bodies_ponds_diameter', trans('water bodies ponds diameter'), array('class' => '')) !!}
+                        {!! Form::label('water_bodies_ponds_diameter', trans('water bodies ponds diameter(m)'), array('class' => '')) !!}
                         {!! Form::text('water_bodies_ponds_diameter', null, array('id' => 'water_bodies_ponds_diameter', 'class' => 'form-control', 'placeholder' => trans('water bodies ponds diameter'), 'title' => trans('water bodies ponds diameter'))) !!}
                     </div>
                 </div>
@@ -158,11 +158,11 @@
                         {!! Form::select('tubewell_borewell[]', [ '' => 'Please Select Source of Ground water', 'tubewell' => 'Tubewell','borewell' => 'Borewell'], null, array('id' => 'tubewell_borewell', 'class' => 'form-control')) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('depth_of_s_pump', trans('depth of s pump'), array('class' => '')) !!}
+                        {!! Form::label('depth_of_s_pump', trans('depth of s pump(m)'), array('class' => '')) !!}
                         {!! Form::text('depth_of_s_pump[]', null, array('id' => 'depth_of_s_pump', 'class' => 'form-control', 'placeholder' => trans('depth of s pump'), 'title' => trans('depth of s pump'))) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('current_water_abstraction', trans('current water abstraction'), array('class' => '')) !!}
+                        {!! Form::label('current_water_abstraction', trans('current water abstraction (Discharge x working hr)'), array('class' => '')) !!}
                         {!! Form::text('current_water_abstraction[]', null, array('id' => 'current_water_abstraction', 'class' => 'form-control', 'placeholder' => trans('current water abstraction'), 'title' => trans('current water abstraction'))) !!}
                     </div>
                 </div>

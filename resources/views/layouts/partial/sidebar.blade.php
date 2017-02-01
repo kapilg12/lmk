@@ -19,11 +19,32 @@
                   <a class="pull-right">{{ $ASurveys->nature_of_establishment }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Email</b> <br><a class="pull-right">{{ $ASurveys->email }}</a>
+                  <b>Email</b>
                 </li>
                 <li class="list-group-item">
-                  <b>Website</b> <a class="pull-right">{{ $ASurveys->website }}</a>
+                  <b><a class="">{{ $ASurveys->email }}</a></b>
                 </li>
+                <li class="list-group-item">
+                  <b>Website</b> 
+                </li>
+                @if(!empty($ASurveys->website))
+                <li class="list-group-item">
+                  <b><a class="">{{ $ASurveys->website }}</a></b>
+                </li>
+                 @endif
+               
+
+              </ul>
+
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <!--<img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">-->
+              <h3 class="profile-username text-center">Status Of Audit </h3>
+        
+              <ul class="list-group list-group-unbordered">
+              
                 <li class="list-group-item">
                   <b>Is Applied</b> <a class="pull-right">@if($ASurveys->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-warning">Not Applied</span> @endif</a>
                 </li>
@@ -61,5 +82,3 @@
               <hr>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
-
-

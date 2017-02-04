@@ -231,6 +231,7 @@
                         <tr>
                           <th style="width: 10px">#</th>
                           <th>Type</th>
+                          <th>Author</th>
                           <th>Image/file</th>
                           <th>Comment</th>
                           <th>Action</th>
@@ -241,13 +242,21 @@
                      @foreach ($ASurveys->attachments as $key => $attachment)
                         <tr>
                           <td>{{++$i}}</td>
-                          <td class="center">{{$attachment->display_name}}</a>
-                           </td>
-                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a>
-                           </td>
-                           <td class="center">{{$attachment->comment}}</td>
-                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a>
-                           </td>
+                          <td class="center">{{$attachment->display_name}}</td>
+                          <td class="center">
+                            @if($attachment->user_slug == 'sa')
+                              Super Admin
+                            @elseif($attachment->user_slug == 'ta')
+                              Torrent
+                            @elseif($attachment->user_slug == 'au')
+                              Auditor
+                            @else
+                              Architecture
+                            @endif
+                          </td>
+                          <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a></td>
+                          <td class="center">{{$attachment->comment}}</td>
+                          <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a></td>
                         </tr>
                     @endforeach
                      </tbody>

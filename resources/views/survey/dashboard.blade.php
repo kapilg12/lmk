@@ -49,7 +49,10 @@
                             <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
 
                             <td>
+
+                                @if($ASurvey->is_approved == '0')
                                 <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
+                                @endif
                                 @if(isset($ASurvey->bsurveys['id']) && !empty($ASurvey->bsurveys['id']))
                                  <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
                                 @else

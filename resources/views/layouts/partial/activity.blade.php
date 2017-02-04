@@ -46,17 +46,24 @@
                 <table class="table table-striped">
                     <tbody>
                         <tr>
+                          <th>Type</th>
                           <th>GPSCoordinate Point</th>
                           <th>Latitude</th>
                           <th>Longitude</th>
                         </tr>
+                        {{--*/ $comment = '' /*--}}
                         @foreach ($ASurveys->gpscoordinates as $key => $gpscoordinate)
+                           {{--*/ $comment = $gpscoordinate->comment /*--}}
                             <tr>
+                              <td><b>{{$gpscoordinate->GPSCoordinate_type}}</b></td>
                               <td><b>Point {{$gpscoordinate->GPSCoordinate_point}}</b></td>
                               <td><span class="badge bg-red">{{$gpscoordinate->GPSCoordinate_latitude}}</span></td>
                               <td><span class="badge bg-red">{{$gpscoordinate->GPSCoordinate_longitude}}</span></td>
                             </tr>
                         @endforeach
+                          <tr>
+                              <td colspan="4"><b>{{$comment}}</b></td>
+                          </tr>
                     </tbody>
                 </table>
             </div><!-- /.box-body -->
@@ -250,7 +257,7 @@
         </div>
         </li>
         <!-- END timeline item -->
-        @if(Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin'))
+        @if(Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin'))
         <!-- timeline item -->
         <li>
             <i class="fa fa-cloud-upload bg-purple"></i>
@@ -261,7 +268,7 @@
                 {{ Form::hidden('a_survey_id', $ASurveys->id) }}
                 {{ Form::hidden('b_survey_id', $ASurveys->bsurveys->id) }}
                 {{ Form::hidden('GPSCoordinate_points', $GPSCoordinate_points) }}
-                    @include('layouts.partial.file_upload_fields')
+                   @include('layouts.partial.file_upload_fields')
 
                 {!! Form::close() !!}
               </div>

@@ -15,7 +15,10 @@
         <div class="nav-tabs-custom">
             @include('layouts.partial.tabbar')
             <div class="tab-content">
-                <div class="active tab-pane" id="activity">
+                <div class="active tab-pane" id="settings">
+                  @include('layouts.partial.settings')
+                </div><!-- /.tab-pane -->
+                <div class="tab-pane" id="activity">
                     @include('layouts.partial.activity')
                 </div><!-- /.tab-pane -->
                 <div class="tab-pane" id="timeline">

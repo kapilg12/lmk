@@ -54,9 +54,11 @@
                                           @endforeach
                                         </ul>
                                     </div>
-                                    @if($ASurvey->is_applied == '0' || $ASurvey->is_applied == '1')
-                                        <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
-                                    @endif
+                                    @if($ASurvey->is_approved == '0')
+                                        @if($ASurvey->is_applied == '0' || $ASurvey->is_applied == '1')
+                                            <a class="btn btn-primary btn-sm" href="{{ route('survey.edit',$ASurvey->id) }}"><strong><i class="fa fa-pencil"></i></strong></a>
+                                        @endif
+                                    @endif    
                                 @endif
                                 @if(Auth::user()->ability(array('torrentadmin'),array()))
                                     @if(isset($ASurvey->bsurveys['id']) && !empty($ASurvey->bsurveys['id'])){

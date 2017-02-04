@@ -384,8 +384,13 @@ class SurveyController extends Controller
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
                 ->find($id);
         } else if ($user_role == 'rm') {
-            $ASurveys = ASurvey::find($id);
 
+            $ASurveys = ASurvey::find($id);
+            $AttacmentArr = BAttachment::where('a_survey_id', $id)
+            ->where(function($query) {
+                /** @var $query Illuminate\Database\Query\Builder  */
+                return $query->orWhere('user_slug', '=', 'sa')->orWhere('user_slug', '=', 'ta');
+            })->get();        
         }
 
         $GPSCoordinate_points = '';
@@ -408,7 +413,7 @@ class SurveyController extends Controller
                 return view('errors.audit_not_completed');
             }
         } else if ($user_role == 'rm') {
-            return view('survey.show_rm', compact('ASurveys', 'user_role'));
+            return view('survey.show_rm', compact('ASurveys', 'user_role', 'AttacmentArr'));
         } else {
             if (isset($ASurveys->bsurveys) && count($ASurveys->bsurveys) > 0) {
                 return view('survey.show', compact('ASurveys', 'user_role', 'AttacmentArr'))->with(['attachmentsValidationRules' => $attachmentsValidationRules, 'GPSCoordinate_points' => trim($GPSCoordinate_points, ',')]);
@@ -902,7 +907,7 @@ class SurveyController extends Controller
             $a = 'Site Layout Plan file uploaded.';
             $dname = 'Site Layout Plan';
         }
-
+        $user_slug = $this->getUserSlug();
         $d = date('Y-m-d H:i:s');
         $df = date('YmdHis');
         $attachmentArr = array();
@@ -937,6 +942,7 @@ class SurveyController extends Controller
                     $attachmentArr[$i]['image_path'] = $fileName;
                     $attachmentArr[$i]['display_name'] = $dname;
                     $attachmentArr[$i]['slug'] = $type;
+                    $attachmentArr[$i]['slug_slug'] = $user_slug;
                     $attachmentArr[$i]['comment'] = $msg . ' Image.';
                     $attachmentArr[$i]['created_at'] = $d;
                     $attachmentArr[$i]['updated_at'] = $d;
@@ -959,6 +965,8 @@ class SurveyController extends Controller
     {
         $attachmentArr = array();
         $d = date('Y-m-d H:i:s');
+
+        $user_slug = $this->getUserSlug();
         if ($file->isValid()) {
             $destinationPath = public_path() . '/uploads'; // upload path
             $extension = $file->getClientOriginalExtension(); // getting image extension
@@ -974,6 +982,7 @@ class SurveyController extends Controller
                 $attachmentArr['image_path'] = $fileName;
                 $attachmentArr['display_name'] = 'GPX File';
                 $attachmentArr['slug'] = 'gpxfile';
+                $attachmentArr['user_slug'] = $user_slug;
                 $attachmentArr['comment'] = 'GPX File.';
                 $attachmentArr['created_at'] = $d;
                 $attachmentArr['updated_at'] = $d;
@@ -1014,6 +1023,24 @@ class SurveyController extends Controller
                 //Gpscoordinate::where('GPSCoordinate_point', $k)->update(['GPSCoordinate_longitude' => $nodes['lon']]);
             }
         }
+    }
+
+    private function getUserSlug(){
+        $user_slug='';
+        if (Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('devadmin')) {
+            $user_slug='sa';
+
+        }else if (Auth::user()->hasRole('torrentadmin')) {
+            $user_slug='ta';
+
+        }else if (Auth::user()->hasRole('auditor')) {
+            $user_slug='au';
+
+        }else {
+            $user_slug='ar';
+        }
+
+        return $user_slug;
     }
     
 

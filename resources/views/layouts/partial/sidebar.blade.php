@@ -5,35 +5,10 @@
               <!--<img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">-->
               <h3 class="profile-username text-center">{{ $ASurveys->offices->office_name }}</h3>
               <p class="text-muted text-center">{{ $ASurveys->contact_person_name }} ({{ $ASurveys->designation }})</p>
-
-
               <ul class="list-group list-group-unbordered">
-              <li class="list-group-item">
+                <li class="list-group-item">
                   <b>Allow Area</b> <a class="pull-right">{{ $ASurveys->allow_area }} Sq m</a>
                 </li>
-                <li class="list-group-item">
-                  <b>Establishment name</b> <a class="pull-right">{{ $ASurveys->establishment_name }}</a>
-                </li>
-                <li class="list-group-item">
-                  <b>Nature of <br />Establishment</b>
-                  <a class="pull-right">{{ $ASurveys->nature_of_establishment }}</a>
-                </li>
-                <li class="list-group-item">
-                  <b>Email</b>
-                </li>
-                <li class="list-group-item">
-                  <b><a class="">{{ $ASurveys->email }}</a></b>
-                </li>
-                <li class="list-group-item">
-                  <b>Website</b> 
-                </li>
-                @if(!empty($ASurveys->website))
-                <li class="list-group-item">
-                  <b><a class="">{{ $ASurveys->website }}</a></b>
-                </li>
-                 @endif
-               
-
               </ul>
 
             </div><!-- /.box-body -->

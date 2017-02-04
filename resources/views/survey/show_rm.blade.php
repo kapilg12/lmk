@@ -2,10 +2,10 @@
 @section('content')
 {{-- dump($ASurveys) --}}
 <div class="row">
-<div class="col-md-4">
+<div class="col-md-3">
     @include('layouts.partial.sidebar')
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#settings" data-toggle="tab">A: Details of Basic Informations</a></li>

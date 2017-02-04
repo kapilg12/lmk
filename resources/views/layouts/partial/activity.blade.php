@@ -239,7 +239,7 @@
                     </thead>
                      <tbody>
                     {{--*/ $i = 0 /*--}}
-                     @foreach ($ASurveys->attachments as $key => $attachment)
+                     @foreach ($AttacmentArr as $key => $attachment)
                         <tr>
                           <td>{{++$i}}</td>
                           <td class="center">{{$attachment->display_name}}</td>

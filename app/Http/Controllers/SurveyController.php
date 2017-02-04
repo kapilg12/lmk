@@ -371,7 +371,7 @@ class SurveyController extends Controller
         } else {
             $user_role = 'visitor';
         }
-        if ($user_role == 'superadmin' || $user_role == 'visitor') {
+        if ($user_role == 'superadmin') {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
                 ->with('bsgwater')
@@ -380,15 +380,31 @@ class SurveyController extends Controller
                 ->with('conesurveys')
                 ->with('ctwosurveys')
                 ->find($id);
+            $AttacmentArr = BAttachment::where('a_survey_id', $id)->get();    
+        }else if ($user_role == 'visitor') {
+            $ASurveys = ASurvey::with('offices')
+                ->with('bsurveys')
+                ->with('bsgwater')
+                ->with('gpscoordinates')
+                ->with('attachments')
+                ->with('conesurveys')
+                ->with('ctwosurveys')
+                ->find($id);
+            $AttacmentArr = BAttachment::where('a_survey_id', $id)
+                                ->where('user_slug', '=', 'au')
+                                ->get();        
         } else if ($user_role == 'torrentadmin') {
             $ASurveys = ASurvey::with(['bsgwater', 'gpscoordinates', 'bsurveys', 'attachments'])
                 ->find($id);
+            $AttacmentArr = BAttachment::where('a_survey_id', $id)
+            ->where(function($query) {
+                return $query->orWhere('user_slug', '=', 'au')->orWhere('user_slug', '=', 'ta');
+            })->get();     
         } else if ($user_role == 'rm') {
 
             $ASurveys = ASurvey::find($id);
             $AttacmentArr = BAttachment::where('a_survey_id', $id)
             ->where(function($query) {
-                /** @var $query Illuminate\Database\Query\Builder  */
                 return $query->orWhere('user_slug', '=', 'sa')->orWhere('user_slug', '=', 'ta');
             })->get();        
         }

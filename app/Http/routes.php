@@ -82,6 +82,13 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('audit/editstep/{step}', ["uses"=>'SurveyController@getSurveyStepEdit'])->where(['step' => '[2-4]']);
     Route::patch('audit/updatestep/{step}', ["uses"=>'SurveyController@getSurveyStepUpdate'])->where(['step' => '[2-4]']);
     //Route::resource('audit', '["uses"=>'SurveyController');
+
+    Route::get('architecture', ["uses"=>'ArchitecturesController@getDashboard',"middleware"=>["permission:audit-list"]]);
+    Route::get('architecture/show/{id}', ["uses"=>'ArchitecturesController@show']);
+    Route::post('architecture/upload', ["uses"=>'ArchitecturesController@postShow']);
+    
+
+
     Route::post('audit/changeStatus
         ', ['as' => 'survey.changeStatus', 'uses' => 'SurveyController@changeStatus', 'middleware' => ['role:superadmin|devadmin']]);
     Route::post("audit/assignUsers",["as"=>"survey.assignUsers","uses"=>"SurveyController@assignUsers","middleware"=>["role:superadmin|devadmin"]]);

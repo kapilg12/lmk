@@ -86,7 +86,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('architect', ["uses"=>'ArchitectsController@getDashboard',"middleware"=>["permission:audit-list"]]);
     Route::get('architect/show/{id}', ["uses"=>'ArchitectsController@show']);
     Route::post('architect/upload', ["uses"=>'ArchitectsController@postShow']);
-    
+    Route::post("architect/assignArchitects",["as"=>"architect.assignUsers","uses"=>"ArchitectsController@assignArchitects","middleware"=>["role:superadmin|devadmin"]]);
 
 
     Route::post('audit/changeStatus

@@ -25,9 +25,7 @@
                             <th>Address</th>
                             <th>Is Applied</th>
                             <th>Is Active</th>
-                            <!--<th>Is Approved</th>
-                            <th>Is Completed</th>
-                            <th>Is Certified</th>-->
+                            <th>Architect</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -39,11 +37,26 @@
                         <tr >
                             <th scope="row">{{ ++$i }}</th>
                             <td>{{$ASurvey->offices['office_name']}}</td>
-                            <td>{{ $ASurvey->postel_address }}</td>
+                            <td><p class="text-muted">{{ $ASurvey->postel_address }}</p></td>
                             <td>@if($ASurvey->is_applied == '1') <span class="label label-success">Applied</span> @else <span class="label label-danger">Not Applied</span> @endif</td>
                             <td>@if($ASurvey->is_active == '1') <span class="label label-success">Active</span> @else <span class="label label-warning">Pending</span> @endif</td>
                             <td>
-                             @if(Auth::user()->ability(array('superadmin','devadmin'),array()))
+                                 @if(Auth::user()->ability(array('superadmin','devadmin'),array()))
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @foreach($architects as $key=>$architect)
+                                          <li><a href="#" onclick="assignArchitects('{{$architect}}','{{$ASurvey->id}}')">{{$key}}</a></li>
+                                          @endforeach
+                                        </ul>
+                                    </div>
+   
+                                @endif
+                            </td>
+                            <td>
+                                @if(Auth::user()->ability(array('superadmin','devadmin'),array()))
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <span class="caret"></span>
@@ -69,7 +82,7 @@
                                 @else
                                     <a class="btn btn-primary btn-sm" href="{{ url('audit/show',$ASurvey->id) }}"><strong><i class="fa fa-eye"></i></strong></a>
                                 @endif
-
+                               
 
                             </td>
                         </tr>
@@ -91,6 +104,17 @@
         $.ajax({
             type:"POST",
             url:"/audit/assignUsers",
+            data:{"uid":key,"aid":aid},
+            success:function(data){
+                alert("Audit assigned successfully.");
+            }
+        });
+    }
+    function assignArchitects(key="",aid="")
+    {
+        $.ajax({
+            type:"POST",
+            url:"/architect/assignArchitects",
             data:{"uid":key,"aid":aid},
             success:function(data){
                 alert("Audit assigned successfully.");

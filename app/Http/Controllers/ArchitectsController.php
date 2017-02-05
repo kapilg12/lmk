@@ -78,4 +78,11 @@ class ArchitectsController extends Controller
         return redirect('/architect/show/' . $a_survey_id);
        
     }
+
+    public function assignArchitects(Request $request)
+    {
+        ASurvey::where("id", $request["aid"])->update(["architect_id" => $request["uid"]]);
+
+        $message = "Audit id " . $request["aid"] . " assigned to Architect user " . $request["uid"] . " by superadmin user" . Auth::user()->name;
+    }  
 }

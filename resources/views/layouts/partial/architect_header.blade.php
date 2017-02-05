@@ -68,4 +68,4 @@
     </style>
 
 </head>
-<body id="app-layout" class="hold-transition skin-blue layout-top-nav">
+<body id="app-layout" class="hold-transition skin-green layout-top-nav">

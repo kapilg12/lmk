@@ -1,6 +1,6 @@
-@include('layouts.partial.architecture_header')
+@include('layouts.partial.architect_header')
     <header class="main-header">
-        @include('layouts.partial.top_nav')
+        @include('layouts.partial.architect_top_nav')
     </header>
     <div class="content-wrapper">
         <div class="container">
@@ -23,4 +23,4 @@
             </section>
         </div>
     </div>
-@include('layouts.partial.architecture_footer')
+@include('layouts.partial.architect_footer')

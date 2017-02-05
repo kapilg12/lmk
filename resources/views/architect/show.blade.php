@@ -1,4 +1,4 @@
-@extends('layouts.architecture')
+@extends('layouts.architect')
 @section('content')
 {{-- dump($ASurveys) --}}
 <div class="row">
@@ -10,7 +10,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#settings" data-toggle="tab">A: Details of Basic Informations</a></li>
         </ul>
-            @include('layouts.partial.architecture_settings')
+            @include('layouts.partial.architect_settings')
         </div><!-- /.tab-content -->
       </div><!-- /.nav-tabs-custom -->
     </div><!-- /.col -->

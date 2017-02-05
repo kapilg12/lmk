@@ -19,7 +19,7 @@ use Redirect;
 use Session;
 use Validator;
 
-class ArchitecturesController extends Controller
+class ArchitectsController extends Controller
 {
 
 
@@ -28,9 +28,9 @@ class ArchitecturesController extends Controller
         $i = 0;
         
         $ASurveys = ASurvey::with('offices')
-            ->where('architecture_id', Auth::user()->id)
+            ->where('architect_id', Auth::user()->id)
             ->orderBy('id', 'DESC')->get();
-        return view('architecture.dashboard', compact('ASurveys', 'i'));
+        return view('architect.dashboard', compact('ASurveys', 'i'));
         
     }
 
@@ -50,7 +50,7 @@ class ArchitecturesController extends Controller
             })->get();        
 
         if (isset($ASurveys->bsurveys) && count($ASurveys->bsurveys) > 0) {
-            return view('architecture.show', compact('ASurveys', 'AttacmentArr'));
+            return view('architect.show', compact('ASurveys', 'AttacmentArr'));
         } else {
             return view('errors.audit_not_completed');
         }
@@ -75,7 +75,7 @@ class ArchitecturesController extends Controller
             $ExistingRWHStructureArr = $this->multipleUpload($input['existing_rwh_structure'], 'existing_rwh_structure', $a_survey_id, $b_survey_id, $user['id']);
         }
         
-        return redirect('/architecture/show/' . $a_survey_id);
+        return redirect('/architect/show/' . $a_survey_id);
        
     }
 }

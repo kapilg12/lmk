@@ -13,7 +13,7 @@ class AddArchitectureIdToASurveysTable extends Migration
     public function up()
     {
         Schema::table('a_surveys', function ($table) {
-            $table->integer('architecture_id')->unsigned()->index()->after('torrent_id');
+            $table->integer('architect_id')->unsigned()->index()->after('torrent_id');
         });
     }
 
@@ -25,7 +25,7 @@ class AddArchitectureIdToASurveysTable extends Migration
     public function down()
     {
         Schema::table('a_surveys', function ($table) {
-            $table->dropColumn('architecture_id');
+            $table->dropColumn('architect_id');
         });
     }
 }

@@ -176,8 +176,8 @@ class UserController extends Controller
     {
         if (Auth::attempt(array('email' => $request['email'], 'password' => $request['password']))) {
             $user = Auth::user();
-            if (Auth::user()->hasRole('architecture')) {
-                return redirect('architecture');
+            if (Auth::user()->hasRole('architect')) {
+                return redirect('architect');
             }else{
                 return redirect('dashboard');
             }         

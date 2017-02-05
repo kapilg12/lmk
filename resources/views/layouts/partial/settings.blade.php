@@ -89,7 +89,7 @@
                             @elseif($attachment->user_slug == 'au')
                               Auditor
                             @else
-                              Architecture
+                              Architect
                             @endif
                           </td>
                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a></td>

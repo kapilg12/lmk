@@ -12,7 +12,7 @@ class ASurvey extends Model
         'is_active' => 'boolean',
     ];
     protected $table = 'a_surveys';
-    protected $fillable = ['user_id', 'torrent_id', 'architecture_id', 'office_id', 'allow_area', 'establishment_name', 'postel_address', 'pin_code', 'nature_of_establishment', 'contact_person_name', 'designation', 'contact_number', 'email', 'website', 'is_active', 'is_approved', 'is_completed', 'is_certified', 'is_applied', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'torrent_id', 'architect_id', 'office_id', 'allow_area', 'establishment_name', 'postel_address', 'pin_code', 'nature_of_establishment', 'contact_person_name', 'designation', 'contact_number', 'email', 'website', 'is_active', 'is_approved', 'is_completed', 'is_certified', 'is_applied', 'created_at', 'updated_at'];
 
     protected static function boot()
     {

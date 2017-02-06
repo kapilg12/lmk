@@ -370,7 +370,7 @@ class SurveyController extends Controller
         } else if ($user->hasRole('rm') == 1) {
             $user_role = 'rm';
         } else {
-            $user_role = 'visitor';
+            $user_role = 'auditor';
         }
         if ($user_role == 'superadmin') {
             $ASurveys = ASurvey::with('offices')
@@ -382,7 +382,7 @@ class SurveyController extends Controller
                 ->with('ctwosurveys')
                 ->find($id);
             $AttacmentArr = BAttachment::where('a_survey_id', $id)->get();    
-        }else if ($user_role == 'visitor') {
+        }else if ($user_role == 'audtior') {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')
                 ->with('bsgwater')

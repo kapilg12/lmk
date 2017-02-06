@@ -962,7 +962,7 @@ class SurveyController extends Controller
                     $attachmentArr[$i]['image_path'] = $fileName;
                     $attachmentArr[$i]['display_name'] = $dname;
                     $attachmentArr[$i]['slug'] = $type;
-                    $attachmentArr[$i]['slug_slug'] = $user_slug;
+                    $attachmentArr[$i]['user_slug'] = $user_slug;
                     $attachmentArr[$i]['comment'] = $msg . ' Image.';
                     $attachmentArr[$i]['created_at'] = $d;
                     $attachmentArr[$i]['updated_at'] = $d;

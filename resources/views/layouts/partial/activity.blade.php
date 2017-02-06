@@ -46,17 +46,24 @@
                 <table class="table table-striped">
                     <tbody>
                         <tr>
+                          <th>Type</th>
                           <th>GPSCoordinate Point</th>
                           <th>Latitude</th>
                           <th>Longitude</th>
                         </tr>
+                        {{--*/ $comment = '' /*--}}
                         @foreach ($ASurveys->gpscoordinates as $key => $gpscoordinate)
+                           {{--*/ $comment = $gpscoordinate->comment /*--}}
                             <tr>
+                              <td><b>{{$gpscoordinate->GPSCoordinate_type}}</b></td>
                               <td><b>Point {{$gpscoordinate->GPSCoordinate_point}}</b></td>
                               <td><span class="badge bg-red">{{$gpscoordinate->GPSCoordinate_latitude}}</span></td>
                               <td><span class="badge bg-red">{{$gpscoordinate->GPSCoordinate_longitude}}</span></td>
                             </tr>
                         @endforeach
+                          <tr>
+                              <td colspan="4"><b>{{$comment}}</b></td>
+                          </tr>
                     </tbody>
                 </table>
             </div><!-- /.box-body -->
@@ -224,6 +231,7 @@
                         <tr>
                           <th style="width: 10px">#</th>
                           <th>Type</th>
+                          <th>Author</th>
                           <th>Image/file</th>
                           <th>Comment</th>
                           <th>Action</th>
@@ -231,16 +239,24 @@
                     </thead>
                      <tbody>
                     {{--*/ $i = 0 /*--}}
-                     @foreach ($ASurveys->attachments as $key => $attachment)
+                     @foreach ($AttacmentArr as $key => $attachment)
                         <tr>
                           <td>{{++$i}}</td>
-                          <td class="center">{{$attachment->display_name}}</a>
-                           </td>
-                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a>
-                           </td>
-                           <td class="center">{{$attachment->comment}}</td>
-                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a>
-                           </td>
+                          <td class="center">{{$attachment->display_name}}</td>
+                          <td class="center">
+                            @if($attachment->user_slug == 'sa')
+                              Super Admin
+                            @elseif($attachment->user_slug == 'ta')
+                              Torrent
+                            @elseif($attachment->user_slug == 'au')
+                              Auditor
+                            @else
+                              Architect
+                            @endif
+                          </td>
+                          <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a></td>
+                          <td class="center">{{$attachment->comment}}</td>
+                          <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a></td>
                         </tr>
                     @endforeach
                      </tbody>
@@ -250,7 +266,7 @@
         </div>
         </li>
         <!-- END timeline item -->
-        @if(Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin'))
+        @if(Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('torrentadmin') || Auth::user()->hasRole('devadmin'))
         <!-- timeline item -->
         <li>
             <i class="fa fa-cloud-upload bg-purple"></i>
@@ -261,7 +277,7 @@
                 {{ Form::hidden('a_survey_id', $ASurveys->id) }}
                 {{ Form::hidden('b_survey_id', $ASurveys->bsurveys->id) }}
                 {{ Form::hidden('GPSCoordinate_points', $GPSCoordinate_points) }}
-                    @include('layouts.partial.file_upload_fields')
+                   @include('layouts.partial.file_upload_fields')
 
                 {!! Form::close() !!}
               </div>

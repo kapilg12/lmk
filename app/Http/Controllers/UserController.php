@@ -175,8 +175,13 @@ class UserController extends Controller
     public function postLogin(Request $request)
     {
         if (Auth::attempt(array('email' => $request['email'], 'password' => $request['password']))) {
-            $user = Auth::user();            
-            return redirect('dashboard');
+            $user = Auth::user();
+            if (Auth::user()->hasRole('architect')) {
+                return redirect('architect');
+            }else{
+                return redirect('dashboard');
+            }         
+            
         }else{
             return redirect()->route('login')->with('warning','Please enter correct username/password');
         }

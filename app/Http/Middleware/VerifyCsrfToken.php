@@ -15,6 +15,7 @@ class VerifyCsrfToken extends BaseVerifier
         "states/getStates",
         "offices/getOffices",
         "audit/changeStatus",
-        "audit/assignUsers"
+        "audit/assignUsers",
+        "architect/assignArchitects"
     ];
 }

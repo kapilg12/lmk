@@ -224,7 +224,7 @@
       <li>
         <i class="fa fa-area-chart bg-purple"></i>
             <div class="timeline-item">
-              <h3 class="timeline-header">Area/Location Site Layout Pians uploaded Picutes</h3>
+              <h3 class="timeline-header">Area/Location Site Layout Plans uploaded Picutes</h3>
               <div class="timeline-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>

@@ -31,7 +31,7 @@
 </div>
 @elseif(Auth::user()->hasRole('torrentadmin'))
 <div class="form-group">
-    {!! Form::label('existing_rwh_structure', trans('RWH structure (Only JPG, PDF, Doc and Docx Extension File)'), array('class' => '')) !!}
+    {!! Form::label('existing_rwh_structure', trans('Concept Plan of RWH structure (Only JPG, PDF, Doc and Docx Extension File)'), array('class' => '')) !!}
     {!! Form::file('existing_rwh_structure[]', array('multiple'=>true, 'id' => 'existing_rwh_structure', 'class' => 'form-control')) !!}
     <p class="errors">{!!$errors->first('existing_rwh_structure')!!}</p>
 </div>

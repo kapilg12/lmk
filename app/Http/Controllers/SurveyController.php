@@ -382,6 +382,7 @@ class SurveyController extends Controller
                 ->with('ctwosurveys')
                 ->find($id);
             $AttacmentArr = BAttachment::where('a_survey_id', $id)->get();    
+
         }else if ($user_role == 'auditor') {
             $ASurveys = ASurvey::with('offices')
                 ->with('bsurveys')

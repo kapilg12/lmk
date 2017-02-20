@@ -336,6 +336,9 @@ class SurveyController extends Controller
             $q->where("name", "torrentadmin");
         })->lists("id", "name");
 
+        $architects = User::whereHas("roles", function ($q) {
+            $q->where("name", "architect");
+        })->lists("id", "name");
         $i = 0;
         if (Auth::user()->hasRole('torrentadmin')) {
             $ASurveys = ASurvey::with('offices')
@@ -346,7 +349,7 @@ class SurveyController extends Controller
 
             if (Auth::user()->hasRole('superadmin') || Auth::user()->hasRole('devadmin')) {
                 $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
-                return view('survey.dashboard_superadmin', compact('ASurveys', 'i', "users"));
+                return view('survey.dashboard_superadmin', compact('ASurveys', 'i', "users","architects"));
             } else if (Auth::user()->hasRole('rm')) {
                 $ASurveys = ASurvey::with('offices')->orderBy('id', 'DESC')->get();
                 return view('survey.dashboard_rm', compact('ASurveys', 'i'));

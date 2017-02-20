@@ -84,5 +84,69 @@ class ArchitectsController extends Controller
         ASurvey::where("id", $request["aid"])->update(["architect_id" => $request["uid"]]);
 
         $message = "Audit id " . $request["aid"] . " assigned to Architect user " . $request["uid"] . " by superadmin user" . Auth::user()->name;
+    }
+
+    private function multipleUpload($files, $type, $a_survey_id, $b_survey_id, $userId)
+    {
+        $msg = '';
+        $a = '';
+        $dname = '';
+        if ('existing_rwh_structure' == $type) {
+            $msg = 'Existing RWH Structure';
+            $a = 'Existing RWH Structure file uploaded.';
+            $dname = 'Existing RWH Structure';
+        }
+        $user_slug = $this->getUserSlug();
+        $d = date('Y-m-d H:i:s');
+        $df = date('YmdHis');
+        $attachmentArr = array();
+        $uploadcount = 0;
+        $file_count = count($files);
+        $uploadFileArr = array();
+        foreach ($files as $file) {
+            if ($file->isValid()) {
+                $destinationPath = public_path() . '/uploads'; // upload path
+                $extension = $file->getClientOriginalExtension(); // getting image extension
+                $orgfileName = $file->getClientOriginalName(); // getting image getClientOriginalName
+                $fileName = $uploadcount . '_' . $df . '_' . $orgfileName; // renameing image
+                $uploadFileArr[$uploadcount][$type] = $fileName;
+                //$upload_success = $file->move($destinationPath, $filename);
+                $file->move($destinationPath, $fileName); // uploading file to given path
+                $uploadcount++;
+            } else {
+                // sending back with error message.
+                Session::flash('error', 'uploaded file is not valid');
+            }
+        }
+        if ($uploadcount == $file_count) {
+            // sending back with message
+            $i = 0;
+            foreach ($uploadFileArr as $uploadFile) {
+                $fileName = $uploadFile[$type];
+                if (file_exists(public_path() . '/uploads/' . $fileName)) {
+
+                    $attachmentArr[$i]['user_id'] = $userId;
+                    $attachmentArr[$i]['a_survey_id'] = $a_survey_id;
+                    $attachmentArr[$i]['b_survey_id'] = $b_survey_id;
+                    $attachmentArr[$i]['image_path'] = $fileName;
+                    $attachmentArr[$i]['display_name'] = $dname;
+                    $attachmentArr[$i]['slug'] = $type;
+                    $attachmentArr[$i]['user_slug'] = $user_slug;
+                    $attachmentArr[$i]['comment'] = $msg . ' Image.';
+                    $attachmentArr[$i]['created_at'] = $d;
+                    $attachmentArr[$i]['updated_at'] = $d;
+                    $msg = $a . ' (' . $fileName . ')';
+                    $this->auditLog($a_survey_id, 'file_upload', $msg);
+                    Session::flash('success', 'Upload successfully');
+                } else {
+                    Session::flash('failed', 'Not Uploaded');
+                }
+                $i++;
+            }
+
+        } else {
+            Session::flash('failed', 'Not Uploaded');
+        }
+        return $attachmentArr;
     }  
 }

@@ -54,7 +54,7 @@
 	@endif
 	@endforeach
 	</table>
-	{!! $data->render() !!}
+	
 @endsection
 @section('js')
 <script type="text/javascript">

@@ -233,7 +233,6 @@
                           <th>Type</th>
                           <th>Author</th>
                           <th>Image/file</th>
-                          <th>Comment</th>
                           <th>Action</th>
                         </tr>
                     </thead>
@@ -255,7 +254,6 @@
                             @endif
                           </td>
                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new">{{$attachment->image_path}}</a></td>
-                          <td class="center">{{$attachment->comment}}</td>
                           <td class="center"><a href="{!! asset('public/uploads/').'/'.$attachment->image_path !!}" target="_new"> <strong><i class="fa fa-eye"></i></strong></a></td>
                         </tr>
                     @endforeach

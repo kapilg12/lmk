@@ -92,7 +92,7 @@ class ArchitectsController extends Controller
         $a = '';
         $dname = '';
         if ('existing_rwh_structure' == $type) {
-            $msg = 'Existing RWH Structure';
+            $msg = 'Existing RWH Structure through Architect.';
             $a = 'Existing RWH Structure file uploaded.';
             $dname = 'Existing RWH Structure';
         }
@@ -148,6 +148,29 @@ class ArchitectsController extends Controller
             Session::flash('failed', 'Not Uploaded');
         }
         return $attachmentArr;
+    }
+
+    /*
+     *
+     * status we have:
+     * a_audit_created,b_audit_created,b_audit_updated,c_audit_created,c_audit_updated,
+     * gps_coordinate_created,gps_coordinate_update,swg_water_created,swg_water_update,
+     * update,applied,not_applied,file_upload,active,approved,completed,certified
+     *
+     */
+    private function auditLog($a_survey_id, $status, $comment)
+    {
+        //echo $comment;die;
+        $user = Auth::user();
+        $log = array(
+            'user_id' => $user['id'],
+            'a_survey_id' => $a_survey_id,
+            'is_status' => $status,
+            'comment' => $comment,
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
+        );
+        SurveyLog::create($log);
+
     }
 
     

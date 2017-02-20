@@ -96,7 +96,7 @@ class ArchitectsController extends Controller
             $a = 'Existing RWH Structure file uploaded.';
             $dname = 'Existing RWH Structure';
         }
-        $user_slug = $this->getUserSlug();
+        $user_slug = 'ar';
         $d = date('Y-m-d H:i:s');
         $df = date('YmdHis');
         $attachmentArr = array();
@@ -131,7 +131,7 @@ class ArchitectsController extends Controller
                     $attachmentArr[$i]['image_path'] = $fileName;
                     $attachmentArr[$i]['display_name'] = $dname;
                     $attachmentArr[$i]['slug'] = $type;
-                    $attachmentArr[$i]['user_slug'] = 'ar';
+                    $attachmentArr[$i]['user_slug'] = $user_slug;
                     $attachmentArr[$i]['comment'] = $msg . ' Image.';
                     $attachmentArr[$i]['created_at'] = $d;
                     $attachmentArr[$i]['updated_at'] = $d;

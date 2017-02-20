@@ -70,10 +70,18 @@ class ArchitectsController extends Controller
         $b_survey_id = $input['b_survey_id'];
         // checking file is valid.
         $ExistingRWHStructureArr = array();
+        $finalFileUploadArr = array();
+        $SiteLayoutPlanArr = array();
        
         if (isset($input['existing_rwh_structure']) && !empty($input['existing_rwh_structure']) && !is_null($input['existing_rwh_structure'][0])) {
             $ExistingRWHStructureArr = $this->multipleUpload($input['existing_rwh_structure'], 'existing_rwh_structure', $a_survey_id, $b_survey_id, $user['id']);
+            $finalFileUploadArr = array_merge($ExistingRWHStructureArr, $SiteLayoutPlanArr);
+            if (!empty($finalFileUploadArr)) {
+                BAttachment::insert($finalFileUploadArr);
+            }
         }
+
+
         
         return redirect('/architect/show/' . $a_survey_id);
        

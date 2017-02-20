@@ -939,7 +939,7 @@ class SurveyController extends Controller
                 $destinationPath = public_path() . '/uploads'; // upload path
                 $extension = $file->getClientOriginalExtension(); // getting image extension
                 $orgfileName = $file->getClientOriginalName(); // getting image getClientOriginalName
-                $fileName = $uploadcount . '_' . $df . '_' . $orgfileName; // renameing image
+                $fileName = $uploadcount . '_' . $df . '_' .'.'. $extension; // renameing image
                 $uploadFileArr[$uploadcount][$type] = $fileName;
                 //$upload_success = $file->move($destinationPath, $filename);
                 $file->move($destinationPath, $fileName); // uploading file to given path
